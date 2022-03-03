@@ -38,6 +38,11 @@ class CustomService extends StatelessWidget {
                     width: 167.w,
                     fit: BoxFit.cover,
                     imageUrl: ImageService,
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                        ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 )
               : Image(

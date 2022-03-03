@@ -26,7 +26,8 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<HomeProvider>(context, listen: false).getMyProjects(context);
+    Provider.of<SpHelper>(context, listen: false).token != null?
+    Provider.of<HomeProvider>(context, listen: false).getMyProjects(context):(){};
   }
 
   @override
@@ -43,9 +44,11 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
         ),
       ),
       body: Provider.of<SpHelper>(context, listen: false).token == null
-          ?  Center(child:  Lottie.asset('assets/animations/empty2.json'),)
+          ? Center(
+              child: Lottie.asset('assets/animations/empty2.json'),
+            )
           // Provider.of<ApiAuthProvider>(context, listen: false).checkToken(context)
-          : Provider.of<HomeProvider>(context).myProjectsData==null
+          : Provider.of<HomeProvider>(context).myProjectsData == null
               ? Center(
                   child: Container(
                   alignment: Alignment.center,
@@ -113,6 +116,27 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                                         .service
                                         .photos[0]
                                         .file
+                                    : 'null',
+                                type: Provider.of<HomeProvider>(context)
+                                            .myProjectsData[index]
+                                            .service !=
+                                        null
+                                    ? Provider.of<HomeProvider>(context)
+                                            .myProjectsData[index]
+                                            .service
+                                            .type ??
+                                        'unfixed_price'
+                                    : 'null',
+                                pointsCount: Provider.of<HomeProvider>(context)
+                                            .myProjectsData[index]
+                                            .service !=
+                                        null
+                                    ? Provider.of<HomeProvider>(context)
+                                            .myProjectsData[index]
+                                            .service
+                                            .pointsCount
+                                            .toString() ??
+                                        'null'
                                     : 'null',
                               ),
                             );

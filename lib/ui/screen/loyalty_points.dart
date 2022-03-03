@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:publish_brand/data/sp_helper.dart';
 import 'package:publish_brand/helpers/RouterClass.dart';
 import 'package:publish_brand/providers/home_provider.dart';
 import 'package:publish_brand/ui/screen/points_service.dart';
@@ -22,7 +23,8 @@ class _LoyaltyPointsScreenState extends State<LoyaltyPointsScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<HomeProvider>(context, listen: false).getMyPoints(context);
+    Provider.of<SpHelper>(context, listen: false).token != null?
+    Provider.of<HomeProvider>(context, listen: false).getMyPoints(context):(){};
   }
 
   @override

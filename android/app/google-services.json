@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "617450963039",
+    "project_id": "business-app-40bfe",
+    "storage_bucket": "business-app-40bfe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617450963039:android:18f0e4a32d67ff1c0b5bea",
+        "android_client_info": {
+          "package_name": "com.devsaleh.publish_brand"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "617450963039-gpnfkpiconv5reu3lvvuicnr9t1ql14s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmRLUnFTqkrJt63Q6C-89sAPyHk2eNK3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "617450963039-gpnfkpiconv5reu3lvvuicnr9t1ql14s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

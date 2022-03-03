@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:publish_brand/data/sp_helper.dart';
 import 'package:publish_brand/helpers/RouterClass.dart';
 import 'package:publish_brand/providers/api_auth_provider.dart';
 import 'package:publish_brand/providers/home_provider.dart';
@@ -67,6 +68,9 @@ class SubmitSpecialRequestsScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: providerHome.btnIsEnable? () {
                     if (submitSpecialRequestsFormKey.currentState.validate()) {
+                      Provider.of<SpHelper>(context, listen: false).token == null
+                          ? Provider.of<ApiAuthProvider>(context, listen: false)
+                          .checkToken(context):
                       providerHome.requestSpecialService(context);
                     }
                   }:(){},

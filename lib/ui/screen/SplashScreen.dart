@@ -47,19 +47,19 @@ class _SplashScreenState extends State<SplashScreen> {
           decoration: BoxDecoration(
             color: HexColor('#F5F5F5'),
             image: const DecorationImage(
-                image: AssetImage('assets/images/bg1.png'), fit: BoxFit.fill),
+                image: AssetImage('assets/images/bg2.png'), fit: BoxFit.fill),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Spacer(),
               Container(
-                margin: EdgeInsets.only(top: 60),
+                margin: EdgeInsets.only(top: 70),
 
                 child: DelayedDisplay(
                   delay: Duration(milliseconds: 600),
-                  slidingBeginOffset: Offset(0.0, -20.0),
-                  fadingDuration: Duration(milliseconds: 1000),
+                  slidingBeginOffset: Offset(0.0, -10.0),
+                  fadingDuration: Duration(milliseconds: 600),
                   child: Center(
                     child: Image(
                       height: 329.h,
@@ -76,16 +76,16 @@ class _SplashScreenState extends State<SplashScreen> {
                   children: [
                     DelayedDisplay(
                       delay: Duration(milliseconds: 800),
-                      slidingBeginOffset: Offset(0.0, 20.0),
+                      slidingBeginOffset: Offset(0.0, 10.0),
                       fadingDuration: Duration(milliseconds: 1000),
                       child: Column(
                         children: [
-                          Text('From',style: TextStyle(fontFamily: 'TajawalBold',fontSize: 16,color: HexColor('#4091AF')),),
+                          Text('from',style: TextStyle(fontFamily: 'TajawalRegular',fontSize: 14,color: HexColor('#4091AF')),),
                           SizedBox(height: 10,),
                           Image(
                             height: 60.h,
                             width: 60.w,
-                            image: const AssetImage('assets/images/logo.png'),
+                            image: const AssetImage('assets/images/logo1.png'),
                           ),
                         ],
                       ),

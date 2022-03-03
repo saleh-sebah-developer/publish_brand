@@ -152,12 +152,14 @@
   "invoice_date": " Invoice Date",
   "please_login_first": "Please login first",
   "new_user": "New user",
-  "request_a_special_request": "إطلب طلب خاص",
+  "request_a_special_request": "Request a special request",
   "the_price_is_negotiable": "The price is negotiable",
   "point": "Point",
   "month": "Month",
   "my_points": "My Points",
-  "error_count": "1 Or More"
+  "error_count": "1 Or More",
+  "number": "Number",
+  "policies_click_here": "To view the policies and conditions, click here"
 
 
 }

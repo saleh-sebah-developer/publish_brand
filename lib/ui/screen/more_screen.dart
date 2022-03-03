@@ -32,8 +32,12 @@ class _MoreScreenState extends State<MoreScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ApiAuthProvider>(context, listen: false).profile(context);
-    Provider.of<HomeProvider>(context, listen: false).getMyPoints(context);
+    Provider.of<SpHelper>(context, listen: false).token != null
+        ? Provider.of<ApiAuthProvider>(context, listen: false).profile(context)
+        : () {};
+    Provider.of<SpHelper>(context, listen: false).token != null
+        ? Provider.of<HomeProvider>(context, listen: false).getMyPoints(context)
+        : () {};
   }
 
   @override
@@ -182,9 +186,9 @@ class _MoreScreenState extends State<MoreScreen> {
                 },
                 child: Card(
                   child: Container(
-                    width: MediaQuery.of(context).size.width/2.5,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 8),
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     child: Column(
                       children: [
                         Image(
@@ -216,9 +220,9 @@ class _MoreScreenState extends State<MoreScreen> {
                 },
                 child: Card(
                   child: Container(
-                    width: MediaQuery.of(context).size.width/4.5,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
+                    width: MediaQuery.of(context).size.width / 4.5,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     child: Column(
                       children: [
                         Image(
@@ -251,9 +255,9 @@ class _MoreScreenState extends State<MoreScreen> {
                 },
                 child: Card(
                   child: Container(
-                    width: MediaQuery.of(context).size.width/4.5,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
+                    width: MediaQuery.of(context).size.width / 4.5,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     child: Column(
                       children: [
                         Image(

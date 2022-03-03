@@ -39,6 +39,7 @@ class HomeProvider extends ChangeNotifier {
     homeScreen();
     getCategories();
   }
+
   bool btnIsEnable = true;
 
   TextEditingController nameConContactTS = TextEditingController();
@@ -54,35 +55,47 @@ class HomeProvider extends ChangeNotifier {
   TextEditingController detailsConBouquet = TextEditingController();
   TextEditingController countConService = TextEditingController();
 
-
   String pageText;
-  List<Categories> categories = [];
+  List<Categories> categories;
+
   List<Categories> searchCategories = [];
-  List<Services> services = [];
+  List<Services> services;
+
   List<Services> searchServices = [];
-  List<Ads> listAds = [];
+  List<Ads> listAds;
+
   List<Services> servicesByCategory = null;
   List<Services> searchServicesByCategory = [];
-  List<ServicesPoint> servicesByPoint ;
-  List<Data> myProjectsData ;
-  Chat chatMyProjects ;
-  List<Packages> packages ;
-  List<Point> points ;
-  List<Invoice> invoices ;
-  List<Contract> contracts ;
+  List<ServicesPoint> servicesByPoint;
+
+  List<Data> myProjectsData;
+
+  Chat chatMyProjects;
+
+  List<Packages> packages;
+
+  List<Point> points;
+
+  List<Invoice> invoices;
+
+  List<Contract> contracts;
+
   List<ListPackage> listPackage;
   List<Notificat> listNotifications;
-  String numPoints='';
+  String numPoints = '';
   Category selectedCategory;
-  String nameSelectedCategory='';
+  String nameSelectedCategory = '';
   Service selectedServices;
   bool appear = false;
-  String urlApp='';
-  String urlFacebookApp='';
-  String urlTwitterApp='';
-  String urlWhatsappApp='';
-  String urlInstagramApp='';
-  String urlYoutubeApp='';
+  String urlApp = '';
+  String urlFacebookApp = '';
+  String urlTwitterApp = '';
+  String urlWhatsappApp = '';
+  String urlInstagramApp = '';
+  String urlYoutubeApp = '';
+  PlatformFile platformFile;
+  String packageId = '';
+
   changeEnablity() {
     btnIsEnable = !btnIsEnable;
     notifyListeners();
@@ -92,16 +105,19 @@ class HomeProvider extends ChangeNotifier {
     appear == false ? appear = true : appear = false;
     notifyListeners();
   }
+
   String validate(String value) {
-      return null;
+    return null;
   }
+
   String validateCount(String value) {
-    if(int.parse(value) <= 0){
+    if (int.parse(value) <= 0) {
       return 'error_count'.tr();
-    }else{
+    } else {
       return null;
     }
   }
+
   homeScreen() async {
     HomeResponse homeResponse = await DioClient.dioClient.homeScreen();
     if (homeResponse != null) {
@@ -121,9 +137,10 @@ class HomeProvider extends ChangeNotifier {
 
   clearServicesByCategory() {
     servicesByCategory = null;
-    nameSelectedCategory='';
+    nameSelectedCategory = '';
     notifyListeners();
   }
+
   getServicesByCategory(int category_id) async {
     GetServicesByCategoryResponse getServicesByCategoryResponse =
         await DioClient.dioClient.getServicesByCategory(category_id);
@@ -141,11 +158,10 @@ class HomeProvider extends ChangeNotifier {
       log('getServicesByCategory failed');
     }
     notifyListeners();
-
   }
 
   getServicesDetails(int service_id) async {
-    selectedServices=null;
+    selectedServices = null;
     notifyListeners();
     GetServicesDetailsResponse getServicesDetailsResponse =
         await DioClient.dioClient.getServicesDetails(service_id);
@@ -160,7 +176,8 @@ class HomeProvider extends ChangeNotifier {
     } else {
       log('getServicesByCategory failed');
     }
-    notifyListeners();  }
+    notifyListeners();
+  }
 
   getCategories() async {
     CategoriesResponse categoriesResponse =
@@ -203,11 +220,10 @@ class HomeProvider extends ChangeNotifier {
 
   sendContactMsg(BuildContext context) async {
     changeEnablity();
-    ContactMsgResponse response = await DioClient.dioClient
-        .sendContactMsg(
-            name: nameConContactTS.text,
-            phone: mobileConContactTS.text,
-            message: messageConContactTS.text);
+    ContactMsgResponse response = await DioClient.dioClient.sendContactMsg(
+        name: nameConContactTS.text,
+        phone: mobileConContactTS.text,
+        message: messageConContactTS.text);
     changeEnablity();
     if (response != null) {
       log('pageDetails success');
@@ -245,11 +261,10 @@ class HomeProvider extends ChangeNotifier {
     changeEnablity();
     log('requestService begin');
     RequestServiceRequest requestServiceRequest = RequestServiceRequest(
-      service_id: selectedServices.id.toString(),
-      details: serviceDetailsConSubmitService.text,
-      coupon: discountCodeConSubmitService.text,
-        quantity: countConService.text
-    );
+        service_id: selectedServices.id.toString(),
+        details: serviceDetailsConSubmitService.text,
+        coupon: discountCodeConSubmitService.text,
+        quantity: countConService.text);
     RequestServiceResponse response = await DioClient.dioClient
         .requestService(context, requestServiceRequest);
     changeEnablity();
@@ -314,7 +329,6 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   getMyProjects(BuildContext context) async {
     clearMyProjects();
     log('getMyProjects begin');
@@ -345,11 +359,10 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  getMyProjectDetails(BuildContext context,String project_id) async {
+  getMyProjectDetails(BuildContext context, String project_id) async {
     log('getMyProjects begin');
     GetMyProjectDetailsResponse response =
-    await DioClient.dioClient.getMyProjectDetails(context,project_id);
+        await DioClient.dioClient.getMyProjectDetails(context, project_id);
     if (response != null) {
       log('getMyProjects success');
       if (response.status) {
@@ -397,12 +410,12 @@ class HomeProvider extends ChangeNotifier {
   getPackageDetails(BuildContext context, String package_id) async {
     log('getPackageDetails begin');
     GetPackageDetailsResponse response =
-    await DioClient.dioClient.getPackageDetails(context,package_id);
+        await DioClient.dioClient.getPackageDetails(context, package_id);
     if (response != null) {
       log('getPackageDetails success');
       if (response.status) {
         log('done');
-       // packages = response.packages;
+        // packages = response.packages;
         notifyListeners();
       } else {
         log(response.status.toString());
@@ -413,16 +426,16 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getMyPoints(BuildContext context)async{
+  getMyPoints(BuildContext context) async {
     log('getMyPoints begin');
     GetMyPointsResponse response =
-    await DioClient.dioClient.getMyPoints(context);
+        await DioClient.dioClient.getMyPoints(context);
     if (response != null) {
       log('getMyPoints success');
       if (response.status) {
         log('done');
         points = response.myPoints.data;
-        numPoints= response.myPoints.total.toString();
+        numPoints = response.myPoints.total.toString();
         notifyListeners();
       } else {
         log(response.status.toString());
@@ -443,10 +456,10 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getMyContracts(BuildContext context)async{
+  getMyContracts(BuildContext context) async {
     log('getMyContracts begin');
     GetMyContractsResponse response =
-    await DioClient.dioClient.getMyContracts(context);
+        await DioClient.dioClient.getMyContracts(context);
     if (response != null) {
       log('getMyContracts success');
       if (response.status) {
@@ -472,10 +485,10 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getMyPackages(BuildContext context)async{
+  getMyPackages(BuildContext context) async {
     log('getMyPackages begin');
     GetMyPackagesResponse response =
-    await DioClient.dioClient.getMyPackages(context);
+        await DioClient.dioClient.getMyPackages(context);
     if (response != null) {
       log('getMyPackages success');
       if (response.status) {
@@ -501,11 +514,10 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  getMyInvoices(BuildContext context)async{
+  getMyInvoices(BuildContext context) async {
     log('getMyInvoices begin');
     GetMyInvoicesResponse response =
-    await DioClient.dioClient.getMyInvoices(context);
+        await DioClient.dioClient.getMyInvoices(context);
     if (response != null) {
       log('getMyInvoices success');
       if (response.status) {
@@ -531,46 +543,45 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  settingsApiApp(BuildContext context)async{
+  settingsApiApp(BuildContext context) async {
     log('settingsApiApp begin');
     SettingsResponse response =
-    await DioClient.dioClient.settingsApiApp(context);
+        await DioClient.dioClient.settingsApiApp(context);
     if (response != null) {
       log('settingsApiApp success');
       if (response.status) {
         log('done');
-        urlApp=response.settings.url;
-        urlFacebookApp=response.settings.facebook;
-        urlTwitterApp=response.settings.twitter;
-        urlWhatsappApp=response.settings.whatsapp;
-        urlInstagramApp=response.settings.instagram;
-        urlYoutubeApp=response.settings.youtube;
+        urlApp = response.settings.url;
+        urlFacebookApp = response.settings.facebook;
+        urlTwitterApp = response.settings.twitter;
+        urlWhatsappApp = response.settings.whatsapp;
+        urlInstagramApp = response.settings.instagram;
+        urlYoutubeApp = response.settings.youtube;
 
         notifyListeners();
       } else {
         log(response.status.toString());
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(response.message.toString()),
-          duration: const Duration(seconds: 3),
-        ));
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //   backgroundColor: Colors.red,
+        //   content: Text(response.message.toString()),
+        //   duration: const Duration(seconds: 3),
+        // ));
       }
     } else {
       log('settingsApiApp failed');
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        backgroundColor: Colors.red,
-        content: Text('getMyInvoices failed'),
-        duration: Duration(seconds: 3),
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //   backgroundColor: Colors.red,
+      //   content: Text('settingsApiApp failed'),
+      //   duration: Duration(seconds: 3),
+      // ));
     }
     notifyListeners();
   }
 
-  getMyNotifications(BuildContext context)async{
+  getMyNotifications(BuildContext context) async {
     log('getMyNotifications begin');
     NotificationsResponse response =
-    await DioClient.dioClient.getMyNotifications(context);
+        await DioClient.dioClient.getMyNotifications(context);
     if (response != null) {
       log('getMyNotifications success');
       if (response.status) {
@@ -596,12 +607,10 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
-  getServicesByPoints(BuildContext context)async{
+  getServicesByPoints(BuildContext context) async {
     log('getServicesByPoints begin');
     GetServicesByPointsResponse response =
-    await DioClient.dioClient.getServicesByPoints(context);
+        await DioClient.dioClient.getServicesByPoints(context);
     if (response != null) {
       log('getServicesByPoints success');
       if (response.status) {
@@ -627,22 +636,20 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  requestPackages(BuildContext context,File file) async {
+  requestPackages(BuildContext context, PlatformFile file) async {
     changeEnablity();
     log('requestService begin');
     RequestPackageRequest requestPackageRequest = RequestPackageRequest(
-        // package_id: selectedServices.id.toString(),
-        // details: serviceDetailsConSubmitService.text,
+      package_id: packageId,
+      details: detailsConBouquet.text,
     );
     RequestPackagesResponse response = await DioClient.dioClient
-        .requestPackages(context, requestPackageRequest,file);
+        .requestPackages(context, requestPackageRequest, file);
     changeEnablity();
     if (response != null) {
       log('requestService success');
       if (response.status) {
         RouterClass.routerClass.pushToScreenUsingWidget(OrderStatusPackage());
-
       } else {
         log(response.status.toString());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -665,50 +672,52 @@ class HomeProvider extends ChangeNotifier {
     //valueSearch = value;
     searchCategories = categories
         .where((element) =>
-        element.name.toLowerCase().contains(value.toLowerCase()))
+            element.name.toLowerCase().contains(value.toLowerCase()))
         .toList();
     searchServices = services
         .where((element) =>
-        element.title.toLowerCase().contains(value.toLowerCase()))
+            element.title.toLowerCase().contains(value.toLowerCase()))
         .toList();
     notifyListeners();
     log(searchCategories.length.toString());
     log(searchServices.length.toString());
-   // log(searchController.text.toString());
+    // log(searchController.text.toString());
   }
 
   searchServiceScreen(String value) {
     searchServicesByCategory = servicesByCategory
         .where((element) =>
-        element.title.toLowerCase().contains(value.toLowerCase()))
+            element.title.toLowerCase().contains(value.toLowerCase()))
         .toList();
     notifyListeners();
     log(servicesByCategory.length.toString());
   }
 
-  uploadFile()async{
+  uploadFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'pdf', 'doc'],
     );
     if (result != null) {
       final file = result.files.first;
-      log('Name: '+file.name.toString());
-      log('extension: '+file.extension.toString());
-      log('path: '+file.path.toString());
+      platformFile = file;
+      log('Name: ' + file.name.toString());
+      log('extension: ' + file.extension.toString());
+      log('path: ' + file.path.toString());
       // File file = File(result.files.single.path);
     } else {
       // User canceled the picker
     }
   }
 
-  downloadFile()async{
+  downloadFile() async {
     final taskId = await FlutterDownloader.enqueue(
       url: 'your download link',
       savedDir: 'the path of directory where you want to save downloaded files',
-      showNotification: true, // show download progress in status bar (for Android)
-      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+      showNotification: true,
+      // show download progress in status bar (for Android)
+      openFileFromNotification:
+          true, // click on notification to open downloaded file (for Android)
     );
   }
-
 }

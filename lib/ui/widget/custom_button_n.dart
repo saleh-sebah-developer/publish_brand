@@ -12,7 +12,7 @@ class CustomButtonN extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width / sizeButton,
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: HexColor('#E6E7EB'),
@@ -20,8 +20,9 @@ class CustomButtonN extends StatelessWidget {
       ),
       child: Text(
         labelText,
+        textAlign: TextAlign.center,
         style: const TextStyle(
-            color: Colors.black, fontSize: 16, fontFamily: 'TajawalRegular'),
+            color: Colors.black, fontSize: 14, fontFamily: 'TajawalRegular'),
       ),
     );
   }

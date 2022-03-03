@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:publish_brand/data/sp_helper.dart';
 import 'package:publish_brand/helpers/RouterClass.dart';
@@ -18,6 +19,7 @@ void main() async {
   await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
   );
+  await Firebase.initializeApp();
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],

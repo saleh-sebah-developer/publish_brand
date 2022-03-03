@@ -50,7 +50,7 @@ class _IntroScreenState extends State<IntroScreen> {
           width: 375.w,
           decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/bg_all.png'),
+                image: AssetImage('assets/images/bg2.png'),
                 fit: BoxFit.fill),
           ),
           child: Column(
@@ -60,7 +60,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 width: 98.w,
                 height: 67.h,
                 child: const Image(
-                  image: AssetImage('assets/images/logo0.png'),
+                  image: AssetImage('assets/images/logo_app.png'),
                 ),
               ),
               Container(

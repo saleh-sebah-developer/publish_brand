@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:publish_brand/data/sp_helper.dart';
 import 'package:publish_brand/models/categories_response.dart';
@@ -31,6 +32,8 @@ import 'package:publish_brand/models/sign_up_users_request.dart';
 import 'package:publish_brand/models/sign_up_users_response.dart';
 import 'api_constants.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 
 class DioClient {
   DioClient._() {
@@ -43,6 +46,8 @@ class DioClient {
   initDio() {
     dio = Dio();
     dio.options.baseUrl = ApiConstant.baseUrl;
+    //BuildContext context;
+    //dio.options.headers['Accept-Language'] = context.setLocale(Locale('ar'));
     dio.options.headers['Accept-Language'] = 'ar';
   }
 
@@ -487,7 +492,7 @@ class DioClient {
   }
 
   Future<RequestPackagesResponse> requestPackages(
-      BuildContext context, RequestPackageRequest requestPackageRequest,File file) async {
+      BuildContext context, RequestPackageRequest requestPackageRequest,PlatformFile file) async {
     try {
       String fileName = file.path.split('/').last;
       FormData formData = FormData.fromMap({
@@ -497,7 +502,8 @@ class DioClient {
 
       Response response = await dio.post(
         ApiConstant.requestPackages,
-        data: requestPackageRequest.toJson(),
+        data: formData,
+     //   data: requestPackageRequest.toJson(),
         options: Options(headers: {
         "Content-Type": "multipart/form-data",
           'authorization': 'Bearer ' +

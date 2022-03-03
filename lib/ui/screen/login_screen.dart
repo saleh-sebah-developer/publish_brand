@@ -34,164 +34,184 @@ class LoginScreen extends StatelessWidget {
               fontFamily: 'TajawalBold'),
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.only(top: 30.h),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/bg_all.png'), fit: BoxFit.fill),
-        ),
-        child: Consumer<ApiAuthProvider>(builder: (context, provider, x) {
-          return Form(
-            key: loginFormKey,
-            child: ListView(
-              children: [
-                CustomTextField(
-                  controller: provider.mobileConLogin,
-                  textInputType: TextInputType.phone,
-                  labelText: 'phone'.tr(),
-                  labelTextHint: 'hint_phone'.tr(),
-                  validationFun: provider.validatePhone,
-                ),
-                CustomTextField(
-                  controller: provider.passwordConLogin,
-                  textInputType: TextInputType.visiblePassword,
-                  labelText: 'password'.tr(),
-                  labelTextHint: 'hint_password'.tr(),
-                  validationFun: provider.validateNull,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    RouterClass.routerClass
-                        .pushToScreenUsingWidget(ForgetPasswordScreen());
-                  },
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                    child: Text(
-                      'forget_password'.tr(),
-                      textAlign: TextAlign.end,
-                      style:
-                          TextStyle(fontSize: 14.sp, fontFamily: 'TajawalBold'),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    RouterClass.routerClass
-                        .pushToScreenUsingWidget(SignUpScreen(typeUser: 'user',));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8.w),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Image(
-                          height: 24.h,
-                          width: 24.w,
-                          image:
-                              const AssetImage('assets/icons/ic_profile.png'),
-                        ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        Text(
-                          'individual_account'.tr(),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontSize: 14.sp, fontFamily: 'TajawalBold'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    RouterClass.routerClass
-                        .pushToScreenUsingWidget(SignUpScreen(typeUser: 'company',));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8.w),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Image(
-                          height: 24.h,
-                          width: 24.w,
-                          image:
-                              const AssetImage('assets/icons/ic_company.png'),
-                        ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        Text(
-                          'company_account'.tr(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 14.sp, fontFamily: 'TajawalBold'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                provider.btnIsEnable == false
-                    ? SizedBox(
-                        height: 40.h,
-                        width: 40.w,
-                        child: Center(
-                          child:
-                              Lottie.asset('assets/animations/progress1.json'),
-                        ))
-                    : Container(),
-                const Spacer(),
-                Container(
-                  color: Colors.white,
-                  margin: EdgeInsets.only(top: 260),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 22.w, vertical: 34.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: provider.btnIsEnable
-                            ? () {
-                                if (loginFormKey.currentState.validate()) {
-                                  provider.LoginForUsers(context);
-                                }
-                              }
-                            : () {},
-                        child: CustomButtonY(
-                          labelText: 'login'.tr(),
-                          sizeButton: 2.5,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 22.w,
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            RouterClass.routerClass
-                                .pushReplacementToScreen(const Home());
-                          },
-                          child: CustomButtonN(
-                            labelText: 'login_guest'.tr(),
-                            sizeButton: 2.5,
-                          )),
-                    ],
-                  ),
-                )
-              ],
+      body: LayoutBuilder(
+        builder: (context,constraint) {
+          return Container(
+            margin: EdgeInsets.only(top: 10.h),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/bg_all.png'), fit: BoxFit.fill),
             ),
+            child: Consumer<ApiAuthProvider>(builder: (context, provider, x) {
+              return Form(
+                key: loginFormKey,
+                child: SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            controller: provider.mobileConLogin,
+                            textInputType: TextInputType.phone,
+                            labelText: 'phone'.tr(),
+                            labelTextHint: 'hint_phone'.tr(),
+                            validationFun: provider.validatePhone,
+                          ),
+                          CustomTextField(
+                            controller: provider.passwordConLogin,
+                            textInputType: TextInputType.visiblePassword,
+                            labelText: 'password'.tr(),
+                            labelTextHint: 'hint_password'.tr(),
+                            validationFun: provider.validateNull,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              RouterClass.routerClass
+                                  .pushToScreenUsingWidget(ForgetPasswordScreen());
+                            },
+                            child: Container(
+                              margin:
+                                  EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                              padding:
+                                  EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'forget_password'.tr(),
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        fontSize: 14.sp, fontFamily: 'TajawalBold'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              RouterClass.routerClass
+                                  .pushToScreenUsingWidget(SignUpScreen(
+                                typeUser: 'user',
+                              ));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 8.w),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w, vertical: 12.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Image(
+                                    height: 24.h,
+                                    width: 24.w,
+                                    image:
+                                        const AssetImage('assets/icons/ic_profile.png'),
+                                  ),
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
+                                  Text(
+                                    'individual_account'.tr(),
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        fontSize: 14.sp, fontFamily: 'TajawalBold'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              RouterClass.routerClass
+                                  .pushToScreenUsingWidget(SignUpScreen(
+                                typeUser: 'company',
+                              ));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 8.w),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w, vertical: 12.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Image(
+                                    height: 24.h,
+                                    width: 24.w,
+                                    image:
+                                        const AssetImage('assets/icons/ic_company.png'),
+                                  ),
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
+                                  Text(
+                                    'company_account'.tr(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14.sp, fontFamily: 'TajawalBold'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          provider.btnIsEnable == false
+                              ? SizedBox(
+                                  height: 40.h,
+                                  width: 40.w,
+                                  child: Center(
+                                    child: Lottie.asset(
+                                        'assets/animations/progress1.json'),
+                                  ))
+                              : Container(),
+                          const Spacer(),
+                          Container(
+                            color: Colors.white,
+                            // margin: EdgeInsets.only(top: 260),
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 22.w, vertical: 22.h),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: provider.btnIsEnable
+                                      ? () {
+                                          if (loginFormKey.currentState.validate()) {
+                                            provider.LoginForUsers(context);
+                                          }
+                                        }
+                                      : () {},
+                                  child: CustomButtonY(
+                                    labelText: 'login'.tr(),
+                                    sizeButton: 2.5,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 22.w,
+                                ),
+                                GestureDetector(
+                                    onTap: () {
+                                      RouterClass.routerClass
+                                          .pushReplacementToScreen(const Home());
+                                    },
+                                    child: CustomButtonN(
+                                      labelText: 'login_guest'.tr(),
+                                      sizeButton: 2.5,
+                                    )),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
           );
-        }),
+        }
       ),
     );
   }

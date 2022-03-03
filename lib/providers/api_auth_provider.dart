@@ -8,6 +8,7 @@ import 'package:publish_brand/models/data_response.dart';
 import 'package:publish_brand/models/login_for_users_response.dart';
 import 'package:publish_brand/models/sign_up_users_request.dart';
 import 'package:publish_brand/models/sign_up_users_response.dart';
+import 'package:publish_brand/repositories/firestore_helper.dart';
 import 'package:publish_brand/ui/screen/activation_code_screen.dart';
 import 'package:publish_brand/ui/screen/home.dart';
 import 'package:publish_brand/ui/screen/login_screen.dart';
@@ -69,6 +70,10 @@ class ApiAuthProvider extends ChangeNotifier {
     }
   }
 
+  String validate(String value) {
+    return null;
+  }
+
   String validateConfirmedPassword(String value) {
     if (passwordConSignUp.text != confirmPasswordConSignUp.text) {
       return 'passwords_are_not_matched'.tr();
@@ -103,7 +108,7 @@ class ApiAuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  logOut(BuildContext context) async{
+  logOut(BuildContext context) async {
     await Provider.of<SpHelper>(context, listen: false).removeToken();
     RouterClass.routerClass.pushReplacementToScreen(LoginScreen());
   }
@@ -142,8 +147,9 @@ class ApiAuthProvider extends ChangeNotifier {
     if (response != null) {
       log('register success');
       if (response.status) {
-
-        RouterClass.routerClass.pushToScreenUsingWidget(ActivationCodeScreen(mobileConSignUp.text));
+        FirestoreHelper.firestoreHelper.registerUser(response.user);
+        RouterClass.routerClass.pushToScreenUsingWidget(
+            ActivationCodeScreen(mobileConSignUp.text));
         nameConSignUp.text = '';
         passwordConSignUp.text = '';
         emailConSignUp.text = '';
@@ -178,6 +184,14 @@ class ApiAuthProvider extends ChangeNotifier {
         mobileConLogin.text = '';
         passwordConLogin.text = '';
         notifyListeners();
+      } else if (response.code == 201) {
+        RouterClass.routerClass
+            .pushToScreenUsingWidget(ActivationCodeScreen(mobileConLogin.text));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(response.message.toString()),
+          duration: const Duration(seconds: 3),
+        ));
       } else {
         log(response.status.toString());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -376,54 +390,51 @@ class ApiAuthProvider extends ChangeNotifier {
     }
   }
 
-
-   checkToken(context){
-      showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return Container(
-              color: Color(0xFF737373),
-              child: Container(
-                height: 150.h,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30.r),
-                      topLeft: Radius.circular(30.r),
-                    )),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(
-                            top: 22,left: 22.w, right: 22.w, bottom: 12.h),
-                        child: Text(
-                          'please_login_first'.tr(),
-                          style: TextStyle(
-                              fontSize: 20.sp,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        )),
-                    GestureDetector(
-                      onTap: (){
-                        RouterClass.routerClass.pushReplacementToScreen(LoginScreen());
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            top: 12,left: 22.w, right: 22.w, bottom: 22.h),
-                        child: CustomButtonY(
-                          labelText: 'login'.tr(),
-                          sizeButton: 1,
-                        ),
+  checkToken(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            color: Color(0xFF737373),
+            child: Container(
+              height: 150.h,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(30.r),
+                    topLeft: Radius.circular(30.r),
+                  )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(
+                          top: 22, left: 22.w, right: 22.w, bottom: 12.h),
+                      child: Text(
+                        'please_login_first'.tr(),
+                        style: TextStyle(
+                            fontSize: 20.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      )),
+                  GestureDetector(
+                    onTap: () {
+                      RouterClass.routerClass
+                          .pushReplacementToScreen(LoginScreen());
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 12, left: 22.w, right: 22.w, bottom: 22.h),
+                      child: CustomButtonY(
+                        labelText: 'login'.tr(),
+                        sizeButton: 1,
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-            );
-          });
-
+            ),
+          );
+        });
   }
-
-
 }

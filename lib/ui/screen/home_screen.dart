@@ -25,6 +25,7 @@ import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -34,6 +35,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   launchNormalUrl(String url) {
     launch(url);
   }
@@ -46,8 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Provider.of<HomeProvider>(context, listen: false).settingsApiApp(context);
-    Provider.of<ApiAuthProvider>(context, listen: false).profile(context);
-    Provider.of<HomeProvider>(context, listen: false).getMyPoints(context);
+    Provider.of<SpHelper>(context, listen: false).token != null
+        ? Provider.of<ApiAuthProvider>(context, listen: false).profile(context)
+        : () {};
+    Provider.of<SpHelper>(context, listen: false).token != null
+        ? Provider.of<HomeProvider>(context, listen: false).getMyPoints(context)
+        : () {};
   }
 
   TextEditingController searchHomeScreenCon = TextEditingController();
@@ -55,26 +62,57 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black, size: 30),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              RouterClass.routerClass
-                  .pushToScreenUsingWidget(const NotificationsScreen());
-            },
-            child: Image(
-              height: 30.h,
-              width: 30.w,
-              image: const AssetImage('assets/icons/ic_noification.png'),
+      key: _scaffoldKey,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(35.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          iconTheme: const IconThemeData(color: Colors.black, size: 30),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Provider.of<SpHelper>(context, listen: false).token == null
+                    ? Provider.of<ApiAuthProvider>(context, listen: false)
+                        .checkToken(context)
+                    : RouterClass.routerClass
+                        .pushToScreenUsingWidget(const NotificationsScreen());
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(5.r)),
+                child: Image(
+                  height: 30.h,
+                  width: 30.w,
+                  image: const AssetImage('assets/icons/ic_noification.png'),
+                ),
+              ),
             ),
+            const SizedBox(
+              width: 8,
+            ),
+          ],
+          leading: GestureDetector(
+            onTap: () {
+              _scaffoldKey.currentState.openDrawer();
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(5.r)),
+                margin: EdgeInsets.only(right: 8),
+                child: Visibility(
+                  visible: true,
+                  child: Image(
+                    height: 30.h,
+                    width: 30.w,
+                    image: const AssetImage('assets/icons/ic_menu.png'),
+                  ),
+                )),
           ),
-          const SizedBox(
-            width: 8,
-          ),
-        ],
+          leadingWidth: 40,
+        ),
       ),
       extendBodyBehindAppBar: true,
       drawer: Drawer(
@@ -264,8 +302,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               onTap: () {
-                RouterClass.routerClass
-                    .pushToScreenUsingWidget(LoyaltyPointsScreen());
+                Provider.of<SpHelper>(context, listen: false).token == null
+                    ? Provider.of<ApiAuthProvider>(context, listen: false)
+                        .checkToken(context)
+                    : RouterClass.routerClass
+                        .pushToScreenUsingWidget(LoyaltyPointsScreen());
               },
               title: Text(
                 'loyalty_points'.tr(),
@@ -356,12 +397,19 @@ class _HomeScreenState extends State<HomeScreen> {
               margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 22.h),
               child: Column(
                 children: [
-                  Text(
-                    Provider.of<HomeProvider>(context, listen: false).urlApp,
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        fontFamily: 'TajawalBold',
-                        color: HexColor('#4091AF')),
+                  GestureDetector(
+                    onTap: () {
+                      launchNormalUrl(
+                          Provider.of<HomeProvider>(context, listen: false)
+                              .urlApp);
+                    },
+                    child: Text(
+                      Provider.of<HomeProvider>(context, listen: false).urlApp,
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: 'TajawalBold',
+                          color: HexColor('#4091AF')),
+                    ),
                   ),
                   SizedBox(
                     height: 2.w,
@@ -472,34 +520,73 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Stack(
                 children: [
-                  CarouselSlider(
-                    options: CarouselOptions(
-                      height: 236.h,
-                      autoPlay: true,
-                    ),
-                    items: provider.listAds.map((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                              height: 236.h,
-                              width: MediaQuery.of(context).size.width,
-                              decoration:
-                                  const BoxDecoration(color: Colors.white10),
-                              child: CachedNetworkImage(
+                  provider.listAds == null
+                      ? Container(
+                          height: 236.h,
+                          child: Center(
+                            child: SizedBox(
+                                height: 40.h,
+                                width: 40.w,
+                                child: Center(
+                                  child: Lottie.asset(
+                                      'assets/animations/progress1.json'),
+                                )),
+                          ),
+                        )
+                      : provider.listAds.isEmpty
+                          ? Center(
+                              child:
+                                  Lottie.asset('assets/animations/empty2.json'),
+                            )
+                          : CarouselSlider(
+                              options: CarouselOptions(
                                 height: 236.h,
-                                width: 375.w,
-                                imageUrl: i.image,
-                              ));
-                        },
-                      );
-                    }).toList(),
-                  ),
+                                autoPlay: true,
+                              ),
+                              items: provider.listAds.map((i) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                        height: 236.h,
+                                        width:
+                                            MediaQuery.of(context).size.width/1.2,
+                                        padding: EdgeInsets.symmetric(horizontal:2.w),
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white10),
+                                        child: CachedNetworkImage(
+                                          height: 236.h,
+                                          width: 375.w,
+                                          imageUrl: i.image,
+                                        ));
+                                  },
+                                );
+                              }).toList(),
+                            ),
                   Container(
                     margin: EdgeInsets.only(
                         top: 40.h, bottom: 42, right: 12.w, left: 8.w),
                     child: Row(
                       children: [
-                        Container(
+                        Visibility(
+                          visible: false,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(5.r)),
+                              child: Visibility(
+                                visible: true,
+                                child: Image(
+                                  height: 30.h,
+                                  width: 30.w,
+                                  image: const AssetImage(
+                                      'assets/icons/ic_menu.png'),
+                                ),
+                              )),
+                        ),
+                        const Spacer(),
+                        Visibility(
+                          visible: false,
+                          child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(0.5),
                                 borderRadius: BorderRadius.circular(5.r)),
@@ -509,21 +596,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 30.h,
                                 width: 30.w,
                                 image: const AssetImage(
-                                    'assets/icons/ic_menu.png'),
+                                    'assets/icons/ic_noification.png'),
                               ),
-                            )),
-                        const Spacer(),
-                        Visibility(
-                          visible: true,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(5.r)),
-                            child: Image(
-                              height: 30.h,
-                              width: 30.w,
-                              image: const AssetImage(
-                                  'assets/icons/ic_noification.png'),
                             ),
                           ),
                         ),
@@ -618,6 +692,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+              provider.categories == null
+                  ? Container(
+                height: 180.h,
+                child: Center(
+                  child: SizedBox(
+                      height: 40.h,
+                      width: 40.w,
+                      child: Center(
+                        child: Lottie.asset(
+                            'assets/animations/progress1.json'),
+                      )),
+                ),
+              )
+                  : provider.categories.isEmpty
+                  ? Center(
+                child:
+                Lottie.asset('assets/animations/empty2.json'),
+              )
+                  :
               Container(
                 height: 180.h,
                 width: MediaQuery.of(context).size.width,
@@ -662,6 +755,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   textAlign: TextAlign.end,
                 ),
               ),
+              provider.services == null
+                  ? Container(
+                height: MediaQuery.of(context).size.height / 3.5,
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: SizedBox(
+                      height: 40.h,
+                      width: 40.w,
+                      child: Center(
+                        child: Lottie.asset(
+                            'assets/animations/progress1.json'),
+                      )),
+                ),
+              )
+                  : provider.services.isEmpty
+                  ? Center(
+                child:
+                Lottie.asset('assets/animations/empty2.json'),
+              )
+                  :
               SizedBox(
                   height: MediaQuery.of(context).size.height / 3.5,
                   width: MediaQuery.of(context).size.width,

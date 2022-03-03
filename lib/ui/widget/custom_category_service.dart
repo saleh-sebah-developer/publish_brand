@@ -23,6 +23,11 @@ class CustomCategoryService extends StatelessWidget {
                 height: 24.h,
                 width: 24.w,
                 imageUrl: iconData,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              CircularProgressIndicator(
+                value: downloadProgress.progress,
+              ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
               )
             : Image(
                 height: 24.h,
