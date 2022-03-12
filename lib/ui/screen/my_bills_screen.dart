@@ -17,6 +17,8 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../providers/SalehProvider.dart';
+
 class MyBillsScreen extends StatefulWidget {
   const MyBillsScreen({Key key}) : super(key: key);
 
@@ -65,6 +67,13 @@ class _MyBillsScreenState extends State<MyBillsScreen> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () async {
+                        Provider.of<SalehProvider>(context, listen: false)
+                            .download2(Provider.of<HomeProvider>(context,
+                                    listen: false)
+                                .invoices[index]
+                                .file);
+
+                        /*
                         final status = await Permission.storage.request();
                         if (status.isGranted) {
                           final externalDir =
@@ -85,6 +94,7 @@ class _MyBillsScreenState extends State<MyBillsScreen> {
                             duration: Duration(seconds: 3),
                           ));
                         }
+                        */
                       },
                       child: CustomMyContract(
                         label: 'invoice_date'.tr() +

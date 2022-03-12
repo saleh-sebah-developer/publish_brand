@@ -147,9 +147,10 @@ class SignUpScreen extends StatelessWidget {
                                     color: Colors.black),
                               ),
                               subtitle: GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   RouterClass.routerClass
-                                      .pushToScreenUsingWidget(PoliciesScreen());
+                                      .pushToScreenUsingWidget(
+                                          PoliciesScreen());
                                 },
                                 child: Text(
                                   'policies_click_here'.tr(),
@@ -161,7 +162,6 @@ class SignUpScreen extends StatelessWidget {
                                 provider.changeAgreeTerms();
                               }),
                         ),
-
                         provider.btnIsEnable == false
                             ? SizedBox(
                                 height: 40.h,

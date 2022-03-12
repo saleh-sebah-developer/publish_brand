@@ -11,6 +11,7 @@ import 'package:publish_brand/providers/api_auth_provider.dart';
 import 'package:publish_brand/providers/home_provider.dart';
 import 'package:publish_brand/ui/screen/bouquet.dart';
 import 'package:publish_brand/ui/screen/special_requests.dart';
+import '../screen/details_package.dart';
 import 'custom_button_y.dart';
 import 'package:provider/provider.dart';
 
@@ -23,9 +24,17 @@ class CustomPackages extends StatelessWidget {
   String monthsCount;
   String package_id;
   String contract;
+  String detailsPackage;
 
   CustomPackages(
-      {this.title, this.iconData, this.packagesProperties, this.price,this.monthsCount, this.package_id,this.contract});
+      {this.title,
+      this.iconData,
+      this.packagesProperties,
+      this.price,
+      this.monthsCount,
+      this.package_id,
+      this.detailsPackage,
+      this.contract});
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +56,15 @@ class CustomPackages extends StatelessWidget {
                 ),
                 child: iconData != null
                     ? CachedNetworkImage(
-                  height: 24.h,
-                  width: 24.w,
-                  imageUrl: iconData,
-                )
+                        height: 24.h,
+                        width: 24.w,
+                        imageUrl: iconData,
+                      )
                     : Image(
-                  height: 24.h,
-                  width: 24.w,
-                  image: const AssetImage('assets/icons/ic_brush.png'),
-                )),
+                        height: 24.h,
+                        width: 24.w,
+                        image: const AssetImage('assets/icons/ic_brush.png'),
+                      )),
             trailing: const Icon(
               Icons.keyboard_arrow_down,
               size: 40,
@@ -78,13 +87,14 @@ class CustomPackages extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 2.h),
                 child: Text(
-                  price +' / '+ monthsCount+'month'.tr(),
+                  price + ' / ' + monthsCount + 'month'.tr(),
                   style: TextStyle(fontSize: 20.sp, fontFamily: 'TajawalBold'),
                 ),
               ),
               ListTile(
-                onTap: (){
-                  RouterClass.routerClass.pushToScreenUsingWidget(SpecialRequestsScreen());
+                onTap: () {
+                  RouterClass.routerClass
+                      .pushToScreenUsingWidget(SpecialRequestsScreen());
                 },
                 // ignore: prefer_const_constructors
                 title: Text(
@@ -93,16 +103,32 @@ class CustomPackages extends StatelessWidget {
                 leading: Icon(Icons.add),
                 minLeadingWidth: 10,
               ),
+              ListTile(
+                onTap: () {
+                  RouterClass.routerClass
+                      .pushToScreenUsingWidget(DetailsPackageScreen(detailsPackage));
+                },
+                // ignore: prefer_const_constructors
+                title: Text(
+                  'details'.tr(),
+                  style: TextStyle(color: HexColor('#4091AF'), fontSize: 16.sp),
+                ),
+                leading: Icon(Icons.details),
+                minLeadingWidth: 10,
+              ),
+
               GestureDetector(
                 onTap: () {
-                  Provider.of<SpHelper>(context, listen: false).token==null?
-                  Provider.of<ApiAuthProvider>(context, listen: false).checkToken(context)
-                  :RouterClass.routerClass
-                      .pushToScreenUsingWidget(BouquetScreen(title,iconData,packagesProperties,price,monthsCount,package_id,contract));
+                  Provider.of<SpHelper>(context, listen: false).token == null
+                      ? Provider.of<ApiAuthProvider>(context, listen: false)
+                          .checkToken(context)
+                      : RouterClass.routerClass.pushToScreenUsingWidget(
+                          BouquetScreen(title, iconData, packagesProperties,
+                              price, monthsCount, package_id, contract));
                 },
                 child: Container(
                   margin:
-                  EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                   child: CustomButtonY(
                     labelText: 'subscribe'.tr(),
                     sizeButton: 1,

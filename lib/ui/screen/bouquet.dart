@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:publish_brand/helpers/RouterClass.dart';
 import 'package:publish_brand/models/get_packages_response.dart';
+import 'package:publish_brand/providers/AppProvider.dart';
 import 'package:publish_brand/providers/api_auth_provider.dart';
 import 'package:publish_brand/providers/home_provider.dart';
 import 'package:publish_brand/ui/screen/payment_confirmation1.dart';
@@ -27,6 +28,8 @@ import 'dart:isolate';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../providers/SalehProvider.dart';
 
 // ignore: must_be_immutable
 class BouquetScreen extends StatefulWidget {
@@ -52,7 +55,6 @@ class _BouquetScreenState extends State<BouquetScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<HomeProvider>(context, listen: false).packageId =
         widget.package_id;
@@ -73,8 +75,8 @@ class _BouquetScreenState extends State<BouquetScreen> {
       ),
       body: LayoutBuilder(builder: (context, constraint) {
         return Container(
-          child: Consumer2<HomeProvider, ApiAuthProvider>(
-              builder: (context, providerHome, providerAuth, x) {
+          child: Consumer3<HomeProvider, ApiAuthProvider, AppProvider>(
+              builder: (context, providerHome, providerAuth, providerApp, x) {
             return Form(
               key: bouquetFormKey,
               child: SingleChildScrollView(
@@ -169,6 +171,10 @@ class _BouquetScreenState extends State<BouquetScreen> {
                         ),
                         GestureDetector(
                           onTap: () async {
+                         //   providerApp.download2(widget.contract);
+                           // Provider.of<SalehProvider>(context,listen: false).download2('https://publishbrand.homeshopuae.com/public/uploads/packages/attach1645864112_43719file.docx');
+                            Provider.of<SalehProvider>(context,listen: false).download2(widget.contract);
+/*
                             final status = await Permission.storage.request();
                             if (status.isGranted) {
                               final externalDir =
@@ -188,6 +194,7 @@ class _BouquetScreenState extends State<BouquetScreen> {
                                 duration: Duration(seconds: 3),
                               ));
                             }
+                            */
                           },
                           child: Container(
                             margin: EdgeInsets.only(

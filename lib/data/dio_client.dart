@@ -30,10 +30,11 @@ import 'package:publish_brand/models/request_special_service_response.dart';
 import 'package:publish_brand/models/settings_response.dart';
 import 'package:publish_brand/models/sign_up_users_request.dart';
 import 'package:publish_brand/models/sign_up_users_response.dart';
+import '../models/get_chat_message_response.dart';
+import '../models/send_message_request.dart';
 import 'api_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 
 class DioClient {
   DioClient._() {
@@ -46,9 +47,13 @@ class DioClient {
   initDio() {
     dio = Dio();
     dio.options.baseUrl = ApiConstant.baseUrl;
-    //BuildContext context;
-    //dio.options.headers['Accept-Language'] = context.setLocale(Locale('ar'));
     dio.options.headers['Accept-Language'] = 'ar';
+
+    // if (context.locale == Locale('en')) {
+    //   dio.options.headers['Accept-Language'] = 'en';
+    // } else {
+    //   dio.options.headers['Accept-Language'] = 'ar';
+    // }
   }
 
   // --- Auth
@@ -112,8 +117,8 @@ class DioClient {
     try {
       Response response = await dio.get(ApiConstant.profile,
           options: Options(headers: {
-            'Authorization':
-                'Bearer ' + await Provider.of<SpHelper>(context,listen: false).getToken()
+            'Authorization': 'Bearer ' +
+                await Provider.of<SpHelper>(context, listen: false).getToken()
           }));
 
       LoginForUsersResponse loginForUsersResponse =
@@ -136,8 +141,8 @@ class DioClient {
           'password': password,
         },
         options: Options(headers: {
-          'authorization':
-              'Bearer ' + await Provider.of<SpHelper>(context,listen: false).getToken()
+          'authorization': 'Bearer ' +
+              await Provider.of<SpHelper>(context, listen: false).getToken()
         }),
       );
       DataResponse dataResponse = DataResponse.fromJson(response.data);
@@ -491,21 +496,21 @@ class DioClient {
     }
   }
 
-  Future<RequestPackagesResponse> requestPackages(
-      BuildContext context, RequestPackageRequest requestPackageRequest,PlatformFile file) async {
+  Future<RequestPackagesResponse> requestPackages(BuildContext context,
+      RequestPackageRequest requestPackageRequest, PlatformFile file) async {
     try {
       String fileName = file.path.split('/').last;
       FormData formData = FormData.fromMap({
         ...requestPackageRequest.toJson(),
-        "file": await MultipartFile.fromFile(file.path, filename:fileName),
+        "file": await MultipartFile.fromFile(file.path, filename: fileName),
       });
 
       Response response = await dio.post(
         ApiConstant.requestPackages,
         data: formData,
-     //   data: requestPackageRequest.toJson(),
+        //   data: requestPackageRequest.toJson(),
         options: Options(headers: {
-        "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
           'authorization': 'Bearer ' +
               await Provider.of<SpHelper>(context, listen: false).getToken()
         }),
@@ -513,6 +518,50 @@ class DioClient {
       RequestPackagesResponse requestPackagesResponse =
           RequestPackagesResponse.fromJson(response.data);
       return requestPackagesResponse;
+    } on Exception catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+//----------------------------------------------------------------------------
+//------------------------------------    chats        -----------------------
+//----------------------------------------------------------------------------
+
+  Future<getChatMessageResponse> getChatMessage(
+      BuildContext context, String package_id) async {
+    try {
+      Response response = await dio.get(
+        ApiConstant.getChatMessage,
+        queryParameters: {'project_id': package_id},
+        options: Options(headers: {
+          'authorization': 'Bearer ' +
+              await Provider.of<SpHelper>(context, listen: false).getToken()
+        }),
+      );
+      getChatMessageResponse chatMessageResponse =
+          getChatMessageResponse.fromJson(response.data);
+      return chatMessageResponse;
+    } on Exception catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<DataResponse> sendMessage(
+      BuildContext context, SendMessageRequest sendMessageRequest) async {
+    try {
+      Response response = await dio.post(
+        ApiConstant.sendMessage,
+        data: sendMessageRequest.toJson(),
+        options: Options(headers: {
+          'authorization': 'Bearer ' +
+              await Provider.of<SpHelper>(context, listen: false).getToken()
+        }),
+      );
+      DataResponse requestServiceResponse =
+          DataResponse.fromJson(response.data);
+      return requestServiceResponse;
     } on Exception catch (e) {
       log(e.toString());
       return null;

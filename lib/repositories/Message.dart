@@ -7,9 +7,15 @@ class Message {
   String senderId;
   FieldValue sentTime;
   String image;
+
   // Date
 
   Message({this.content, this.senderId, this.chatId, this.image});
+
+  Message.fromMap(Map map) {
+    this.content = map['content'];
+    this.senderId = map['senderId'];
+  }
 
   toMap() {
     return {

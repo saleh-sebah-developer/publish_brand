@@ -31,6 +31,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         .getServicesDetails(widget.service_id);
     Provider.of<HomeProvider>(context, listen: false).countConService.text =
         '1';
+
   }
 
   @override
@@ -165,40 +166,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                                 fontSize: 14.sp,
                                                 fontFamily: 'TajawalBold',
                                                 color: HexColor('#4091AF'))),
-                                        SizedBox(
-                                          width: 12.w,
-                                        ),
-                                        Text('number'.tr(),
-                                            style: TextStyle(
-                                                fontSize: 14.sp,
-                                                fontFamily: 'TajawalBold',
-                                                color: Colors.black)),
-                                        SizedBox(
-                                          width: 4.w,
-                                        ),
-                                        Container(
-                                          height: 25,
-                                          width: 60,
-                                          decoration: BoxDecoration(
-                                              color: HexColor('#F5F5F5'),
-                                              borderRadius:
-                                                  BorderRadius.circular(6)),
-                                          child: Form(
-                                            key: widget.countServiceFormKey,
-                                            child: TextFormField(
-                                              controller:
-                                                  provider.countConService,
-                                              validator: (v) =>
-                                                  provider.validateCount(v),
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  color: Colors.blueAccent,
-                                                  fontSize: 16),
-                                            ),
-                                          ),
-                                        )
+
                                       ],
                                     ),
                                     Row(
@@ -222,6 +190,66 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                                 fontFamily: 'TajawalBold',
                                                 color: HexColor('#4091AF'))),
                                       ],
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      height: 25,
+                                      margin: EdgeInsets.symmetric(vertical: 2.h),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text('number'.tr(),
+                                              style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                  fontFamily: 'TajawalRegular',
+                                                  color: Colors.black)),
+                                          SizedBox(
+                                            width: 4.w,
+                                          ),
+                                          Container(
+                                            height: 25,
+                                            width: 60,
+                                            decoration: BoxDecoration(
+                                                color: HexColor('#F5F5F5'),
+                                                borderRadius:
+                                                BorderRadius.circular(6)),
+                                            child: Form(
+                                              key: widget.countServiceFormKey,
+                                              child: TextFormField(
+                                                onChanged: (v)=> provider.totalPriceMethod(v),
+                                                controller:
+                                                provider.countConService,
+                                                validator: (v) =>
+                                                    provider.validateCount(v),
+                                                keyboardType:
+                                                TextInputType.number,
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color: Colors.blueAccent,
+                                                    fontSize: 16),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 4.w,
+                                          ),
+                                          Text('total_price'.tr(),
+                                              style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                  fontFamily: 'TajawalRegular',
+                                                  color: Colors.black)),
+                                          SizedBox(
+                                            width: 4.w,
+                                          ),
+                                          Text(provider.totalPrice.toString()??provider.selectedServices.price.toString(),
+                                              style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                  fontFamily: 'TajawalRegular',
+                                                  color: Colors.black)),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

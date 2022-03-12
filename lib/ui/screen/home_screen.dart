@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -18,6 +20,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:publish_brand/ui/widget/custom_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../providers/AppProvider.dart';
 import 'about_bublesh_brand.dart';
 import 'loyalty_points.dart';
 import 'notifications.dart';
@@ -26,6 +29,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lottie/lottie.dart';
+
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -48,6 +54,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    Provider.of<AppProvider>(context, listen: false).checkInternetConnection();
+    Connectivity().onConnectivityChanged.listen((result) {
+      setState(() {
+        Provider.of<AppProvider>(context, listen: false)
+            .checkInternetConnection(result: result);
+      });
+    });
+    InternetConnectionChecker().onStatusChange.listen((status) {
+      bool hasInternet = status == InternetConnectionStatus.connected;
+      setState(() {
+        Provider.of<AppProvider>(context, listen: false)
+            .checkInternetConnection(hasInternet: hasInternet);
+      });
+    });
     Provider.of<HomeProvider>(context, listen: false).settingsApiApp(context);
     Provider.of<SpHelper>(context, listen: false).token != null
         ? Provider.of<ApiAuthProvider>(context, listen: false).profile(context)
@@ -64,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(35.0),
+        preferredSize: Size.fromHeight(40.0),
         child: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -213,6 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+
             /*
             ListTile(
               onTap: () {
@@ -540,17 +561,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                           : CarouselSlider(
                               options: CarouselOptions(
-                                height: 236.h,
+                                height: 256.h,
                                 autoPlay: true,
                               ),
                               items: provider.listAds.map((i) {
                                 return Builder(
                                   builder: (BuildContext context) {
                                     return Container(
-                                        height: 236.h,
-                                        width:
-                                            MediaQuery.of(context).size.width/1.2,
-                                        padding: EdgeInsets.symmetric(horizontal:2.w),
+                                        padding: EdgeInsets.symmetric(horizontal:1.w),
                                         decoration: const BoxDecoration(
                                             color: Colors.white10),
                                         child: CachedNetworkImage(
@@ -606,7 +624,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Container(
                     margin:
-                        EdgeInsets.only(right: 18.w, left: 18.w, top: 210.h),
+                        EdgeInsets.only(right: 8.w, left: 8.w, top: 210.h),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       color: Colors.white,

@@ -36,22 +36,22 @@ class Project {
   int serviceId;
   String title;
   String details;
-  Null paymentMethodId;
+  var paymentMethodId;
   num price;
-  Null couponId;
-  Null couponPercent;
-  Null couponAmount;
+  var couponId;
+  var couponPercent;
+  var couponAmount;
   num finalPrice;
   int rate;
-  Null cardNumber;
-  Null expiredDate;
-  Null validationNumber;
-  Null nameCardholder;
+  var cardNumber;
+  var expiredDate;
+  var validationNumber;
+  var nameCardholder;
   String status;
   String createdAt;
   User user;
-  Null service;
-  Null paymentMethod;
+  var service;
+  var paymentMethod;
   Chat chat;
 
   Project(

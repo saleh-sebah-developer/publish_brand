@@ -39,4 +39,10 @@ class ApiConstant {
   static const String getServicesByPoints = 'getServicesByPoints';
   static const String requestPackages = 'requestPackages';
 
+// --- chats
+  static const String getChatMessage = 'getChatMessage';
+  static const String sendMessage = 'sendMessage';
+
+
+
 }

@@ -10,6 +10,7 @@ import 'package:publish_brand/ui/screen/login_screen.dart';
 import 'package:publish_brand/ui/screen/policies.dart';
 import 'package:publish_brand/ui/screen/profile_screen.dart';
 import 'package:publish_brand/ui/screen/support_and_help.dart';
+import '../../providers/AppProvider.dart';
 import 'about_bublesh_brand.dart';
 import 'loyalty_points.dart';
 import 'my_bills_screen.dart';
@@ -20,6 +21,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({Key key}) : super(key: key);
@@ -32,6 +35,20 @@ class _MoreScreenState extends State<MoreScreen> {
   @override
   void initState() {
     super.initState();
+    Provider.of<AppProvider>(context, listen: false).checkInternetConnection();
+    Connectivity().onConnectivityChanged.listen((result) {
+      setState(() {
+        Provider.of<AppProvider>(context, listen: false)
+            .checkInternetConnection(result: result);
+      });
+    });
+    InternetConnectionChecker().onStatusChange.listen((status) {
+      bool hasInternet = status == InternetConnectionStatus.connected;
+      setState(() {
+        Provider.of<AppProvider>(context, listen: false)
+            .checkInternetConnection(hasInternet: hasInternet);
+      });
+    });
     Provider.of<SpHelper>(context, listen: false).token != null
         ? Provider.of<ApiAuthProvider>(context, listen: false).profile(context)
         : () {};
@@ -330,10 +347,10 @@ class _MoreScreenState extends State<MoreScreen> {
             onTap: () {
               if (context.locale == Locale('en')) {
                 context.setLocale(Locale('ar'));
-                //RestartWidget.restartApp(context);
+                RestartWidget.restartApp(context);
               } else {
                 context.setLocale(Locale('en'));
-                //RestartWidget.restartApp(context);
+                RestartWidget.restartApp(context);
               }
             },
             child: Card(

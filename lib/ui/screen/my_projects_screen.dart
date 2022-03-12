@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -8,12 +7,15 @@ import 'package:publish_brand/helpers/RouterClass.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:publish_brand/providers/AppProvider.dart';
 import 'package:publish_brand/providers/api_auth_provider.dart';
 import 'package:publish_brand/providers/home_provider.dart';
 import 'package:publish_brand/ui/screen/project_details.dart';
 import 'package:publish_brand/ui/screen/service_details.dart';
 import 'package:publish_brand/ui/widget/custom_service2.dart';
 import 'package:lottie/lottie.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class MyProjectsScreen extends StatefulWidget {
   const MyProjectsScreen({Key key}) : super(key: key);
@@ -26,8 +28,24 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<SpHelper>(context, listen: false).token != null?
-    Provider.of<HomeProvider>(context, listen: false).getMyProjects(context):(){};
+    Provider.of<AppProvider>(context, listen: false).checkInternetConnection();
+    Connectivity().onConnectivityChanged.listen((result) {
+      setState(() {
+        Provider.of<AppProvider>(context, listen: false)
+            .checkInternetConnection(result: result);
+      });
+    });
+    InternetConnectionChecker().onStatusChange.listen((status) {
+      bool hasInternet = status == InternetConnectionStatus.connected;
+      setState(() {
+        Provider.of<AppProvider>(context, listen: false)
+            .checkInternetConnection(hasInternet: hasInternet);
+      });
+    });
+    Provider.of<SpHelper>(context, listen: false).token != null
+        ? Provider.of<HomeProvider>(context, listen: false)
+            .getMyProjects(context)
+        : () {};
   }
 
   @override
@@ -72,6 +90,14 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
+                                Provider.of<HomeProvider>(context,
+                                        listen: false)
+                                    .project_id = Provider.of<HomeProvider>(
+                                        context,
+                                        listen: false)
+                                    .myProjectsData[index]
+                                    .id
+                                    .toString();
                                 RouterClass.routerClass.pushToScreenUsingWidget(
                                     ProjectDetailsScreen(
                                         Provider.of<HomeProvider>(context,

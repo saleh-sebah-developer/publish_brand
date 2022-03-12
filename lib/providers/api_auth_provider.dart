@@ -148,6 +148,7 @@ class ApiAuthProvider extends ChangeNotifier {
       log('register success');
       if (response.status) {
         FirestoreHelper.firestoreHelper.registerUser(response.user);
+        FirestoreHelper.firestoreHelper.createChatWithAdmin(response.user);
         RouterClass.routerClass.pushToScreenUsingWidget(
             ActivationCodeScreen(mobileConSignUp.text));
         nameConSignUp.text = '';
@@ -175,7 +176,7 @@ class ApiAuthProvider extends ChangeNotifier {
         mobile: mobileConLogin.text, password: passwordConLogin.text);
     changeEnablity();
     if (response != null) {
-      log('login success');
+
       if (response.status) {
         await Provider.of<SpHelper>(context, listen: false)
             .setToken(response.user.accessToken.toString());
@@ -184,7 +185,9 @@ class ApiAuthProvider extends ChangeNotifier {
         mobileConLogin.text = '';
         passwordConLogin.text = '';
         notifyListeners();
-      } else if (response.code == 201) {
+      }
+      /*
+      else if (response.code == 201) {
         RouterClass.routerClass
             .pushToScreenUsingWidget(ActivationCodeScreen(mobileConLogin.text));
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -192,7 +195,9 @@ class ApiAuthProvider extends ChangeNotifier {
           content: Text(response.message.toString()),
           duration: const Duration(seconds: 3),
         ));
-      } else {
+      }
+      */
+      else {
         log(response.status.toString());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,

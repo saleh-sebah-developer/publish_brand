@@ -54,7 +54,7 @@ class HomeProvider extends ChangeNotifier {
       TextEditingController();
   TextEditingController detailsConBouquet = TextEditingController();
   TextEditingController countConService = TextEditingController();
-
+  num totalPrice=1;
   String pageText;
   List<Categories> categories;
 
@@ -69,6 +69,7 @@ class HomeProvider extends ChangeNotifier {
   List<ServicesPoint> servicesByPoint;
 
   List<Data> myProjectsData;
+  String project_id;
 
   Chat chatMyProjects;
 
@@ -116,6 +117,11 @@ class HomeProvider extends ChangeNotifier {
     } else {
       return null;
     }
+  }
+
+   totalPriceMethod(String value) {
+    totalPrice = int.parse(this.countConService.text) * selectedServices.price;
+    notifyListeners();
   }
 
   homeScreen() async {
@@ -339,6 +345,7 @@ class HomeProvider extends ChangeNotifier {
       if (response.status) {
         log('done');
         myProjectsData = response.myProjects.data;
+
         notifyListeners();
       } else {
         log(response.status.toString());
@@ -385,7 +392,6 @@ class HomeProvider extends ChangeNotifier {
     if (response != null) {
       log('getPackages success');
       if (response.status) {
-        log('done');
         packages = response.packages;
         notifyListeners();
       } else {

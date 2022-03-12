@@ -1,9 +1,16 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:publish_brand/data/sp_helper.dart';
 import 'package:publish_brand/helpers/RouterClass.dart';
+import 'package:publish_brand/providers/AppProvider.dart';
+import 'package:publish_brand/providers/SalehProvider.dart';
 import 'package:publish_brand/providers/api_auth_provider.dart';
+import 'package:publish_brand/providers/chatProvider.dart';
 import 'package:publish_brand/providers/home_provider.dart';
 import 'package:publish_brand/ui/screen/SplashScreen.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,14 +19,24 @@ import 'package:provider/provider.dart';
 import 'package:publish_brand/ui/screen/chat.dart';
 import 'package:publish_brand/ui/screen/chat_messages_screen.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:hyperpay/hyperpay.dart';
+import 'constants.dart';
+
+const bool isDev = bool.fromEnvironment('DEV');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
-  );
+      );
   await Firebase.initializeApp();
+  await HyperpayPlugin.setup(
+    config: isDev ? TestConfig() : LiveConfig(),
+  );
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
@@ -36,6 +53,11 @@ void main() async {
             create: (context) => ApiAuthProvider()),
         ChangeNotifierProvider<HomeProvider>(
             create: (context) => HomeProvider()),
+        ChangeNotifierProvider<SalehProvider>(
+            create: (context) => SalehProvider()),
+        ChangeNotifierProvider<ChatProvider>(
+            create: (context) => ChatProvider()),
+        ChangeNotifierProvider<AppProvider>(create: (context) => AppProvider()),
       ], child: const MyApp()),
     ),
   );
@@ -50,30 +72,33 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: () => MaterialApp(
-        navigatorKey: RouterClass.routerClass.nav,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      builder: () => OverlaySupport.global(
+        child: RestartWidget(
+          child: MaterialApp(
+            navigatorKey: RouterClass.routerClass.nav,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            debugShowCheckedModeBanner: false,
+            home: SplashScreen(),
+            routes: RouterClass.routerClass.map,
+            builder: (context, widget) {
+              //add this line
+              ScreenUtil.setContext(context);
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: widget,
+              );
+            },
+          ),
         ),
-        debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
-        routes: RouterClass.routerClass.map,
-        builder: (context, widget) {
-          //add this line
-          ScreenUtil.setContext(context);
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: widget,
-          );
-        },
       ),
     );
   }
 }
-
 
 class RestartWidget extends StatefulWidget {
   RestartWidget({this.child});

@@ -5,11 +5,14 @@ import 'package:publish_brand/helpers/RouterClass.dart';
 import 'package:publish_brand/providers/home_provider.dart';
 import 'package:publish_brand/ui/widget/custom_button_y.dart';
 import 'package:publish_brand/ui/widget/custom_packages.dart';
+import '../../providers/AppProvider.dart';
 import 'bouquet.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:lottie/lottie.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class PackagesScreen extends StatefulWidget {
   @override
@@ -20,6 +23,20 @@ class _PackagesScreenState extends State<PackagesScreen> {
   @override
   void initState() {
     super.initState();
+    Provider.of<AppProvider>(context, listen: false).checkInternetConnection();
+    Connectivity().onConnectivityChanged.listen((result) {
+      setState(() {
+        Provider.of<AppProvider>(context, listen: false)
+            .checkInternetConnection(result: result);
+      });
+    });
+    InternetConnectionChecker().onStatusChange.listen((status) {
+      bool hasInternet = status == InternetConnectionStatus.connected;
+      setState(() {
+        Provider.of<AppProvider>(context, listen: false)
+            .checkInternetConnection(hasInternet: hasInternet);
+      });
+    });
     Provider.of<HomeProvider>(context, listen: false).getPackages(context);
   }
 
@@ -89,6 +106,8 @@ class _PackagesScreenState extends State<PackagesScreen> {
                             contract: Provider.of<HomeProvider>(context)
                                 .packages[index]
                                 .file,
+detailsPackage: Provider.of<HomeProvider>(context)
+    .packages[index].details,
                           ),
                         );
                       })),

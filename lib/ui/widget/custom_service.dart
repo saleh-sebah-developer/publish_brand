@@ -56,7 +56,7 @@ class CustomService extends StatelessWidget {
           SizedBox(
             width: 167.w,
             child: Text(
-              title,
+              title?? ' ',
               maxLines: 2,
               textAlign: TextAlign.start,
               style: TextStyle(

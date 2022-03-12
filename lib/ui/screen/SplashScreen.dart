@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Provider.of<SpHelper>(context,listen: false).getToken();
     Timer(
-      const Duration(seconds: 3),
+      const Duration(seconds: 4),
       () =>
       Provider.of<SpHelper>(context,listen: false).token== null?
       RouterClass.routerClass.pushReplacementToScreen(IntroScreen()):
@@ -47,15 +47,15 @@ class _SplashScreenState extends State<SplashScreen> {
           decoration: BoxDecoration(
             color: HexColor('#F5F5F5'),
             image: const DecorationImage(
-                image: AssetImage('assets/images/bg2.png'), fit: BoxFit.fill),
+                image: AssetImage('assets/images/comp.gif'), fit: BoxFit.fill),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Spacer(),
+              /*
               Container(
                 margin: EdgeInsets.only(top: 70),
-
                 child: DelayedDisplay(
                   delay: Duration(milliseconds: 600),
                   slidingBeginOffset: Offset(0.0, -10.0),
@@ -64,11 +64,13 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: Image(
                       height: 329.h,
                       width: 337.w,
+                      //image: const AssetImage('assets/images/comp.gif'),
                       image: const AssetImage('assets/images/logo_app1.png'),
                     ),
                   ),
                 ),
               ),
+              */
               Spacer(),
               Container(
                 margin: EdgeInsets.only(bottom: 30),

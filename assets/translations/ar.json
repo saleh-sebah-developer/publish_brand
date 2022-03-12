@@ -159,5 +159,10 @@
   "my_points": "نقاطي",
   "error_count": "1 أو أكثر",
   "number": "العدد",
-  "policies_click_here": "للاطلاع على السياسات والشروط اضغط هنا"
+  "total_price": "السعر الإجمالي",
+  "policies_click_here": "للاطلاع على السياسات والشروط اضغط هنا",
+  "details": "التفاصيل",
+  "administration": "الإدارة",
+  "administration_department": "قسم الإدارة",
+  "create_a_meeting": "أنشئ اجتماع"
 }

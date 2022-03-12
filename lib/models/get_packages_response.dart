@@ -39,6 +39,7 @@ class Packages {
   String status;
   String createdAt;
   String title;
+  String details;
   List<PackagesProperties> packagesProperties;
 
   Packages(
@@ -50,6 +51,7 @@ class Packages {
         this.status,
         this.createdAt,
         this.title,
+        this.details,
         this.packagesProperties});
 
   Packages.fromJson(Map<String, dynamic> json) {
@@ -61,6 +63,7 @@ class Packages {
     status = json['status'];
     createdAt = json['created_at'];
     title = json['title'];
+    details = json['details'];
     if (json['packages_properties'] != null) {
       packagesProperties = <PackagesProperties>[];
       json['packages_properties'].forEach((v) {
@@ -79,6 +82,7 @@ class Packages {
     data['status'] = status;
     data['created_at'] = createdAt;
     data['title'] = title;
+    data['details'] = details;
     if (packagesProperties != null) {
       data['packages_properties'] =
           packagesProperties.map((v) => v.toJson()).toList();

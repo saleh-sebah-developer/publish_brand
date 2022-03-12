@@ -8,21 +8,31 @@ class FirestoreHelper {
   static FirestoreHelper firestoreHelper = FirestoreHelper._();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final String usersCollectionName = 'Users';
-  final String chatsCollectionName = 'Chats';
-  final String messagesCollectionName = 'Messages';
+  final String chatsCollectionName = 'chats';
+  final String messagesCollectionName = 'messages';
 
   registerUser(User user) async {
     firebaseFirestore
         .collection(usersCollectionName)
-        .doc(user.id.toString()) // id just number?
+        .doc(user.id.toString())
         .set(user.toJson());
   }
 
-  sendMessage(Message message) async {
-    firebaseFirestore
+  createChatWithAdmin(User user) async {
+    firebaseFirestore.collection('chats').doc(user.id.toString()).set({
+      'users': [user.id.toString()],
+      'isChatWithAdmin': true
+    });
+    // firebaseFirestore.collection('chats').doc(user.id.toString()).collection('messages').add({});
+  }
+
+  sendMessage(Message message, User user) async {
+    message.sentTime = FieldValue.serverTimestamp();
+    await firebaseFirestore
         .collection(chatsCollectionName)
-        .doc(message.chatId)
-        .set(message.toMap());
+        .doc(user.id.toString())
+        .collection(messagesCollectionName)
+        .add(message.toMap());
   }
 
   Future<bool> checkCollectionExists(String chatiD) async {
@@ -44,15 +54,16 @@ class FirestoreHelper {
     });
   }
 
-
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getChats() async {
-    //String myId = FirebaseAuth.instance.currentUser?.uid;
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getAdminChat(
+      User user) async {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await firebaseFirestore
         .collection(chatsCollectionName)
-        // .where('membersIds', arrayContains: myId)
+        .doc(user.id.toString())
+        .collection(messagesCollectionName)
         .get();
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs = querySnapshot.docs;
-    return docs;
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> adminMessages =
+        querySnapshot.docs;
+    return adminMessages;
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatMessages(String chatId) {
