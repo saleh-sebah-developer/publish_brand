@@ -402,7 +402,7 @@ class ApiAuthProvider extends ChangeNotifier {
           return Container(
             color: Color(0xFF737373),
             child: Container(
-              height: 150.h,
+              height: 160.h,
               decoration: BoxDecoration(
                   color: Theme.of(context).canvasColor,
                   borderRadius: BorderRadius.only(

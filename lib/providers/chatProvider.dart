@@ -15,11 +15,13 @@ class ChatProvider extends ChangeNotifier {
     messages = null;
     notifyListeners();
   }
-  getChatMessages(BuildContext context, String package_id) async {
+
+  getChatMessages(
+      BuildContext context, String package_id, String target) async {
     clearChatMessages();
     log('getChatMessages begin');
     getChatMessageResponse response =
-        await DioClient.dioClient.getChatMessage(context, package_id);
+        await DioClient.dioClient.getChatMessage(context, package_id, target);
     if (response != null) {
       log('getChatMessages success');
       if (response.status) {
@@ -36,8 +38,8 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  sendMessage(
-      BuildContext context, SendMessageRequest sendMessageRequest) async {
+  sendMessage(BuildContext context, SendMessageRequest sendMessageRequest,
+      String target) async {
     log('sendMessage begin');
     DataResponse response =
         await DioClient.dioClient.sendMessage(context, sendMessageRequest);
@@ -45,9 +47,11 @@ class ChatProvider extends ChangeNotifier {
       log('sendMessage success');
       if (response.status) {
         log(response.status.toString());
-        textEditingController.text='';
-        getChatMessages(context,
-            Provider.of<HomeProvider>(context, listen: false).project_id);
+        textEditingController.text = '';
+        getChatMessages(
+            context,
+            Provider.of<HomeProvider>(context, listen: false).project_id,
+            target);
         notifyListeners();
       } else {
         log(response.status.toString());

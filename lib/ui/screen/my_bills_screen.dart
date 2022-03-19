@@ -101,7 +101,7 @@ class _MyBillsScreenState extends State<MyBillsScreen> {
                             Provider.of<HomeProvider>(context)
                                 .invoices[index]
                                 .createdAt
-                                .substring(0, 9)
+                                .substring(0, 10)
                                 .toString(),
                       ),
                     );

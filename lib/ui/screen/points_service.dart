@@ -108,13 +108,28 @@ class _PointsServicesScreenState extends State<PointsServicesScreen> {
                             itemBuilder: (BuildContext ctx, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  RouterClass.routerClass
-                                      .pushToScreenUsingWidget(
-                                          ServiceDetailsScreen(
-                                              Provider.of<HomeProvider>(context,
-                                                      listen: false)
-                                                  .servicesByPoint[index]
-                                                  .id));
+                                  Provider.of<HomeProvider>(context,listen: false)
+                                              .servicesByPoint[index]
+                                              .points_count <=
+                                          int.parse(Provider.of<HomeProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .numPoints)
+                                      ? RouterClass.routerClass
+                                          .pushToScreenUsingWidget(
+                                              ServiceDetailsScreen(
+                                                  Provider.of<HomeProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .servicesByPoint[index]
+                                                      .id))
+                                      : ScaffoldMessenger.of(context)
+                                          .showSnackBar( SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content:
+                                              Text('your_points_are_not_enough'.tr()),
+                                          duration: Duration(seconds: 3),
+                                        ));
                                 },
                                 child: CustomService(
                                   ImageService:

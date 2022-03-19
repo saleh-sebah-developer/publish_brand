@@ -35,7 +35,7 @@ class SubmitService extends StatelessWidget {
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-        child: Consumer<HomeProvider>(builder: (context, provider, x) {
+        child: Consumer2<HomeProvider,ApiAuthProvider>(builder: (context, provider,providerApi, x) {
           return Form(
             key: submitServiceFormKey,
             child: Column(
@@ -118,7 +118,7 @@ class SubmitService extends StatelessWidget {
                   textInputType: TextInputType.text,
                   labelText: 'details_service_requested_by_you'.tr(),
                   labelTextHint: 'hint_details_service_requested_by_you'.tr(),
-                  validationFun: provider.validate,
+                  validationFun: providerApi.validateNull,
                 ),
                 const Spacer(),
                 GestureDetector(

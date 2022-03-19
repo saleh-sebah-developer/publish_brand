@@ -529,11 +529,11 @@ class DioClient {
 //----------------------------------------------------------------------------
 
   Future<getChatMessageResponse> getChatMessage(
-      BuildContext context, String package_id) async {
+      BuildContext context, String package_id, String target) async {
     try {
       Response response = await dio.get(
         ApiConstant.getChatMessage,
-        queryParameters: {'project_id': package_id},
+        queryParameters: {'project_id': package_id, 'target': target},
         options: Options(headers: {
           'authorization': 'Bearer ' +
               await Provider.of<SpHelper>(context, listen: false).getToken()

@@ -38,7 +38,7 @@ class SignUpScreen extends StatelessWidget {
           margin: EdgeInsets.only(top: 10.h),
           decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/bg_all.png'),
+                image: AssetImage('assets/images/bg2.png'),
                 fit: BoxFit.fill),
           ),
           child: Consumer<ApiAuthProvider>(builder: (context, provider, x) {
@@ -136,14 +136,13 @@ class SignUpScreen extends StatelessWidget {
                           validationFun: provider.validateNull,
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8.w),
                           child: SwitchListTile(
                               title: Text(
                                 'agree_terms_switch'.tr(),
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     fontFamily: 'TajawalRegular',
-                                    fontSize: 14.sp,
+                                    fontSize: 12.sp,
                                     color: Colors.black),
                               ),
                               subtitle: GestureDetector(
@@ -154,7 +153,7 @@ class SignUpScreen extends StatelessWidget {
                                 },
                                 child: Text(
                                   'policies_click_here'.tr(),
-                                  style: TextStyle(color: HexColor('#4091AF')),
+                                  style: TextStyle(color: HexColor('#4091AF'),fontSize: 12.sp),
                                 ),
                               ),
                               value: provider.agreeTerms,
@@ -175,7 +174,7 @@ class SignUpScreen extends StatelessWidget {
                         Container(
                           color: Colors.white,
                           padding: EdgeInsets.symmetric(
-                              horizontal: 22.w, vertical: 34.h),
+                              horizontal: 22.w, vertical: 22.h),
                           // margin: EdgeInsets.only(top: 85.h),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

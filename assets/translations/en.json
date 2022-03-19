@@ -164,7 +164,10 @@
   "details": "Details",
   "administration": "Administration",
   "administration_department": "Administration Department",
-  "create_a_meeting": "Create a meeting"
+  "create_a_meeting": "Create a meeting",
+  "competent": "Competent",
+  "your_points_are_not_enough": "Your points are not enough",
+  "you_have_no_points": "You have no points"
 
 
 }

@@ -107,7 +107,7 @@ class _MoreScreenState extends State<MoreScreen> {
                                 : Provider.of<ApiAuthProvider>(context,
                                         listen: false)
                                     .currentUser
-                                    .name,
+                                    .name??" ",
                             style: const TextStyle(
                                 color: Colors.black, fontFamily: 'TajawalBold'),
                           ),

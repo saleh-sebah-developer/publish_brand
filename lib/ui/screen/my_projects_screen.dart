@@ -119,7 +119,9 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                                         .myProjectsData[index]
                                         .service
                                         .title
-                                    : 'null',
+                                    : Provider.of<HomeProvider>(context)
+                                    .myProjectsData[index]
+                                    .title??'null',
                                 price: Provider.of<HomeProvider>(context)
                                             .myProjectsData[index]
                                             .service !=
@@ -129,7 +131,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                                         .service
                                         .price
                                         .toString()
-                                    : '0',
+                                    : ' ',
                                 status: Provider.of<HomeProvider>(context)
                                     .myProjectsData[index]
                                     .status,
@@ -151,7 +153,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                                             .myProjectsData[index]
                                             .service
                                             .type ??
-                                        'unfixed_price'
+                                        'null'
                                     : 'null',
                                 pointsCount: Provider.of<HomeProvider>(context)
                                             .myProjectsData[index]

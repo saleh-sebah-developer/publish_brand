@@ -1,5 +1,8 @@
 import 'package:publish_brand/models/login_for_users_response.dart';
 
+import 'get_services_by_category_response.dart';
+import 'get_services_details_response.dart';
+
 class GetMyProjectDetailsResponse {
   bool status;
   int code;
@@ -32,16 +35,19 @@ class GetMyProjectDetailsResponse {
 class Project {
   int id;
   String type;
+  var employeeId;
   int userId;
   int serviceId;
-  String title;
+  int categoryId;
+  Null title;
   String details;
   var paymentMethodId;
-  num price;
-  var couponId;
-  var couponPercent;
-  var couponAmount;
-  num finalPrice;
+  int quantity;
+  int price;
+  int couponId;
+  int couponPercent;
+  int couponAmount;
+  int finalPrice;
   int rate;
   var cardNumber;
   var expiredDate;
@@ -49,19 +55,24 @@ class Project {
   var nameCardholder;
   String status;
   String createdAt;
+  AdminChat adminChat;
+  CategoryChat categoryChat;
   User user;
-  var service;
+  var employee;
+  Service service;
   var paymentMethod;
-  Chat chat;
 
   Project(
       {this.id,
         this.type,
+        this.employeeId,
         this.userId,
         this.serviceId,
+        this.categoryId,
         this.title,
         this.details,
         this.paymentMethodId,
+        this.quantity,
         this.price,
         this.couponId,
         this.couponPercent,
@@ -74,19 +85,24 @@ class Project {
         this.nameCardholder,
         this.status,
         this.createdAt,
+        this.adminChat,
+        this.categoryChat,
         this.user,
+        this.employee,
         this.service,
-        this.paymentMethod,
-        this.chat});
+        this.paymentMethod});
 
   Project.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     type = json['type'];
+    employeeId = json['employee_id'];
     userId = json['user_id'];
     serviceId = json['service_id'];
+    categoryId = json['category_id'];
     title = json['title'];
     details = json['details'];
     paymentMethodId = json['payment_method_id'];
+    quantity = json['quantity'];
     price = json['price'];
     couponId = json['coupon_id'];
     couponPercent = json['coupon_percent'];
@@ -99,65 +115,83 @@ class Project {
     nameCardholder = json['name_cardholder'];
     status = json['status'];
     createdAt = json['created_at'];
-    user = json['user'] != null ?  User.fromJson(json['user']) : null;
-    service = json['service'];
+    adminChat = json['admin_chat'] != null
+        ? new AdminChat.fromJson(json['admin_chat'])
+        : null;
+    categoryChat = json['category_chat'] != null
+        ? new CategoryChat.fromJson(json['category_chat'])
+        : null;
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    employee = json['employee'];
+    service =
+    json['service'] != null ? new Service.fromJson(json['service']) : null;
     paymentMethod = json['payment_method'];
-    chat = json['chat'] != null ?  Chat.fromJson(json['chat']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
-    data['id'] = id;
-    data['type'] = type;
-    data['user_id'] = userId;
-    data['service_id'] = serviceId;
-    data['title'] = title;
-    data['details'] = details;
-    data['payment_method_id'] = paymentMethodId;
-    data['price'] = price;
-    data['coupon_id'] = couponId;
-    data['coupon_percent'] = couponPercent;
-    data['coupon_amount'] = couponAmount;
-    data['final_price'] = finalPrice;
-    data['rate'] = rate;
-    data['card_number'] = cardNumber;
-    data['expired_date'] = expiredDate;
-    data['validation_number'] = validationNumber;
-    data['name_cardholder'] = nameCardholder;
-    data['status'] = status;
-    data['created_at'] = createdAt;
-    if (user != null) {
-      data['user'] = user.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['type'] = this.type;
+    data['employee_id'] = this.employeeId;
+    data['user_id'] = this.userId;
+    data['service_id'] = this.serviceId;
+    data['category_id'] = this.categoryId;
+    data['title'] = this.title;
+    data['details'] = this.details;
+    data['payment_method_id'] = this.paymentMethodId;
+    data['quantity'] = this.quantity;
+    data['price'] = this.price;
+    data['coupon_id'] = this.couponId;
+    data['coupon_percent'] = this.couponPercent;
+    data['coupon_amount'] = this.couponAmount;
+    data['final_price'] = this.finalPrice;
+    data['rate'] = this.rate;
+    data['card_number'] = this.cardNumber;
+    data['expired_date'] = this.expiredDate;
+    data['validation_number'] = this.validationNumber;
+    data['name_cardholder'] = this.nameCardholder;
+    data['status'] = this.status;
+    data['created_at'] = this.createdAt;
+    if (this.adminChat != null) {
+      data['admin_chat'] = this.adminChat.toJson();
     }
-    data['service'] = service;
-    data['payment_method'] = paymentMethod;
-    if (chat != null) {
-      data['chat'] = chat.toJson();
+    if (this.categoryChat != null) {
+      data['category_chat'] = this.categoryChat.toJson();
     }
+    if (this.user != null) {
+      data['user'] = this.user.toJson();
+    }
+    data['employee'] = this.employee;
+    if (this.service != null) {
+      data['service'] = this.service.toJson();
+    }
+    data['payment_method'] = this.paymentMethod;
     return data;
   }
 }
 
-
-class Chat {
+class AdminChat {
   int id;
   int orderId;
   int user1;
   int user2;
+  Null categoryId;
   int delete;
   int freez;
-  String lastSeen;
+  Null lastSeen;
   String createdAt;
-  String lastMessage;
+  Null lastMessage;
   String totalUnread;
   User user;
+  Null category;
   List<Null> messages;
 
-  Chat(
+  AdminChat(
       {this.id,
         this.orderId,
         this.user1,
         this.user2,
+        this.categoryId,
         this.delete,
         this.freez,
         this.lastSeen,
@@ -165,48 +199,133 @@ class Chat {
         this.lastMessage,
         this.totalUnread,
         this.user,
+        this.category,
         this.messages});
 
-  Chat.fromJson(Map<String, dynamic> json) {
+  AdminChat.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     orderId = json['order_id'];
     user1 = json['user1'];
     user2 = json['user2'];
+    categoryId = json['category_id'];
     delete = json['delete'];
     freez = json['freez'];
     lastSeen = json['last_seen'];
     createdAt = json['created_at'];
     lastMessage = json['last_message'];
     totalUnread = json['total_unread'];
-    user = json['user'];
-    /*
-    if (json['messages'] != null) {
-      messages = <Null>[];
-      json['messages'].forEach((v) {
-        messages.add( Null.fromJson(v));
-      });
-    }
-    */
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    category = json['category'];
+    // if (json['messages'] != null) {
+    //   messages = <Null>[];
+    //   json['messages'].forEach((v) {
+    //     messages.add(new Null.fromJson(v));
+    //   });
+    // }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
-    data['id'] = id;
-    data['order_id'] = orderId;
-    data['user1'] = user1;
-    data['user2'] = user2;
-    data['delete'] = delete;
-    data['freez'] = freez;
-    data['last_seen'] = lastSeen;
-    data['created_at'] = createdAt;
-    data['last_message'] = lastMessage;
-    data['total_unread'] = totalUnread;
-    data['user'] = user;
-    /*
-    if (messages != null) {
-      data['messages'] = messages.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['order_id'] = this.orderId;
+    data['user1'] = this.user1;
+    data['user2'] = this.user2;
+    data['category_id'] = this.categoryId;
+    data['delete'] = this.delete;
+    data['freez'] = this.freez;
+    data['last_seen'] = this.lastSeen;
+    data['created_at'] = this.createdAt;
+    data['last_message'] = this.lastMessage;
+    data['total_unread'] = this.totalUnread;
+    if (this.user != null) {
+      data['user'] = this.user.toJson();
     }
-    */
+    data['category'] = this.category;
+    // if (this.messages != null) {
+    //   data['messages'] = this.messages.map((v) => v.toJson()).toList();
+    // }
+    return data;
+  }
+}
+
+class CategoryChat {
+  int id;
+  int orderId;
+  int user1;
+  var user2;
+  int categoryId;
+  int delete;
+  int freez;
+  var lastSeen;
+  String createdAt;
+  var lastMessage;
+  var totalUnread;
+  User user;
+  Category category;
+  List<Null> messages;
+
+  CategoryChat(
+      {this.id,
+        this.orderId,
+        this.user1,
+        this.user2,
+        this.categoryId,
+        this.delete,
+        this.freez,
+        this.lastSeen,
+        this.createdAt,
+        this.lastMessage,
+        this.totalUnread,
+        this.user,
+        this.category,
+        this.messages});
+
+  CategoryChat.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    orderId = json['order_id'];
+    user1 = json['user1'];
+    user2 = json['user2'];
+    categoryId = json['category_id'];
+    delete = json['delete'];
+    freez = json['freez'];
+    lastSeen = json['last_seen'];
+    createdAt = json['created_at'];
+    lastMessage = json['last_message'];
+    totalUnread = json['total_unread'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    category = json['category'] != null
+        ? new Category.fromJson(json['category'])
+        : null;
+    // if (json['messages'] != null) {
+    //   messages = <Null>[];
+    //   json['messages'].forEach((v) {
+    //     messages!.add(new Null.fromJson(v));
+    //   });
+    // }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['order_id'] = this.orderId;
+    data['user1'] = this.user1;
+    data['user2'] = this.user2;
+    data['category_id'] = this.categoryId;
+    data['delete'] = this.delete;
+    data['freez'] = this.freez;
+    data['last_seen'] = this.lastSeen;
+    data['created_at'] = this.createdAt;
+    data['last_message'] = this.lastMessage;
+    data['total_unread'] = this.totalUnread;
+    if (this.user != null) {
+      data['user'] = this.user.toJson();
+    }
+    if (this.category != null) {
+      data['category'] = this.category.toJson();
+    }
+    // if (this.messages != null) {
+    //   data['messages'] = this.messages.map((v) => v.toJson()).toList();
+    // }
     return data;
   }
 }

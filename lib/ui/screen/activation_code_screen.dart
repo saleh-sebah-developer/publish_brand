@@ -46,7 +46,7 @@ class _ActivationCodeScreenState extends State<ActivationCodeScreen> {
         margin: EdgeInsets.only(top: 10.h),
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/bg_all.png'), fit: BoxFit.fill),
+              image: AssetImage('assets/images/bg2.png'), fit: BoxFit.fill),
         ),
         child: Container(
           margin: EdgeInsets.only(top: 60.h),

@@ -101,7 +101,7 @@ class _myContractScreenState extends State<myContractScreen> {
                               Provider.of<HomeProvider>(context)
                                   .contracts[index]
                                   .createdAt
-                                  .substring(0, 9)),
+                                  .substring(0, 10)),
                     );
                   }),
     );

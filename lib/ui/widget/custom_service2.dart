@@ -15,7 +15,13 @@ class CustomService2 extends StatelessWidget {
   String pointsCount;
 
   CustomService2(
-      {Key key, this.imageService, this.title, this.price, this.status,this.type,this.pointsCount})
+      {Key key,
+      this.imageService,
+      this.title,
+      this.price,
+      this.status,
+      this.type,
+      this.pointsCount})
       : super(key: key);
 
   @override
@@ -28,22 +34,23 @@ class CustomService2 extends StatelessWidget {
           children: [
             imageService != 'null'
                 ? CachedNetworkImage(
-              height: 95.h, width: 94.w,
-              fit: BoxFit.cover,
-              imageUrl: imageService,
-            )
+                    height: 95.h,
+                    width: 94.w,
+                    fit: BoxFit.cover,
+                    imageUrl: imageService,
+                  )
                 : Image(
-              height: 95.h, width: 94.w,
-              image: const AssetImage('assets/images/logo0.png'),
-            ),
-
+                    height: 95.h,
+                    width: 94.w,
+                    image: const AssetImage('assets/images/logo0.png'),
+                  ),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
                   child: Text(
-                    title??'null',
+                    title ?? 'null',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         fontSize: 14.sp,
@@ -57,9 +64,10 @@ class CustomService2 extends StatelessWidget {
                     type == 'fixed_price'
                         ? price + 'sr'.tr()
                         : type == 'unfixed_price'
-                        ? 'the_price_is_negotiable'.tr()
-                        : pointsCount.toString() + 'point'.tr(),
-                   
+                            ? 'the_price_is_negotiable'.tr()
+                            : type == 'points'
+                                ? pointsCount.toString() + 'point'.tr()
+                                : ' ',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         fontSize: 14.sp,
@@ -70,7 +78,7 @@ class CustomService2 extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
                   child: Text(
-                    status??'new',
+                    status ?? 'new',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         fontSize: 14.sp,

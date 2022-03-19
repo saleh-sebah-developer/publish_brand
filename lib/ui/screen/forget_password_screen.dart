@@ -34,7 +34,7 @@ class ForgetPasswordScreen extends StatelessWidget {
         margin: EdgeInsets.only(top: 30.h),
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/bg_all.png'), fit: BoxFit.fill),
+              image: AssetImage('assets/images/bg2.png'), fit: BoxFit.fill),
         ),
         child: Consumer<ApiAuthProvider>(builder: (context, provider, x) {
           return  Column(

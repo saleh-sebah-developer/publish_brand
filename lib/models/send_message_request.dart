@@ -4,6 +4,7 @@ class SendMessageRequest {
   String image;
   String file;
   String type;
+  String target;
 
   SendMessageRequest({
     this.project_id,
@@ -11,6 +12,7 @@ class SendMessageRequest {
     this.image,
     this.file,
     this.type,
+    this.target,
   });
 
   toJson() {
@@ -19,7 +21,8 @@ class SendMessageRequest {
       'message': message,
       'image': image,
       'file': file,
-      'type': type
+      'type': type,
+      'target': target
     };
   }
 }

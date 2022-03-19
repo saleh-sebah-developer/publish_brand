@@ -217,7 +217,7 @@ class _BouquetScreenState extends State<BouquetScreen> {
                           labelText: 'details_of_the_required_package'.tr(),
                           labelTextHint:
                               'hint_details_of_the_required_package'.tr(),
-                          validationFun: providerHome.validate,
+                          validationFun: providerAuth.validateNull,
                         ),
                         GestureDetector(
                           onTap: () async {

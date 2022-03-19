@@ -164,5 +164,9 @@
   "details": "التفاصيل",
   "administration": "الإدارة",
   "administration_department": "قسم الإدارة",
-  "create_a_meeting": "أنشئ اجتماع"
+  "create_a_meeting": "أنشئ اجتماع",
+  "competent": "مختص",
+  "your_points_are_not_enough": "نقاطك لا تكفي",
+  "you_have_no_points": "لا يوجد لديك نقاط"
+
 }

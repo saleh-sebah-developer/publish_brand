@@ -71,7 +71,9 @@ class HomeProvider extends ChangeNotifier {
   List<Data> myProjectsData;
   String project_id;
 
-  Chat chatMyProjects;
+  AdminChat adminChat;
+  CategoryChat categoryChat;
+ // Chat chatMyProjects;
 
   List<Packages> packages;
 
@@ -83,7 +85,7 @@ class HomeProvider extends ChangeNotifier {
 
   List<ListPackage> listPackage;
   List<Notificat> listNotifications;
-  String numPoints = '';
+  String numPoints = '0';
   Category selectedCategory;
   String nameSelectedCategory = '';
   Service selectedServices;
@@ -374,7 +376,9 @@ class HomeProvider extends ChangeNotifier {
       log('getMyProjects success');
       if (response.status) {
         log('done');
-        chatMyProjects = response.project.chat;
+        adminChat = response.project.adminChat;
+        categoryChat = response.project.categoryChat;
+        //chatMyProjects = response.project.chat;
         notifyListeners();
       } else {
         log(response.status.toString());

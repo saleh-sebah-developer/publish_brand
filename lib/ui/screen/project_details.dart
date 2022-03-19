@@ -42,20 +42,22 @@ class ProjectDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            GestureDetector(
-              onTap: () {
-                RouterClass.routerClass.pushToScreenUsingWidget(
-                    ServiceDetailsScreen2(_service.id));
-              },
-              child: CustomService2(
-                title: _service.title ?? 'null',
-                price: _service.price.toString() ?? '0',
-                status: _service.status ?? 'new',
-                imageService: _service.photos[0].file ?? 'null',
-                type: _service.type??' ',
-                pointsCount: _service.pointsCount??' ',
-              ),
-            ),
+            _service != null
+                ? GestureDetector(
+                    onTap: () {
+                      RouterClass.routerClass.pushToScreenUsingWidget(
+                          ServiceDetailsScreen2(_service.id));
+                    },
+                    child: CustomService2(
+                      title: _service.title ?? 'null',
+                      price: _service.price.toString() ?? '0',
+                      status: _service.status ?? 'new',
+                      imageService: _service.photos[0].file ?? 'null',
+                      type: _service.type ?? ' ',
+                      pointsCount: _service.pointsCount ?? ' ',
+                    ),
+                  )
+                : Container(),
             Container(
               alignment: Alignment.centerRight,
               margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
@@ -68,57 +70,16 @@ class ProjectDetailsScreen extends StatelessWidget {
                 textAlign: TextAlign.end,
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Provider.of<AppProvider>(context, listen: false)
-                    .getChatsWithAdmin(
-                        Provider.of<ApiAuthProvider>(context, listen: false)
-                            .currentUser);
-                RouterClass.routerClass
-                    .pushToScreenUsingWidget(AllChatMessagesScreen(project_id));
-              },
-              child: Container(
-                margin: EdgeInsets.only(right: 4.w, left: 4.w, top: 12.h),
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: ListTile(
-                  title: Text('administration'.tr(),
-                      style: TextStyle(
-                          fontSize: 14.sp,
-                          fontFamily: 'TajawalBold',
-                          color: Colors.black)),
-                  subtitle: Text(
-                      'administration_department'.tr(),
-                      style: TextStyle(
-                          fontSize: 14.sp,
-                          fontFamily: 'TajawalRegular',
-                          color: Colors.black)),
-                  trailing: Visibility(
-                    visible: false,
-                    child: Text('5:20am',
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            fontFamily: 'TajawalRegular',
-                            color: Colors.black)),
-                  ),
-                  leading: Image(
-                    height: 35.h,
-                    width: 35.w,
-                    image: const AssetImage('assets/images/logo.png'),
-                  ),
-                ),
-              ),
-            ),
             Visibility(
-              visible: false,
+              visible: true,
               child: GestureDetector(
                 onTap: () {
-                  RouterClass.routerClass
-                      .pushToScreenUsingWidget(AllChatMessagesScreen(project_id));
+                  Provider.of<AppProvider>(context, listen: false)
+                      .getChatsWithAdmin(
+                          Provider.of<ApiAuthProvider>(context, listen: false)
+                              .currentUser);
+                  RouterClass.routerClass.pushToScreenUsingWidget(
+                      AllChatMessagesScreen(project_id, 'admin', _service));
                 },
                 child: Container(
                   margin: EdgeInsets.only(right: 4.w, left: 4.w, top: 12.h),
@@ -130,22 +91,24 @@ class ProjectDetailsScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: ListTile(
-                    title: Text('مختص التصميم',
+                    title: Text('administration'.tr(),
                         style: TextStyle(
                             fontSize: 14.sp,
                             fontFamily: 'TajawalBold',
                             color: Colors.black)),
-                    subtitle: Text(
-                        'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد',
+                    subtitle: Text('administration_department'.tr(),
                         style: TextStyle(
                             fontSize: 14.sp,
                             fontFamily: 'TajawalRegular',
                             color: Colors.black)),
-                    trailing: Text('5:20am',
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            fontFamily: 'TajawalRegular',
-                            color: Colors.black)),
+                    trailing: Visibility(
+                      visible: false,
+                      child: Text('5:20am',
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              fontFamily: 'TajawalRegular',
+                              color: Colors.black)),
+                    ),
                     leading: Image(
                       height: 35.h,
                       width: 35.w,
@@ -155,6 +118,52 @@ class ProjectDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
+            _service != null
+                ? Visibility(
+                    visible: true,
+                    child: GestureDetector(
+                      onTap: () {
+                        RouterClass.routerClass.pushToScreenUsingWidget(
+                            AllChatMessagesScreen(
+                                project_id, 'category', _service));
+                      },
+                      child: Container(
+                        margin:
+                            EdgeInsets.only(right: 4.w, left: 4.w, top: 12.h),
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 4.h),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: ListTile(
+                          title: Text('competent'.tr() + _service.category.name,
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontFamily: 'TajawalBold',
+                                  color: Colors.black)),
+                          subtitle: Text(
+                              _service.category.name + ' ' + 'department'.tr(),
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontFamily: 'TajawalRegular',
+                                  color: Colors.black)),
+                          // trailing: Text('5:20am',
+                          //     style: TextStyle(
+                          //         fontSize: 14.sp,
+                          //         fontFamily: 'TajawalRegular',
+                          //         color: Colors.black)),
+                          leading: Image(
+                            height: 35.h,
+                            width: 35.w,
+                            image: const AssetImage('assets/images/logo.png'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),

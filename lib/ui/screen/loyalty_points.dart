@@ -23,8 +23,9 @@ class _LoyaltyPointsScreenState extends State<LoyaltyPointsScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<SpHelper>(context, listen: false).token != null?
-    Provider.of<HomeProvider>(context, listen: false).getMyPoints(context):(){};
+    Provider.of<SpHelper>(context, listen: false).token != null
+        ? Provider.of<HomeProvider>(context, listen: false).getMyPoints(context)
+        : () {};
   }
 
   @override
@@ -73,8 +74,16 @@ class _LoyaltyPointsScreenState extends State<LoyaltyPointsScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      RouterClass.routerClass.pushToScreenUsingWidget(
-                          const PointsServicesScreen());
+                      Provider.of<HomeProvider>(context, listen: false)
+                                  .numPoints !=
+                              "0"
+                          ? RouterClass.routerClass.pushToScreenUsingWidget(
+                              const PointsServicesScreen())
+                          : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text('you_have_no_points'.tr()),
+                              duration: Duration(seconds: 3),
+                            ));
                     },
                     child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 12.w),
@@ -111,7 +120,10 @@ class _LoyaltyPointsScreenState extends State<LoyaltyPointsScreen> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               child: CustomMyPoints(
-                                date: 'dfs',
+                                date: Provider.of<HomeProvider>(context)
+                                    .points[index]
+                                    .createdAt
+                                    .substring(0, 10),
                                 //Provider.of<HomeProvider>(context).points[index].createdAt
                                 point: Provider.of<HomeProvider>(context)
                                     .points[index]
