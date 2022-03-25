@@ -67,6 +67,7 @@ class AppProvider extends ChangeNotifier {
   getChatMessages(String chatId) async {}
 
   checkInternetConnection({bool hasInternet, ConnectivityResult result}) async {
+/*
     this.hasInternet = hasInternet;
     this.result = result;
     notifyListeners();
@@ -97,6 +98,7 @@ class AppProvider extends ChangeNotifier {
       // );
     }
     notifyListeners();
+*/
   }
 
     // void showDownloadProgress(received, total) {

@@ -251,10 +251,10 @@ class DioClient {
   }
 
   Future<ContactMsgResponse> sendContactMsg(
-      {String name, String phone, String message}) async {
+      {String email,String name, String phone, String message}) async {
     try {
       Response response = await dio.post(ApiConstant.sendContactMsg,
-          data: {'name': name, 'phone': phone, 'message': message});
+          data: {'email': email,'name': name, 'phone': phone, 'message': message});
       ContactMsgResponse contactMsgResponse =
           ContactMsgResponse.fromJson(response.data);
       return contactMsgResponse;

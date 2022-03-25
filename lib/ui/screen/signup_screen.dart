@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -38,8 +40,7 @@ class SignUpScreen extends StatelessWidget {
           margin: EdgeInsets.only(top: 10.h),
           decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/bg2.png'),
-                fit: BoxFit.fill),
+                image: AssetImage('assets/images/bg2.png'), fit: BoxFit.fill),
           ),
           child: Consumer<ApiAuthProvider>(builder: (context, provider, x) {
             provider.typeUser = typeUser;
@@ -116,7 +117,7 @@ class SignUpScreen extends StatelessWidget {
                                 textInputType: TextInputType.phone,
                                 labelText: 'company_phone_number'.tr(),
                                 labelTextHint: 'hint_company_phone_number'.tr(),
-                                validationFun: provider.validatePhone,
+                                validationFun: provider.validate,
                               )
                             : Container(),
                         CustomTextField(
@@ -139,7 +140,7 @@ class SignUpScreen extends StatelessWidget {
                           child: SwitchListTile(
                               title: Text(
                                 'agree_terms_switch'.tr(),
-                                textAlign: TextAlign.end,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'TajawalRegular',
                                     fontSize: 12.sp,
@@ -153,7 +154,10 @@ class SignUpScreen extends StatelessWidget {
                                 },
                                 child: Text(
                                   'policies_click_here'.tr(),
-                                  style: TextStyle(color: HexColor('#4091AF'),fontSize: 12.sp),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: HexColor('#4091AF'),
+                                      fontSize: 12.sp),
                                 ),
                               ),
                               value: provider.agreeTerms,
@@ -184,7 +188,18 @@ class SignUpScreen extends StatelessWidget {
                                     ? () {
                                         if (signUpFormKey.currentState
                                             .validate()) {
-                                          provider.SignUpUsers(context);
+                                          if (provider.agreeTerms) {
+                                            provider.SignUpUsers(context);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                'agree_terms_switch'.tr(),
+                                              ),
+                                              duration: Duration(seconds: 3),
+                                            ));
+                                          }
                                         }
                                       }
                                     : () {},

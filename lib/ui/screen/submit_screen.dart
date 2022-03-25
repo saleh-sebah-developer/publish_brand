@@ -123,16 +123,19 @@ class SubmitService extends StatelessWidget {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    RouterClass.routerClass
-                        .pushToScreenUsingWidget(PaymentConfirmationScreen(
-                      service: Provider.of<HomeProvider>(context, listen: false)
-                          .selectedServices,
-                    ));
+                    if (submitServiceFormKey.currentState
+                        .validate()){
+                      RouterClass.routerClass
+                          .pushToScreenUsingWidget(PaymentConfirmationScreen(
+                        service: Provider.of<HomeProvider>(context, listen: false)
+                            .selectedServices,
+                      ));
+                    }
                   },
                   child: Container(
                     color: Colors.white,
                     padding:
-                        EdgeInsets.symmetric(horizontal: 22.w, vertical: 34.h),
+                        EdgeInsets.symmetric(horizontal: 22.w, vertical: 22.h),
                     margin: EdgeInsets.only(top: 85.h),
                     child: CustomButtonY(
                       labelText: 'continuation'.tr(),

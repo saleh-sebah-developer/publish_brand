@@ -69,10 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
     Provider.of<HomeProvider>(context, listen: false).settingsApiApp(context);
-    Provider.of<SpHelper>(context, listen: false).token != null
+    Provider.of<SpHelper>(context, listen: false).getToken != null
         ? Provider.of<ApiAuthProvider>(context, listen: false).profile(context)
         : () {};
-    Provider.of<SpHelper>(context, listen: false).token != null
+    Provider.of<SpHelper>(context, listen: false).getToken != null
         ? Provider.of<HomeProvider>(context, listen: false).getMyPoints(context)
         : () {};
   }
@@ -173,8 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .token ==
                                           null
                                       ? 'new_user'.tr()
-                                      : Provider.of<ApiAuthProvider>(context,
-                                                  listen: false)
+                                      : Provider.of<ApiAuthProvider>(context)
                                               .currentUser
                                               ?.name ??
                                           '',
@@ -670,6 +669,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
+              // ElevatedButton(onPressed: (){
+              //   log( Provider.of<SpHelper>(context, listen: false).token);
+              // }, child: Text('dddddddd')),
               Container(
                 margin: EdgeInsets.only(right: 12.w, left: 12.w, top: 12.h),
                 child: Row(

@@ -40,7 +40,7 @@ class _AboutBubleshBrandScreenState extends State<AboutBubleshBrandScreen> {
           Image(
             height: 67.h,
             width: 98.w,
-            image: const AssetImage('assets/images/logo.png'),
+            image: const AssetImage('assets/images/logo_app.png'),
           ),
           SizedBox(
             height: 6.h,

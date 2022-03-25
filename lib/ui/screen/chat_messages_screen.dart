@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:provider/provider.dart';
@@ -99,35 +100,43 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                                             ? MainAxisAlignment.end
                                             : MainAxisAlignment.start,
                                     children: [
-                                      ChatBubble(
-                                        backGroundColor: providerChat
-                                                    .messages[index].senderId ==
-                                                providerAuth.currentUser.id
-                                            ? HexColor('#E5E5EA')
-                                            : HexColor('#145366'),
-                                        clipper: ChatBubbleClipper5(
-                                            type: providerChat.messages[index]
-                                                        .senderId ==
-                                                    providerAuth.currentUser.id
-                                                ? BubbleType.sendBubble
-                                                : BubbleType.receiverBubble),
-                                        child: providerChat
-                                                    .messages[index].senderId ==
-                                                providerAuth.currentUser.id
-                                            ? Text(
+                                      Container(
+                                       // width: MediaQuery.of(context).size.width/2,
+                                        child: ChatBubble(
+                                          backGroundColor: providerChat
+                                                      .messages[index].senderId ==
+                                                  providerAuth.currentUser.id
+                                              ? HexColor('#E5E5EA')
+                                              : HexColor('#145366'),
+                                          clipper: ChatBubbleClipper5(
+                                              type: providerChat.messages[index]
+                                                          .senderId ==
+                                                      providerAuth.currentUser.id
+                                                  ? BubbleType.sendBubble
+                                                  : BubbleType.receiverBubble),
+                                          child: providerChat
+                                                      .messages[index].senderId ==
+                                                  providerAuth.currentUser.id
+                                              ? Text(
                                                 providerChat.messages[index]
-                                                        .message ??
+                                                    .message ??
                                                     '',
                                                 style: TextStyle(
                                                     color: Colors.black),
+                                                overflow: TextOverflow.visible,
+
                                               )
-                                            : Text(
-                                                providerChat.messages[index]
-                                                        .message ??
-                                                    '',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
+                                              : Text(
+                                                  providerChat.messages[index]
+                                                          .message ??
+                                                      '',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                            overflow: TextOverflow.visible,
+
+                                          ),
+
+                                        ),
                                       ),
                                     ],
                                   ),

@@ -45,7 +45,7 @@
   "service_sections": "Service Sections",
   "submit_special_requests": "Submit Special Services",
   "loyalty_points": "Loyalty Points",
-  "about_bublesh_brand": "About Bublesh Brand",
+  "about_bublesh_brand": "About Business Application",
   "policies": "Policies",
   "support_and_help": "Support And Help",
   "logout": "Logout",
@@ -167,7 +167,8 @@
   "create_a_meeting": "Create a meeting",
   "competent": "Competent",
   "your_points_are_not_enough": "Your points are not enough",
-  "you_have_no_points": "You have no points"
+  "you_have_no_points": "You have no points",
+  "note": "Note: The time varies according to the number entered"
 
 
 }

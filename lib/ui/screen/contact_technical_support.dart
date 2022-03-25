@@ -44,7 +44,6 @@ class ContactTechnicalSupportScreen extends StatelessWidget {
           return Consumer2<HomeProvider,ApiAuthProvider>(builder: (context, providerHome,providerAuth, x) {
             return Form(
               key: contactTSFormKey,
-
               child: SingleChildScrollView(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(minHeight: constraint.maxHeight),
@@ -112,6 +111,13 @@ class ContactTechnicalSupportScreen extends StatelessWidget {
                         ),
                         SizedBox(
                           height: 6.h,
+                        ),
+                        CustomTextField(
+                          controller: providerHome.emailConContactTS,
+                          textInputType: TextInputType.emailAddress,
+                          labelText: 'email'.tr(),
+                          labelTextHint: 'hint_email'.tr(),
+                          validationFun: providerAuth.validateEmail,
                         ),
                         CustomTextField(
                           controller: providerHome.nameConContactTS,

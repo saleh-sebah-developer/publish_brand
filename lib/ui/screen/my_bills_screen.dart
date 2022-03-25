@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -8,16 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:publish_brand/providers/home_provider.dart';
 import 'package:publish_brand/ui/widget/mycontract.dart';
 
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'dart:isolate';
-import 'dart:ui';
-
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-
-import '../../providers/SalehProvider.dart';
+// import 'package:flowder/flowder.dart';
 
 class MyBillsScreen extends StatefulWidget {
   const MyBillsScreen({Key key}) : super(key: key);
@@ -27,6 +19,7 @@ class MyBillsScreen extends StatefulWidget {
 }
 
 class _MyBillsScreenState extends State<MyBillsScreen> {
+
   @override
   void initState() {
     super.initState();
@@ -67,11 +60,34 @@ class _MyBillsScreenState extends State<MyBillsScreen> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () async {
+
+                        /*
+                        final downloaderUtils = DownloaderUtils(
+                          progressCallback: (current, total) {
+                            final progress = (current / total) * 100;
+                            print('Downloading: $progress');
+                          },
+                          file: File('http://ipv4.download.thinkbroadband.com/200MB.zip'),
+                          progress: ProgressImplementation(),
+                          onDone: () => print('Download done'),
+                          deleteOnCancel: true,
+                        );
+
+                        final core = await Flowder.download(
+                            'http://ipv4.download.thinkbroadband.com/200MB.zip',
+                            downloaderUtils);
+                        core.download('http://ipv4.download.thinkbroadband.com/200MB.zip', downloaderUtils);
+                        */
+
+
+                        /*
+
                         Provider.of<SalehProvider>(context, listen: false)
                             .download2(Provider.of<HomeProvider>(context,
                                     listen: false)
                                 .invoices[index]
                                 .file);
+                        */
 
                         /*
                         final status = await Permission.storage.request();

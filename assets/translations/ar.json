@@ -45,7 +45,7 @@
   "service_sections": "أقسام الخدمات",
   "submit_special_requests": "تقديم خدمات خاصة",
   "loyalty_points": "نقاط الولاء",
-  "about_bublesh_brand": "عن ببلش براند",
+  "about_bublesh_brand": "عن تطبيق أعمال",
   "policies": "السياسات",
   "support_and_help": "الدعم والمساعدة",
   "logout": " تسجيل خروج",
@@ -167,6 +167,7 @@
   "create_a_meeting": "أنشئ اجتماع",
   "competent": "مختص",
   "your_points_are_not_enough": "نقاطك لا تكفي",
-  "you_have_no_points": "لا يوجد لديك نقاط"
+  "you_have_no_points": "لا يوجد لديك نقاط",
+  "note": "ملاحظة: يختلف الوقت على حسب العدد المدخل"
 
 }

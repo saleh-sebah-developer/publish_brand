@@ -42,6 +42,7 @@ class HomeProvider extends ChangeNotifier {
 
   bool btnIsEnable = true;
 
+  TextEditingController emailConContactTS = TextEditingController();
   TextEditingController nameConContactTS = TextEditingController();
   TextEditingController mobileConContactTS = TextEditingController();
   TextEditingController messageConContactTS = TextEditingController();
@@ -229,6 +230,7 @@ class HomeProvider extends ChangeNotifier {
   sendContactMsg(BuildContext context) async {
     changeEnablity();
     ContactMsgResponse response = await DioClient.dioClient.sendContactMsg(
+      email: emailConContactTS.text,
         name: nameConContactTS.text,
         phone: mobileConContactTS.text,
         message: messageConContactTS.text);
@@ -238,6 +240,7 @@ class HomeProvider extends ChangeNotifier {
       if (response.status == true) {
         log(response.message.toString());
         RouterClass.routerClass.popScreen();
+        emailConContactTS.text = '';
         nameConContactTS.text = '';
         mobileConContactTS.text = '';
         messageConContactTS.text = '';

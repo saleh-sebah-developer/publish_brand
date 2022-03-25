@@ -49,10 +49,10 @@ class _MoreScreenState extends State<MoreScreen> {
             .checkInternetConnection(hasInternet: hasInternet);
       });
     });
-    Provider.of<SpHelper>(context, listen: false).token != null
+    Provider.of<SpHelper>(context, listen: false).getToken != null
         ? Provider.of<ApiAuthProvider>(context, listen: false).profile(context)
         : () {};
-    Provider.of<SpHelper>(context, listen: false).token != null
+    Provider.of<SpHelper>(context, listen: false).getToken != null
         ? Provider.of<HomeProvider>(context, listen: false).getMyPoints(context)
         : () {};
   }

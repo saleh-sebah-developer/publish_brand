@@ -52,167 +52,167 @@ class _ServiceScreenState extends State<ServiceScreen> {
                 fontFamily: 'TajawalBold'),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(children: [
-            Container(
-              alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              width: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              child: TextFormField(
-                textAlign: TextAlign.start,
-                onChanged: (value) {
-                  Provider.of<HomeProvider>(context, listen: false)
-                      .searchServiceScreen(value);
-                },
-                controller: searchServiceScreenCon,
-                decoration: InputDecoration(
-                  // ignore: missing_required_param
-                  prefixIcon: const IconButton(
-                    icon: Icon(
-                      Icons.search_rounded,
-                      color: Colors.black,
-                    ),
+        body: ListView(
+            children: [
+          Container(
+            alignment: Alignment.bottomCenter,
+            margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            child: TextFormField(
+              textAlign: TextAlign.start,
+              onChanged: (value) {
+                Provider.of<HomeProvider>(context, listen: false)
+                    .searchServiceScreen(value);
+              },
+              controller: searchServiceScreenCon,
+              decoration: InputDecoration(
+                // ignore: missing_required_param
+                prefixIcon: const IconButton(
+                  icon: Icon(
+                    Icons.search_rounded,
+                    color: Colors.black,
                   ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      searchServiceScreenCon.clear();
-                      Provider.of<HomeProvider>(context, listen: false)
-                          .searchServiceScreen('');
-                    },
-                    icon: const Icon(
-                      Icons.cancel,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.r),
-                      borderSide: const BorderSide(
-                          color: Colors.transparent, width: 0.0)),
-                  fillColor: Colors.white,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 2.w, vertical: 12.h),
-                  isDense: true,
-                  hintStyle: TextStyle(color: Colors.black, fontSize: 14.sp),
-                  hintText: 'look_for2'.tr(),
                 ),
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerRight,
-              margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-              child: Text(
-                'all_services'.tr() +
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    searchServiceScreenCon.clear();
                     Provider.of<HomeProvider>(context, listen: false)
-                        .nameSelectedCategory,
-                style: TextStyle(
-                    fontSize: 16.sp,
-                    fontFamily: 'TajawalBold',
-                    color: Colors.black),
-                textAlign: TextAlign.end,
+                        .searchServiceScreen('');
+                  },
+                  icon: const Icon(
+                    Icons.cancel,
+                    color: Colors.grey,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.r),
+                    borderSide: const BorderSide(
+                        color: Colors.transparent, width: 0.0)),
+                fillColor: Colors.white,
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 2.w, vertical: 12.h),
+                isDense: true,
+                hintStyle: TextStyle(color: Colors.black, fontSize: 14.sp),
+                hintText: 'look_for2'.tr(),
               ),
             ),
-            Provider.of<HomeProvider>(context).servicesByCategory == null
-                ? SizedBox(
-                    height: 40.h,
-                    width: 40.w,
-                    child: Center(
-                      child: Lottie.asset('assets/animations/progress1.json'),
-                    ))
-                : Provider.of<HomeProvider>(context).servicesByCategory.isEmpty
-                    ? Center(
-                        child: Lottie.asset('assets/animations/empty2.json'),
-                      )
-                    : Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: GridView.builder(
-                            scrollDirection: Axis.vertical,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisExtent: 235,
-                                    mainAxisSpacing: 4),
-                            itemCount: searchServiceScreenCon.text.isNotEmpty
-                                ? Provider.of<HomeProvider>(context)
-                                    .searchServicesByCategory
-                                    .length
-                                : Provider.of<HomeProvider>(context)
-                                    .servicesByCategory
-                                    .length,
-                            itemBuilder: (BuildContext ctx, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  RouterClass.routerClass
-                                      .pushToScreenUsingWidget(
-                                          ServiceDetailsScreen(
-                                              searchServiceScreenCon
-                                                      .text.isNotEmpty
-                                                  ? Provider.of<HomeProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .searchServicesByCategory[
-                                                          index]
-                                                      .id
-                                                  : Provider.of<HomeProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .services[index]
-                                                      .id));
-                                },
-                                child: CustomService(
-                                  ImageService:
-                                      searchServiceScreenCon.text.isNotEmpty
-                                          ? Provider.of<HomeProvider>(context)
-                                              .searchServicesByCategory[index]
-                                              .photos[0]
-                                              .file
-                                          : Provider.of<HomeProvider>(context)
-                                              .servicesByCategory[index]
-                                              .photos[0]
-                                              .file,
-                                  title: searchServiceScreenCon.text.isNotEmpty
-                                      ? Provider.of<HomeProvider>(context)
-                                          .searchServicesByCategory[index]
-                                          .title
-                                      : Provider.of<HomeProvider>(context)
-                                          .servicesByCategory[index]
-                                          .title,
-                                  titleSub:
-                                      searchServiceScreenCon.text.isNotEmpty
-                                          ? Provider.of<HomeProvider>(context)
-                                              .searchServicesByCategory[index]
-                                              .price
-                                              .toString()
-                                          : Provider.of<HomeProvider>(context)
-                                              .servicesByCategory[index]
-                                              .price
-                                              .toString(),
-                                  type: searchServiceScreenCon.text.isNotEmpty
-                                      ? Provider.of<HomeProvider>(context)
-                                          .searchServicesByCategory[index]
-                                          .type
-                                          .toString()
-                                      : Provider.of<HomeProvider>(context)
-                                          .servicesByCategory[index]
-                                          .type
-                                          .toString(),
-                                  pointsCount:
-                                      searchServiceScreenCon.text.isNotEmpty
-                                          ? Provider.of<HomeProvider>(context)
-                                              .searchServicesByCategory[index]
-                                              .pointsCount
-                                              .toString()
-                                          : Provider.of<HomeProvider>(context)
-                                              .servicesByCategory[index]
-                                              .pointsCount
-                                              .toString(),
-                                ),
-                              );
-                            }),
-                      ),
-          ]),
-        ),
+          ),
+          Container(
+            alignment: Alignment.centerRight,
+            margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+            child: Text(
+              'all_services'.tr() +
+                  Provider.of<HomeProvider>(context, listen: false)
+                      .nameSelectedCategory,
+              style: TextStyle(
+                  fontSize: 16.sp,
+                  fontFamily: 'TajawalBold',
+                  color: Colors.black),
+              textAlign: TextAlign.end,
+            ),
+          ),
+          Provider.of<HomeProvider>(context).servicesByCategory == null
+              ? SizedBox(
+                  height: 40.h,
+                  width: 40.w,
+                  child: Center(
+                    child: Lottie.asset('assets/animations/progress1.json'),
+                  ))
+              : Provider.of<HomeProvider>(context).servicesByCategory.isEmpty
+                  ? Center(
+                      child: Lottie.asset('assets/animations/empty2.json'),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          padding: EdgeInsets.only(bottom: 200),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisExtent: 235,
+                                  mainAxisSpacing: 4),
+                          itemCount: searchServiceScreenCon.text.isNotEmpty
+                              ? Provider.of<HomeProvider>(context)
+                                  .searchServicesByCategory
+                                  .length
+                              : Provider.of<HomeProvider>(context)
+                                  .servicesByCategory
+                                  .length,
+                          itemBuilder: (BuildContext ctx, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                RouterClass.routerClass
+                                    .pushToScreenUsingWidget(
+                                        ServiceDetailsScreen(
+                                            searchServiceScreenCon
+                                                    .text.isNotEmpty
+                                                ? Provider.of<HomeProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .searchServicesByCategory[
+                                                        index]
+                                                    .id
+                                                : Provider.of<HomeProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .services[index]
+                                                    .id));
+                              },
+                              child: CustomService(
+                                ImageService:
+                                    searchServiceScreenCon.text.isNotEmpty
+                                        ? Provider.of<HomeProvider>(context)
+                                            .searchServicesByCategory[index]
+                                            .photos[0]
+                                            .file
+                                        : Provider.of<HomeProvider>(context)
+                                            .servicesByCategory[index]
+                                            .photos[0]
+                                            .file,
+                                title: searchServiceScreenCon.text.isNotEmpty
+                                    ? Provider.of<HomeProvider>(context)
+                                        .searchServicesByCategory[index]
+                                        .title
+                                    : Provider.of<HomeProvider>(context)
+                                        .servicesByCategory[index]
+                                        .title,
+                                titleSub:
+                                    searchServiceScreenCon.text.isNotEmpty
+                                        ? Provider.of<HomeProvider>(context)
+                                            .searchServicesByCategory[index]
+                                            .price
+                                            .toString()
+                                        : Provider.of<HomeProvider>(context)
+                                            .servicesByCategory[index]
+                                            .price
+                                            .toString(),
+                                type: searchServiceScreenCon.text.isNotEmpty
+                                    ? Provider.of<HomeProvider>(context)
+                                        .searchServicesByCategory[index]
+                                        .type
+                                        .toString()
+                                    : Provider.of<HomeProvider>(context)
+                                        .servicesByCategory[index]
+                                        .type
+                                        .toString(),
+                                pointsCount:
+                                    searchServiceScreenCon.text.isNotEmpty
+                                        ? Provider.of<HomeProvider>(context)
+                                            .searchServicesByCategory[index]
+                                            .pointsCount
+                                            .toString()
+                                        : Provider.of<HomeProvider>(context)
+                                            .servicesByCategory[index]
+                                            .pointsCount
+                                            .toString(),
+                              ),
+                            );
+                          }),
+                    ),
+        ]),
       ),
     );
   }
