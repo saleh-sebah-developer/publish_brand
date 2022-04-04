@@ -18,17 +18,19 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../repositories/Message2.dart';
 
 class AppProvider extends ChangeNotifier {
   User myUser;
   List<User> users;
   List<Message> allMyChats;
+  List<Message2> listMessage2;
   bool hasInternet = false;
   ConnectivityResult result = ConnectivityResult.none;
 
-  getChatsWithAdmin(User user) async {
+  getChatsWithAdmin(String projectID) async {
     List<QueryDocumentSnapshot<Map<String, dynamic>>> list =
-        await FirestoreHelper.firestoreHelper.getAdminChat(user);
+        await FirestoreHelper.firestoreHelper.getAdminChat(projectID);
 
     List<Message> messages = list.map((e) {
       String chatId = e.id;
@@ -42,8 +44,10 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  sendMessage(Message message,User user) async {
-    FirestoreHelper.firestoreHelper.sendMessage(message,user);
+  sendMessage(Message2 message2, String projectID) async {
+    FirestoreHelper.firestoreHelper.sendMessage(message2, projectID);
+    getChatMessages(projectID);
+
     /*
     bool x =
         await FirestoreHelper.firestoreHelper.checkCollectionExists(chatId);
@@ -64,7 +68,21 @@ class AppProvider extends ChangeNotifier {
     FirestoreHelper.firestoreHelper.createChat(chatId, this.myUser, otherUser);
   }
 
-  getChatMessages(String chatId) async {}
+  getChatMessages(String projectID) async {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> list =
+        await FirestoreHelper.firestoreHelper.getAdminChat(projectID);
+
+    List<Message2> messages = list.map((e) {
+      //  String chatId = e.id;
+      Map<String, dynamic> map = e.data();
+      log(map.toString());
+      // map['chatId'] = chatId;
+      return Message2.fromMap(map);
+    }).toList();
+    log(messages.length.toString());
+    this.listMessage2 = messages;
+    notifyListeners();
+  }
 
   checkInternetConnection({bool hasInternet, ConnectivityResult result}) async {
 /*
@@ -101,43 +119,41 @@ class AppProvider extends ChangeNotifier {
 */
   }
 
-    // void showDownloadProgress(received, total) {
-    //   if (total != -1) {
-    //     print((received / total * 100).toStringAsFixed(0) + "%");
-    //   }
-    //
-    // }
-    Future download2(String url) async {
-      try {
-
-        if (await Permission.storage.request().isGranted) {
-          String path =
-          await AndroidPathProvider.downloadsPath;
-          //String fullPath = tempDir.path + "/boo2.pdf'";
-          String fullPath = "$path/test.docx";
-          print('full path ${fullPath}');
-          Response response = await Dio().get(
-            url,
-           // onReceiveProgress: showDownloadProgress,
-            //Received data with List<int>
-            options: Options(
-                responseType: ResponseType.bytes,
-                followRedirects: false,
-                validateStatus: (status) {
-                  return status < 500;
-                }),
-          );
-          log(response.headers.toString());
-          log(fullPath.toString());
-          File file = File(fullPath);
-          var raf = file.openSync(mode: FileMode.write);
-          // response.data is List<int> type
-          raf.writeFromSync(response.data);
-          await raf.close();
-          OpenFile.open(fullPath);}
-      } catch (e) {
-        print(e);
+  // void showDownloadProgress(received, total) {
+  //   if (total != -1) {
+  //     print((received / total * 100).toStringAsFixed(0) + "%");
+  //   }
+  //
+  // }
+  Future download2(String url) async {
+    try {
+      if (await Permission.storage.request().isGranted) {
+        String path = await AndroidPathProvider.downloadsPath;
+        //String fullPath = tempDir.path + "/boo2.pdf'";
+        String fullPath = "$path/test.docx";
+        print('full path ${fullPath}');
+        Response response = await Dio().get(
+          url,
+          // onReceiveProgress: showDownloadProgress,
+          //Received data with List<int>
+          options: Options(
+              responseType: ResponseType.bytes,
+              followRedirects: false,
+              validateStatus: (status) {
+                return status < 500;
+              }),
+        );
+        log(response.headers.toString());
+        log(fullPath.toString());
+        File file = File(fullPath);
+        var raf = file.openSync(mode: FileMode.write);
+        // response.data is List<int> type
+        raf.writeFromSync(response.data);
+        await raf.close();
+        OpenFile.open(fullPath);
       }
+    } catch (e) {
+      print(e);
     }
-
+  }
 }

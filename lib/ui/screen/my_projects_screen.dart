@@ -100,15 +100,33 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                                     .toString();
                                 RouterClass.routerClass.pushToScreenUsingWidget(
                                     ProjectDetailsScreen(
-                                        Provider.of<HomeProvider>(context,
-                                                listen: false)
+                                        Provider.of<HomeProvider>(context, listen: false)
                                             .myProjectsData[index]
                                             .service,
-                                        Provider.of<HomeProvider>(context,
-                                                listen: false)
+                                        Provider.of<HomeProvider>(context, listen: false)
                                             .myProjectsData[index]
                                             .id
-                                            .toString()));
+                                            .toString(),
+                                        Provider.of<HomeProvider>(context, listen: false)
+                                                    .myProjectsData[index]
+                                                    .adminChat !=
+                                                null
+                                            ? Provider.of<HomeProvider>(context,
+                                                    listen: false)
+                                                .myProjectsData[index]
+                                                .adminChat
+                                                .id
+                                            : 0,
+                                        Provider.of<HomeProvider>(context, listen: false)
+                                                    .myProjectsData[index]
+                                                    .categoryChat !=
+                                                null
+                                            ? Provider.of<HomeProvider>(context,
+                                                    listen: false)
+                                                .myProjectsData[index]
+                                                .categoryChat
+                                                .id
+                                            : 0));
                               },
                               child: CustomService2(
                                 title: Provider.of<HomeProvider>(context)
@@ -120,8 +138,9 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                                         .service
                                         .title
                                     : Provider.of<HomeProvider>(context)
-                                    .myProjectsData[index]
-                                    .title??'null',
+                                            .myProjectsData[index]
+                                            .title ??
+                                        'null',
                                 price: Provider.of<HomeProvider>(context)
                                             .myProjectsData[index]
                                             .service !=

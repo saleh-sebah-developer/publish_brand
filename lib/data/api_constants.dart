@@ -1,6 +1,6 @@
 class ApiConstant {
   static const String baseUrl =
-      'http://businessapp.live/appfiles/public/api/';
+      'https://businessapp.live/appfiles/public/api/';
      // 'https://publishbrand.homeshopuae.com/public/api/';
 
   // --- Auth

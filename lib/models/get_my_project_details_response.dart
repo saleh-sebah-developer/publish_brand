@@ -17,11 +17,11 @@ class GetMyProjectDetailsResponse {
     code = json['code'];
     message = json['message'];
     project =
-    json['project'] != null ?  Project.fromJson(json['project']) : null;
+        json['project'] != null ? Project.fromJson(json['project']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['code'] = code;
     data['message'] = message;
@@ -64,33 +64,33 @@ class Project {
 
   Project(
       {this.id,
-        this.type,
-        this.employeeId,
-        this.userId,
-        this.serviceId,
-        this.categoryId,
-        this.title,
-        this.details,
-        this.paymentMethodId,
-        this.quantity,
-        this.price,
-        this.couponId,
-        this.couponPercent,
-        this.couponAmount,
-        this.finalPrice,
-        this.rate,
-        this.cardNumber,
-        this.expiredDate,
-        this.validationNumber,
-        this.nameCardholder,
-        this.status,
-        this.createdAt,
-        this.adminChat,
-        this.categoryChat,
-        this.user,
-        this.employee,
-        this.service,
-        this.paymentMethod});
+      this.type,
+      this.employeeId,
+      this.userId,
+      this.serviceId,
+      this.categoryId,
+      this.title,
+      this.details,
+      this.paymentMethodId,
+      this.quantity,
+      this.price,
+      this.couponId,
+      this.couponPercent,
+      this.couponAmount,
+      this.finalPrice,
+      this.rate,
+      this.cardNumber,
+      this.expiredDate,
+      this.validationNumber,
+      this.nameCardholder,
+      this.status,
+      this.createdAt,
+      this.adminChat,
+      this.categoryChat,
+      this.user,
+      this.employee,
+      this.service,
+      this.paymentMethod});
 
   Project.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -124,7 +124,7 @@ class Project {
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
     employee = json['employee'];
     service =
-    json['service'] != null ? new Service.fromJson(json['service']) : null;
+        json['service'] != null ? new Service.fromJson(json['service']) : null;
     paymentMethod = json['payment_method'];
   }
 
@@ -170,17 +170,95 @@ class Project {
   }
 }
 
+// class AdminChat {
+//   int id;
+//   int orderId;
+//   int user1;
+//   int user2;
+//   num categoryId;
+//   int delete;
+//   int freez;
+//   String lastSeen;
+//   String createdAt;
+//   String lastMessage;
+//   String totalUnread;
+//   User user;
+//   Category category;
+//   List<num> messages;
+//
+//   AdminChat(
+//       {this.id,
+//         this.orderId,
+//         this.user1,
+//         this.user2,
+//         this.categoryId,
+//         this.delete,
+//         this.freez,
+//         this.lastSeen,
+//         this.createdAt,
+//         this.lastMessage,
+//         this.totalUnread,
+//         this.user,
+//         this.category,
+//         this.messages});
+//
+//   AdminChat.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     orderId = json['order_id'];
+//     user1 = json['user1'];
+//     user2 = json['user2'];
+//     categoryId = json['category_id'];
+//     delete = json['delete'];
+//     freez = json['freez'];
+//     lastSeen = json['last_seen'];
+//     createdAt = json['created_at'];
+//     lastMessage = json['last_message'];
+//     totalUnread = json['total_unread'];
+//     user = json['user'] != null ? new User.fromJson(json['user']) : null;
+//     category = json['category'];
+//     // if (json['messages'] != null) {
+//     //   messages = <Null>[];
+//     //   json['messages'].forEach((v) {
+//     //     messages.add(new Null.fromJson(v));
+//     //   });
+//     // }
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['id'] = this.id;
+//     data['order_id'] = this.orderId;
+//     data['user1'] = this.user1;
+//     data['user2'] = this.user2;
+//     data['category_id'] = this.categoryId;
+//     data['delete'] = this.delete;
+//     data['freez'] = this.freez;
+//     data['last_seen'] = this.lastSeen;
+//     data['created_at'] = this.createdAt;
+//     data['last_message'] = this.lastMessage;
+//     data['total_unread'] = this.totalUnread;
+//     if (this.user != null) {
+//       data['user'] = this.user.toJson();
+//     }
+//     data['category'] = this.category;
+//     // if (this.messages != null) {
+//     //   data['messages'] = this.messages.map((v) => v.toJson()).toList();
+//     // }
+//     return data;
+//   }
+// }
 class AdminChat {
   int id;
   int orderId;
   int user1;
   int user2;
-  Null categoryId;
+  int categoryId;
+  Null empChat;
   int delete;
   int freez;
-  Null lastSeen;
+  String lastSeen;
   String createdAt;
-  Null lastMessage;
+  String lastMessage;
   String totalUnread;
   User user;
   Null category;
@@ -188,19 +266,20 @@ class AdminChat {
 
   AdminChat(
       {this.id,
-        this.orderId,
-        this.user1,
-        this.user2,
-        this.categoryId,
-        this.delete,
-        this.freez,
-        this.lastSeen,
-        this.createdAt,
-        this.lastMessage,
-        this.totalUnread,
-        this.user,
-        this.category,
-        this.messages});
+      this.orderId,
+      this.user1,
+      this.user2,
+      this.categoryId,
+      this.empChat,
+      this.delete,
+      this.freez,
+      this.lastSeen,
+      this.createdAt,
+      this.lastMessage,
+      this.totalUnread,
+      this.user,
+      this.category,
+      this.messages});
 
   AdminChat.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -208,6 +287,7 @@ class AdminChat {
     user1 = json['user1'];
     user2 = json['user2'];
     categoryId = json['category_id'];
+    empChat = json['emp_chat'];
     delete = json['delete'];
     freez = json['freez'];
     lastSeen = json['last_seen'];
@@ -215,7 +295,7 @@ class AdminChat {
     lastMessage = json['last_message'];
     totalUnread = json['total_unread'];
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
-    category = json['category'];
+    // category = json['category'];
     // if (json['messages'] != null) {
     //   messages = <Null>[];
     //   json['messages'].forEach((v) {
@@ -231,6 +311,7 @@ class AdminChat {
     data['user1'] = this.user1;
     data['user2'] = this.user2;
     data['category_id'] = this.categoryId;
+    data['emp_chat'] = this.empChat;
     data['delete'] = this.delete;
     data['freez'] = this.freez;
     data['last_seen'] = this.lastSeen;
@@ -240,7 +321,7 @@ class AdminChat {
     if (this.user != null) {
       data['user'] = this.user.toJson();
     }
-    data['category'] = this.category;
+    // data['category'] = this.category;
     // if (this.messages != null) {
     //   data['messages'] = this.messages.map((v) => v.toJson()).toList();
     // }
@@ -248,18 +329,100 @@ class AdminChat {
   }
 }
 
+// class CategoryChat {
+//   int id;
+//   int orderId;
+//   int user1;
+//   var user2;
+//   int categoryId;
+//   int delete;
+//   int freez;
+//   var lastSeen;
+//   String createdAt;
+//   var lastMessage;
+//   var totalUnread;
+//   User user;
+//   Category category;
+//   List<Null> messages;
+//
+//   CategoryChat(
+//       {this.id,
+//       this.orderId,
+//       this.user1,
+//       this.user2,
+//       this.categoryId,
+//       this.delete,
+//       this.freez,
+//       this.lastSeen,
+//       this.createdAt,
+//       this.lastMessage,
+//       this.totalUnread,
+//       this.user,
+//       this.category,
+//       this.messages});
+//
+//   CategoryChat.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     orderId = json['order_id'];
+//     user1 = json['user1'];
+//     user2 = json['user2'];
+//     categoryId = json['category_id'];
+//     delete = json['delete'];
+//     freez = json['freez'];
+//     lastSeen = json['last_seen'];
+//     createdAt = json['created_at'];
+//     lastMessage = json['last_message'];
+//     totalUnread = json['total_unread'];
+//     user = json['user'] != null ? new User.fromJson(json['user']) : null;
+//     category = json['category'] != null
+//         ? new Category.fromJson(json['category'])
+//         : null;
+//     // if (json['messages'] != null) {
+//     //   messages = <Null>[];
+//     //   json['messages'].forEach((v) {
+//     //     messages!.add(new Null.fromJson(v));
+//     //   });
+//     // }
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['id'] = this.id;
+//     data['order_id'] = this.orderId;
+//     data['user1'] = this.user1;
+//     data['user2'] = this.user2;
+//     data['category_id'] = this.categoryId;
+//     data['delete'] = this.delete;
+//     data['freez'] = this.freez;
+//     data['last_seen'] = this.lastSeen;
+//     data['created_at'] = this.createdAt;
+//     data['last_message'] = this.lastMessage;
+//     data['total_unread'] = this.totalUnread;
+//     if (this.user != null) {
+//       data['user'] = this.user.toJson();
+//     }
+//     if (this.category != null) {
+//       data['category'] = this.category.toJson();
+//     }
+//     // if (this.messages != null) {
+//     //   data['messages'] = this.messages.map((v) => v.toJson()).toList();
+//     // }
+//     return data;
+//   }
+// }
 class CategoryChat {
   int id;
   int orderId;
   int user1;
-  var user2;
+  Null user2;
   int categoryId;
+  Null empChat;
   int delete;
   int freez;
-  var lastSeen;
+  Null lastSeen;
   String createdAt;
-  var lastMessage;
-  var totalUnread;
+  Null lastMessage;
+  String totalUnread;
   User user;
   Category category;
   List<Null> messages;
@@ -270,6 +433,7 @@ class CategoryChat {
         this.user1,
         this.user2,
         this.categoryId,
+        this.empChat,
         this.delete,
         this.freez,
         this.lastSeen,
@@ -286,6 +450,7 @@ class CategoryChat {
     user1 = json['user1'];
     user2 = json['user2'];
     categoryId = json['category_id'];
+    empChat = json['emp_chat'];
     delete = json['delete'];
     freez = json['freez'];
     lastSeen = json['last_seen'];
@@ -299,7 +464,7 @@ class CategoryChat {
     // if (json['messages'] != null) {
     //   messages = <Null>[];
     //   json['messages'].forEach((v) {
-    //     messages!.add(new Null.fromJson(v));
+    //     messages.add(new Null.fromJson(v));
     //   });
     // }
   }
@@ -311,6 +476,7 @@ class CategoryChat {
     data['user1'] = this.user1;
     data['user2'] = this.user2;
     data['category_id'] = this.categoryId;
+    data['emp_chat'] = this.empChat;
     data['delete'] = this.delete;
     data['freez'] = this.freez;
     data['last_seen'] = this.lastSeen;
@@ -329,3 +495,4 @@ class CategoryChat {
     return data;
   }
 }
+

@@ -99,7 +99,7 @@ class Notifications {
 class Notificat {
   int id;
   int fromDashboard;
-  Null randomKey;
+  String randomKey;
   int userId;
   String tag;
   int tagId;

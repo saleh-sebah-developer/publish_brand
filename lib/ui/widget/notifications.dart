@@ -34,13 +34,13 @@ class CustomNotifications extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(title,
+                      Text(title??'',
                           style: TextStyle(
                               fontSize: 14.sp,
                               fontFamily: 'TajawalBold',
                               color: Colors.black)),
                       const Spacer(),
-                      Text(time,
+                      Text(time??'',
                           style: TextStyle(
                               fontSize: 14.sp,
                               fontFamily: 'TajawalRegular',
@@ -50,7 +50,7 @@ class CustomNotifications extends StatelessWidget {
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
-                  child: Text(des,
+                  child: Text(des??'',
                       style: TextStyle(
                           fontSize: 14.sp,
                           fontFamily: 'TajawalRegular',

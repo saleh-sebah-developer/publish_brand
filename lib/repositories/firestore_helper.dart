@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:publish_brand/models/login_for_users_response.dart';
 import 'package:publish_brand/repositories/Message.dart';
+
+import 'Message2.dart';
 
 class FirestoreHelper {
   FirestoreHelper._();
@@ -26,13 +30,13 @@ class FirestoreHelper {
     // firebaseFirestore.collection('chats').doc(user.id.toString()).collection('messages').add({});
   }
 
-  sendMessage(Message message, User user) async {
-    message.sentTime = FieldValue.serverTimestamp();
+  sendMessage(Message2 message2, String projectID) async {
+    message2.date = FieldValue.serverTimestamp();
     await firebaseFirestore
         .collection(chatsCollectionName)
-        .doc(user.id.toString())
+        .doc(projectID)
         .collection(messagesCollectionName)
-        .add(message.toMap());
+        .add(message2.toMap());
   }
 
   Future<bool> checkCollectionExists(String chatiD) async {
@@ -55,10 +59,10 @@ class FirestoreHelper {
   }
 
   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getAdminChat(
-      User user) async {
+      String projectID) async {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await firebaseFirestore
         .collection(chatsCollectionName)
-        .doc(user.id.toString())
+        .doc(projectID.toString())
         .collection(messagesCollectionName)
         .get();
     List<QueryDocumentSnapshot<Map<String, dynamic>>> adminMessages =
@@ -67,11 +71,12 @@ class FirestoreHelper {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatMessages(String chatId) {
+
     return firebaseFirestore
         .collection(chatsCollectionName)
         .doc(chatId)
         .collection(messagesCollectionName)
-        .orderBy('sentTime')
+        .orderBy('date',descending: true)
         .snapshots();
   }
 }

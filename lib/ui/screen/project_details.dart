@@ -20,8 +20,11 @@ import 'package:provider/provider.dart';
 class ProjectDetailsScreen extends StatelessWidget {
   Service _service;
   String project_id;
+  int adminChatID;
+  int categoryChatID;
 
-  ProjectDetailsScreen(this._service, this.project_id);
+  ProjectDetailsScreen(
+      this._service, this.project_id, this.adminChatID, this.categoryChatID);
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +77,13 @@ class ProjectDetailsScreen extends StatelessWidget {
               visible: true,
               child: GestureDetector(
                 onTap: () {
-                  Provider.of<AppProvider>(context, listen: false)
-                      .getChatsWithAdmin(
-                          Provider.of<ApiAuthProvider>(context, listen: false)
-                              .currentUser);
+                  // Provider.of<AppProvider>(context, listen: false)
+                  //     .getChatsWithAdmin(
+                  //         Provider.of<ApiAuthProvider>(context, listen: false)
+                  //             .currentUser);
                   RouterClass.routerClass.pushToScreenUsingWidget(
-                      AllChatMessagesScreen(project_id, 'admin', _service));
+                      AllChatMessagesScreen(project_id, 'admin', _service,
+                          adminChatID, categoryChatID));
                 },
                 child: Container(
                   margin: EdgeInsets.only(right: 4.w, left: 4.w, top: 12.h),
@@ -124,8 +128,8 @@ class ProjectDetailsScreen extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         RouterClass.routerClass.pushToScreenUsingWidget(
-                            AllChatMessagesScreen(
-                                project_id, 'category', _service));
+                            AllChatMessagesScreen(project_id, 'category',
+                                _service, adminChatID, categoryChatID));
                       },
                       child: Container(
                         margin:

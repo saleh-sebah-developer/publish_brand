@@ -14,6 +14,7 @@ import 'package:publish_brand/repositories/Message.dart';
 import '../../models/get_services_details_response.dart';
 import '../../models/send_message_request.dart';
 import '../../providers/chatProvider.dart';
+import '../../repositories/Message2.dart';
 import '../../repositories/firestore_helper.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
@@ -23,8 +24,11 @@ class AllChatMessagesScreen extends StatefulWidget {
   String project_id;
   String target;
   Service service;
+  int adminChatID;
+  int categoryChatID;
 
-  AllChatMessagesScreen(this.project_id, this.target,this.service);
+  AllChatMessagesScreen(this.project_id, this.target, this.service,
+      this.adminChatID, this.categoryChatID);
 
   @override
   State<AllChatMessagesScreen> createState() => _AllChatMessagesScreenState();
@@ -35,6 +39,10 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
     super.initState();
     Provider.of<ChatProvider>(context, listen: false)
         .getChatMessages(context, widget.project_id, widget.target);
+    Provider.of<AppProvider>(context, listen: false).getChatMessages(
+        widget.target == 'admin'
+            ? widget.adminChatID.toString()
+            : widget.categoryChatID.toString());
   }
 
   @override
@@ -49,14 +57,15 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
               margin: EdgeInsets.only(top: 40),
               child: ListTile(
                 title: Text(
-                    widget.target=='admin'?
-                  'administration'.tr():'competent'.tr() + widget.service.category.name,
-
+                  widget.target == 'admin'
+                      ? 'administration'.tr()
+                      : 'competent'.tr() + widget.service.category.name,
                   style: TextStyle(fontSize: 14.sp, fontFamily: 'TajawalBold'),
                 ),
                 subtitle: Text(
-                  widget.target=='admin'?
-                  'administration_department'.tr():   widget.service.category.name + ' ' +'department'.tr(),
+                  widget.target == 'admin'
+                      ? 'administration_department'.tr()
+                      : widget.service.category.name + ' ' + 'department'.tr(),
                   style: TextStyle(fontSize: 14.sp, fontFamily: 'TajawalBold'),
                 ),
                 leading: GestureDetector(
@@ -64,7 +73,7 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                     RouterClass.routerClass.popScreen();
                   },
                   child: Icon(
-                    Icons.keyboard_arrow_right,
+                    Icons.keyboard_arrow_left,
                     size: 40,
                   ),
                 ),
@@ -75,67 +84,72 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
               ),
             ),
             Expanded(
-              child: providerChat.messages == null
+              child: providerApp.listMessage2 == null
                   ? SizedBox(
                       height: 40.h,
                       width: 40.w,
                       child: Center(
                         child: Lottie.asset('assets/animations/progress1.json'),
                       ))
-                  : providerChat.messages.isEmpty
+                  : providerApp.listMessage2.isEmpty
                       ? Center(
                           child: Lottie.asset('assets/animations/empty2.json'),
                         )
                       : Container(
                           child: ListView.builder(
-                              itemCount: providerChat.messages.length,
+                              itemCount: providerApp.listMessage2.length,
                               itemBuilder: (context, index) {
                                 return Container(
                                   margin: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 10),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        providerChat.messages[index].senderId ==
-                                                providerAuth.currentUser.id
-                                            ? MainAxisAlignment.end
-                                            : MainAxisAlignment.start,
+                                    mainAxisAlignment: providerApp
+                                                .listMessage2[index]
+                                                .client_id ==
+                                            providerAuth.currentUser.id
+                                        ? MainAxisAlignment.end
+                                        : MainAxisAlignment.start,
                                     children: [
                                       Container(
-                                       // width: MediaQuery.of(context).size.width/2,
+                                        // width: MediaQuery.of(context).size.width/2,
                                         child: ChatBubble(
-                                          backGroundColor: providerChat
-                                                      .messages[index].senderId ==
+                                          backGroundColor: providerApp
+                                                      .listMessage2[index]
+                                                      .client_id ==
                                                   providerAuth.currentUser.id
                                               ? HexColor('#E5E5EA')
                                               : HexColor('#145366'),
                                           clipper: ChatBubbleClipper5(
-                                              type: providerChat.messages[index]
-                                                          .senderId ==
-                                                      providerAuth.currentUser.id
+                                              type: providerApp
+                                                          .listMessage2[index]
+                                                          .client_id ==
+                                                      providerAuth
+                                                          .currentUser.id
                                                   ? BubbleType.sendBubble
                                                   : BubbleType.receiverBubble),
-                                          child: providerChat
-                                                      .messages[index].senderId ==
+                                          child: providerApp.listMessage2[index]
+                                                      .client_id ==
                                                   providerAuth.currentUser.id
                                               ? Text(
-                                                providerChat.messages[index]
-                                                    .message ??
-                                                    '',
-                                                style: TextStyle(
-                                                    color: Colors.black),
-                                                overflow: TextOverflow.visible,
-
-                                              )
+                                                  providerApp
+                                                          .listMessage2[index]
+                                                          .content ??
+                                                      '',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                  overflow:
+                                                      TextOverflow.visible,
+                                                )
                                               : Text(
-                                                  providerChat.messages[index]
-                                                          .message ??
+                                                  providerApp
+                                                          .listMessage2[index]
+                                                          .content ??
                                                       '',
                                                   style: TextStyle(
                                                       color: Colors.white),
-                                            overflow: TextOverflow.visible,
-
-                                          ),
-
+                                                  overflow:
+                                                      TextOverflow.visible,
+                                                ),
                                         ),
                                       ),
                                     ],
@@ -161,6 +175,8 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      //--------Api
+                      /*
                       SendMessageRequest sendMessageRequest =
                           SendMessageRequest(
                               type: '0',
@@ -169,6 +185,19 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                               target: widget.target);
                       providerChat.sendMessage(
                           context, sendMessageRequest, widget.target);
+                      */
+                      //--------Firebase
+                      Message2 message2 = Message2(
+                          client_id: providerAuth.currentUser.id,
+                          client_name: providerAuth.currentUser.name,
+                          content: providerChat.textEditingController.text,
+                          type: 'text');
+                      providerApp.sendMessage(
+                          message2,
+                          widget.target == 'admin'
+                              ? widget.adminChatID.toString()
+                              : widget.categoryChatID.toString());
+                      providerChat.textEditingController.text='';
                     },
                     child: Container(
                       padding: EdgeInsets.all(12),
