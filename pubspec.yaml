@@ -61,6 +61,11 @@ dependencies:
   connectivity_plus: ^2.2.1
   hyperpay: ^0.0.8-alpha
   android_path_provider: ^0.3.0
+  flutter_local_notifications: ^9.4.0
+  firebase_messaging: ^11.2.11
+  jiffy: ^5.0.0
+  mime: ^1.0.1
+  image_downloader: ^0.31.0
 #  flowder: ^0.2.0
 
   # The following adds the Cupertino Icons font to your application.

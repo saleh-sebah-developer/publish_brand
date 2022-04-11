@@ -3,12 +3,16 @@ import 'dart:io';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:publish_brand/helpers/RouterClass.dart';
 import 'package:publish_brand/models/login_for_users_response.dart';
+import 'package:publish_brand/providers/api_auth_provider.dart';
 import 'package:publish_brand/repositories/Chat.dart';
 import 'package:publish_brand/repositories/Message.dart';
 import 'package:publish_brand/repositories/firestore_helper.dart';
@@ -18,6 +22,9 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../data/dio_client.dart';
+import '../models/data_response.dart';
+import '../models/upload_chat_img_response.dart';
 import '../repositories/Message2.dart';
 
 class AppProvider extends ChangeNotifier {
@@ -27,22 +34,29 @@ class AppProvider extends ChangeNotifier {
   List<Message2> listMessage2;
   bool hasInternet = false;
   ConnectivityResult result = ConnectivityResult.none;
+  File imageFile;
+  PlatformFile imageFile2;
+  PlatformFile platformFile;
+  String imageFilePath;
+  String targetProvider;
+  int adminChatIDProvider;
+  int categoryChatIDProvider;
 
-  getChatsWithAdmin(String projectID) async {
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> list =
-        await FirestoreHelper.firestoreHelper.getAdminChat(projectID);
-
-    List<Message> messages = list.map((e) {
-      String chatId = e.id;
-      Map<String, dynamic> map = e.data();
-      log(map.toString());
-      map['chatId'] = chatId;
-      return Message.fromMap(map);
-    }).toList();
-    log(messages.length.toString());
-    this.allMyChats = messages;
-    notifyListeners();
-  }
+  // getChatsWithAdmin(String projectID) async {
+  //   List<QueryDocumentSnapshot<Map<String, dynamic>>> list =
+  //       await FirestoreHelper.firestoreHelper.getAdminChat(projectID);
+  //
+  //   List<Message> messages = list.map((e) {
+  //     String chatId = e.id;
+  //     Map<String, dynamic> map = e.data();
+  //     log(map.toString());
+  //     map['chatId'] = chatId;
+  //     return Message.fromMap(map);
+  //   }).toList();
+  //   log(messages.length.toString());
+  //   this.allMyChats = messages;
+  //   notifyListeners();
+  // }
 
   sendMessage(Message2 message2, String projectID) async {
     FirestoreHelper.firestoreHelper.sendMessage(message2, projectID);
@@ -155,5 +169,72 @@ class AppProvider extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future getImage(BuildContext context, String projectID) async {
+    // ImagePicker _picker = ImagePicker();
+    // await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
+    //   if (xFile != null) {
+    //     imageFile = File(xFile.path);
+    //     //uploadImage();
+    //     postImage(context, projectID);
+    //   }
+    // });
+  //  ---- picker file
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'jpg',
+        'jpeg',
+        'png',
+        'svg',
+        'gif',
+        'pdf',
+        'doc',
+        'docx'
+      ],
+    );
+    if (result != null) {
+      final file = result.files.first;
+      imageFile2 = file;
+      postImage(context, projectID);
+
+    }
+  }
+
+  postImage(BuildContext context, String projectID) async {
+    log('postImage begin');
+    UploadChatImgResponse response =
+        await DioClient.dioClient.upload_chat_img(context, imageFile2);
+    if (response != null) {
+      log('postImage success');
+      if (response.status) {
+        log(response.status.toString());
+        imageFilePath = response.file;
+        log(imageFilePath);
+        Message2 message2 = Message2(
+            client_id: Provider.of<ApiAuthProvider>(context, listen: false)
+                .currentUser
+                .id,
+            client_name: Provider.of<ApiAuthProvider>(context, listen: false)
+                .currentUser
+                .name,
+            content: imageFilePath,
+            date: Timestamp.now(),
+            type: 'image');
+        sendMessage(
+            message2,
+            targetProvider == 'admin'
+                ? adminChatIDProvider.toString()
+                : categoryChatIDProvider.toString());
+        // getChatMessages(projectID);
+        notifyListeners();
+      } else {
+        log(response.status.toString());
+      }
+    } else {
+      log('postImage failed');
+    }
+    notifyListeners();
   }
 }

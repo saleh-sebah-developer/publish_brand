@@ -815,10 +815,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: CustomService(
                             ImageService: searchHomeScreenCon.text.isNotEmpty
-                                ? provider.searchServices[index].photos[0].file?? 'null'
+                                ?
+
+                            provider.searchServices[index].image?? 'null'
                                 :
-                            provider.services[index].photos.length!=0?
-                            provider.services[index].photos[0].file?? 'null':'null',
+                            provider.services[index].image?? 'null',
                             title: searchHomeScreenCon.text.isNotEmpty
                                 ? provider.searchServices[index].title
                                 : provider.services[index].title,

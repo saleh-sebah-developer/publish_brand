@@ -12,7 +12,7 @@ import 'package:lottie/lottie.dart';
 
 // ignore: must_be_immutable
 class ActivationCodeScreen extends StatefulWidget {
-  String mobile = '';
+  int mobile ;
 
   ActivationCodeScreen(this.mobile, {Key key}) : super(key: key);
 
@@ -24,7 +24,7 @@ class _ActivationCodeScreenState extends State<ActivationCodeScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ApiAuthProvider>(context, listen: false).mobileVerify=widget.mobile;
+    Provider.of<ApiAuthProvider>(context, listen: false).mobileVerify=widget.mobile.toString();
   }
 
   String codeVerify = '';
@@ -61,7 +61,7 @@ class _ActivationCodeScreenState extends State<ActivationCodeScreen> {
                 height: 5.h,
               ),
               Text(
-                widget.mobile,
+                widget.mobile.toString(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 16.sp,
@@ -148,7 +148,7 @@ class _ActivationCodeScreenState extends State<ActivationCodeScreen> {
                 child: GestureDetector(
                   onTap:  Provider.of<ApiAuthProvider>(context).btnIsEnable? () {
                     Provider.of<ApiAuthProvider>(context, listen: false)
-                        .checkCode(context,codeVerify);
+                        .checkCode(context,codeVerify,widget.mobile);
                   }:(){},
                   child: CustomButtonY(
                     labelText: 'confirm'.tr(),

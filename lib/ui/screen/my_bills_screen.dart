@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:publish_brand/providers/home_provider.dart';
 import 'package:publish_brand/ui/widget/mycontract.dart';
 
+import '../../providers/SalehProvider.dart';
+
 // import 'package:flowder/flowder.dart';
 
 class MyBillsScreen extends StatefulWidget {
@@ -80,14 +82,14 @@ class _MyBillsScreenState extends State<MyBillsScreen> {
                         */
 
 
-                        /*
+
 
                         Provider.of<SalehProvider>(context, listen: false)
                             .download2(Provider.of<HomeProvider>(context,
                                     listen: false)
                                 .invoices[index]
                                 .file);
-                        */
+
 
                         /*
                         final status = await Permission.storage.request();

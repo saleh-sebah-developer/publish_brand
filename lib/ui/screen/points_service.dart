@@ -133,16 +133,11 @@ class _PointsServicesScreenState extends State<PointsServicesScreen> {
                                 },
                                 child: CustomService(
                                   ImageService:
-                                      Provider.of<HomeProvider>(context)
+
+                                         Provider.of<HomeProvider>(context)
                                                   .servicesByPoint[index]
-                                                  .photos ==
-                                              null
-                                          ? Provider.of<HomeProvider>(context)
-                                                  .servicesByPoint[index]
-                                                  .photos[0]
-                                                  .file ??
-                                              'null'
-                                          : 'null',
+                                                  .image ??
+                                              'null',
                                   title: Provider.of<HomeProvider>(context)
                                           .servicesByPoint[index]
                                           .title ??

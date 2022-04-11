@@ -31,6 +31,7 @@ class CustomService2 extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             imageService != 'null'
                 ? CachedNetworkImage(
@@ -44,49 +45,55 @@ class CustomService2 extends StatelessWidget {
                     width: 94.w,
                     image: const AssetImage('assets/images/logo0.png'),
                   ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
-                  child: Text(
-                    title ?? 'null',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        fontFamily: 'TajawalBold',
-                        color: Colors.black),
+            Container(
+              width: MediaQuery.of(context).size.width/1.8,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+                    child: Text(
+                      title ?? 'null',
+                      textAlign: TextAlign.start,
+                      maxLines: 2,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          fontFamily: 'TajawalBold',
+                          color: Colors.black),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
-                  child: Text(
-                    type == 'fixed_price'
-                        ? price + 'sr'.tr()
-                        : type == 'unfixed_price'
-                            ? 'the_price_is_negotiable'.tr()
-                            : type == 'points'
-                                ? pointsCount.toString() + 'point'.tr()
-                                : ' ',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        fontFamily: 'TajawalBold',
-                        color: HexColor('#4091AF')),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+                    child: Text(
+                      type == 'fixed_price'
+                          ? price + 'sr'.tr()
+                          : type == 'unfixed_price'
+                              ? 'the_price_is_negotiable'.tr()
+                              : type == 'points'
+                                  ? pointsCount.toString() + 'point'.tr()
+                                  : ' ',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          fontFamily: 'TajawalBold',
+                          color: HexColor('#4091AF')),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
-                  child: Text(
-                    status ?? 'new',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        fontFamily: 'TajawalBold',
-                        color: HexColor('#F9B909')),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+                    child: Text(
+                      status ?? 'new',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          fontFamily: 'TajawalBold',
+                          color: HexColor('#F9B909')),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

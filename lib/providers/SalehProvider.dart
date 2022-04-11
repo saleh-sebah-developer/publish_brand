@@ -20,6 +20,7 @@ class SalehProvider extends ChangeNotifier{
         String path =
         await AndroidPathProvider.downloadsPath;
         //String fullPath = tempDir.path + "/boo2.pdf'";
+       // String nameFile = url.split('/').last;
         String fullPath = "$path/file.docx";
         print('full path ${fullPath}');
         Response response = await Dio().get(

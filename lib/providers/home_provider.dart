@@ -706,21 +706,34 @@ class HomeProvider extends ChangeNotifier {
     log(servicesByCategory.length.toString());
   }
 
-  uploadFile() async {
+ uploadFile(BuildContext context) async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc'],
+      allowedExtensions: ['jpg', 'pdf', 'doc', 'docx'],
     );
     if (result != null) {
       final file = result.files.first;
       platformFile = file;
+      notifyListeners();
       log('Name: ' + file.name.toString());
       log('extension: ' + file.extension.toString());
       log('path: ' + file.path.toString());
       // File file = File(result.files.single.path);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.green,
+        content: Text('File saved'),
+        duration: Duration(seconds: 3),
+      ));
     } else {
       // User canceled the picker
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text('File Not saved'),
+        duration: Duration(seconds: 3),
+      ));
     }
+    notifyListeners();
+
   }
 
   downloadFile() async {

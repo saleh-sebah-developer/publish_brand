@@ -61,11 +61,22 @@ class BillScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text('price'.tr()+Provider.of<HomeProvider>(context).selectedServices.title,
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontFamily: 'TajawalRegular',
-                                  color: Colors.black)),
+                          Flexible(
+                            child: Text(
+                                'price'.tr() + Provider.of<HomeProvider>(context).selectedServices.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontFamily:
+                                    'TajawalRegular',
+                                    color: Colors.black)),
+                          ),
+                          // Text('price'.tr()+Provider.of<HomeProvider>(context).selectedServices.title,
+                          //     style: TextStyle(
+                          //         fontSize: 14.sp,
+                          //         fontFamily: 'TajawalRegular',
+                          //         color: Colors.black)),
                           SizedBox(
                             width: 4.w,
                           ),

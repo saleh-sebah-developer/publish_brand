@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -70,9 +72,18 @@ class _myContractScreenState extends State<myContractScreen> {
                       onTap: () async {
                         Provider.of<SalehProvider>(context, listen: false)
                             .download2(Provider.of<HomeProvider>(context,
+                            listen: false)
+                            .invoices[index]
+                            .file);
+
+                        /*
+                        Provider.of<SalehProvider>(context, listen: false)
+                            .download2(Provider.of<HomeProvider>(context,
                                     listen: false)
                                 .contracts[index]
                                 .contractFile);
+
+                         */
 /*
                         final status = await Permission.storage.request();
                         if (status.isGranted) {
@@ -95,6 +106,7 @@ class _myContractScreenState extends State<myContractScreen> {
                           ));
                         }
                         */
+
                       },
                       child: CustomMyContract(
                           label: 'contract_dated'.tr() +

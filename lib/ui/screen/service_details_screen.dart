@@ -68,14 +68,14 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                               .size
                               .width,
                           child:
-                          provider.selectedServices.photos.length == 0
-                              ? const Image(
-                            image: AssetImage(
-                                'assets/images/logo0.png'),
-                            fit: BoxFit.cover,
-                          )
-                              : provider.selectedServices.photos[0]
-                              .file !=
+                          // provider.selectedServices.photos.length == 0
+                          //     ? const Image(
+                          //   image: AssetImage(
+                          //       'assets/images/logo0.png'),
+                          //   fit: BoxFit.cover,
+                          // )
+                          //    :
+                  provider.selectedServices.image!=
                               null
                               ? CachedNetworkImage(
                             height: 159.h,
@@ -83,19 +83,18 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                             fit: BoxFit.cover,
                             imageUrl: provider
                                 .selectedServices
-                                .photos[0]
-                                .file,
+                                .image,
                           )
                               : provider.selectedServices
-                              .photos[0].file.isEmpty
+                              .image.isEmpty
                               ? const Image(
                             image: AssetImage(
-                                'assets/images/service_details.png'),
+                                'assets/images/logo0.png'),
                             fit: BoxFit.cover,
                           )
                               : const Image(
                             image: AssetImage(
-                                'assets/images/service_details.png'),
+                                'assets/images/logo0.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -143,41 +142,51 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                       fontSize: 14.sp,
                                       fontFamily: 'TajawalBold',
                                       color: Colors.black)),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      'price'.tr() +
-                                          provider.selectedServices.title,
-                                      style: TextStyle(
-                                          fontSize: 14.sp,
-                                          fontFamily: 'TajawalRegular',
-                                          color: Colors.black)),
-                                  SizedBox(
-                                    width: 4.w,
-                                  ),
-                                  Text(
-                                      provider.selectedServices.type ==
-                                          'fixed_price'
-                                          ? provider.selectedServices.price
-                                          .toString() +
-                                          'sr'.tr()
-                                          : provider.selectedServices
-                                          .type ==
-                                          'unfixed_price'
-                                          ? 'the_price_is_negotiable'
-                                          .tr()
-                                          : provider.selectedServices
-                                          .pointsCount
-                                          .toString() +
-                                          'point'.tr(),
-                                      style: TextStyle(
-                                          fontSize: 14.sp,
-                                          fontFamily: 'TajawalBold',
-                                          color: HexColor('#4091AF'))),
-
-                                ],
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.start,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                          'price'.tr() +
+                                              provider
+                                                  .selectedServices.title,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              fontFamily:
+                                              'TajawalRegular',
+                                              color: Colors.black)),
+                                    ),
+                                    SizedBox(
+                                      width: 4.w,
+                                    ),
+                                    Container(
+                                      child: Text(
+                                          provider.selectedServices.type ==
+                                              'fixed_price'
+                                              ? provider.selectedServices.price
+                                              .toString() +
+                                              'sr'.tr()
+                                              : provider.selectedServices
+                                              .type ==
+                                              'unfixed_price'
+                                              ? 'the_price_is_negotiable'
+                                              .tr()
+                                              : provider.selectedServices
+                                              .pointsCount
+                                              .toString() +
+                                              'point'.tr(),
+                                          overflow: TextOverflow.fade,
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              fontFamily: 'TajawalBold',
+                                              color: HexColor('#4091AF'))),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -193,7 +202,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                   ),
                                   Text(
                                       provider.selectedServices
-                                          .estimatedTime +
+                                          .estimatedTime??'estimated' +
                                           'days'.tr(),
                                       style: TextStyle(
                                           fontSize: 14.sp,

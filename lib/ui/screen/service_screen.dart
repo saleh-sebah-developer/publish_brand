@@ -52,8 +52,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                 fontFamily: 'TajawalBold'),
           ),
         ),
-        body: ListView(
-            children: [
+        body: ListView(children: [
           Container(
             alignment: Alignment.bottomCenter,
             margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
@@ -144,34 +143,29 @@ class _ServiceScreenState extends State<ServiceScreen> {
                           itemBuilder: (BuildContext ctx, index) {
                             return GestureDetector(
                               onTap: () {
-                                RouterClass.routerClass
-                                    .pushToScreenUsingWidget(
-                                        ServiceDetailsScreen(
-                                            searchServiceScreenCon
-                                                    .text.isNotEmpty
-                                                ? Provider.of<HomeProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .searchServicesByCategory[
-                                                        index]
-                                                    .id
-                                                : Provider.of<HomeProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .services[index]
-                                                    .id));
+                                RouterClass.routerClass.pushToScreenUsingWidget(
+                                    ServiceDetailsScreen(
+                                        searchServiceScreenCon.text.isNotEmpty
+                                            ? Provider.of<HomeProvider>(context,
+                                                    listen: false)
+                                                .searchServicesByCategory[index]
+                                                .id
+                                            : Provider.of<HomeProvider>(context,
+                                                    listen: false)
+                                                .servicesByCategory[index]
+                                                .id));
                               },
                               child: CustomService(
                                 ImageService:
                                     searchServiceScreenCon.text.isNotEmpty
                                         ? Provider.of<HomeProvider>(context)
-                                            .searchServicesByCategory[index]
-                                            .photos[0]
-                                            .file
+                                                .searchServicesByCategory[index]
+                                                .image ??
+                                            'null'
                                         : Provider.of<HomeProvider>(context)
-                                            .servicesByCategory[index]
-                                            .photos[0]
-                                            .file,
+                                                .servicesByCategory[index]
+                                                .image ??
+                                            'null',
                                 title: searchServiceScreenCon.text.isNotEmpty
                                     ? Provider.of<HomeProvider>(context)
                                         .searchServicesByCategory[index]
@@ -179,16 +173,15 @@ class _ServiceScreenState extends State<ServiceScreen> {
                                     : Provider.of<HomeProvider>(context)
                                         .servicesByCategory[index]
                                         .title,
-                                titleSub:
-                                    searchServiceScreenCon.text.isNotEmpty
-                                        ? Provider.of<HomeProvider>(context)
-                                            .searchServicesByCategory[index]
-                                            .price
-                                            .toString()
-                                        : Provider.of<HomeProvider>(context)
-                                            .servicesByCategory[index]
-                                            .price
-                                            .toString(),
+                                titleSub: searchServiceScreenCon.text.isNotEmpty
+                                    ? Provider.of<HomeProvider>(context)
+                                        .searchServicesByCategory[index]
+                                        .price
+                                        .toString()
+                                    : Provider.of<HomeProvider>(context)
+                                        .servicesByCategory[index]
+                                        .price
+                                        .toString(),
                                 type: searchServiceScreenCon.text.isNotEmpty
                                     ? Provider.of<HomeProvider>(context)
                                         .searchServicesByCategory[index]

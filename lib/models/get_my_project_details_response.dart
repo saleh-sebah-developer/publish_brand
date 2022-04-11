@@ -419,9 +419,9 @@ class CategoryChat {
   Null empChat;
   int delete;
   int freez;
-  Null lastSeen;
+  String lastSeen;
   String createdAt;
-  Null lastMessage;
+  String lastMessage;
   String totalUnread;
   User user;
   Category category;

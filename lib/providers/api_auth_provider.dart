@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:publish_brand/data/dio_client.dart';
@@ -133,6 +134,7 @@ class ApiAuthProvider extends ChangeNotifier {
 
   SignUpUsers(BuildContext context) async {
     changeEnablity();
+    String token = await FirebaseMessaging.instance.getToken();
     SignUpUsersRequest signUpUsersRequest = SignUpUsersRequest(
         type: typeUser,
         name: nameConSignUp.text,
@@ -140,17 +142,23 @@ class ApiAuthProvider extends ChangeNotifier {
         confirm_password: passwordConSignUp.text,
         email: emailConSignUp.text,
         mobile: mobileConSignUp.text,
-        phone: phoneConSignUp.text);
+        phone: phoneConSignUp.text,
+        fcm_token: token,
+        device_type: 'android');
     SignUpUsersResponse response =
         await DioClient.dioClient.SignUpUsers(signUpUsersRequest);
     changeEnablity();
     if (response != null) {
       log('register success');
       if (response.status) {
-        FirestoreHelper.firestoreHelper.registerUser(response.user);
-        FirestoreHelper.firestoreHelper.createChatWithAdmin(response.user);
-        RouterClass.routerClass.pushToScreenUsingWidget(
-            ActivationCodeScreen(mobileConSignUp.text));
+        // FirestoreHelper.firestoreHelper.registerUser(response.user);
+        //  FirestoreHelper.firestoreHelper.createChatWithAdmin(response.user);
+        //   RouterClass.routerClass.pushToScreenUsingWidget(
+        //       ActivationCodeScreen(int.parse(mobileConSignUp.text)));
+        await Provider.of<SpHelper>(context, listen: false)
+            .setToken(response.user.accessToken.toString());
+        RouterClass.routerClass.pushReplacementToScreen(Home());
+
         nameConSignUp.text = '';
         passwordConSignUp.text = '';
         emailConSignUp.text = '';
@@ -158,7 +166,13 @@ class ApiAuthProvider extends ChangeNotifier {
         phoneConSignUp.text = '';
         notifyListeners();
       } else {
-        log(response.status.toString());
+        log(response.message.toString());
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(response.message.toString()),
+          duration: Duration(seconds: 3),
+        ));
+        log('register failed');
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -172,11 +186,13 @@ class ApiAuthProvider extends ChangeNotifier {
 
   LoginForUsers(BuildContext context) async {
     changeEnablity();
+    String token = await FirebaseMessaging.instance.getToken();
     LoginForUsersResponse response = await DioClient.dioClient.LoginForUsers(
-        mobile: mobileConLogin.text, password: passwordConLogin.text);
+        mobile: mobileConLogin.text,
+        password: passwordConLogin.text,
+        fcm_token: token);
     changeEnablity();
     if (response != null) {
-
       if (response.status) {
         await Provider.of<SpHelper>(context, listen: false)
             .setToken(response.user.accessToken.toString());
@@ -215,10 +231,10 @@ class ApiAuthProvider extends ChangeNotifier {
     }
   }
 
-  checkCode(BuildContext context, String codeVerify) async {
+  checkCode(BuildContext context, String codeVerify, int mobile) async {
     changeEnablity();
-    LoginForUsersResponse response = await DioClient.dioClient
-        .checkCode(mobile: mobileVerify, code: codeVerify);
+    LoginForUsersResponse response =
+        await DioClient.dioClient.checkCode(mobile: mobile, code: codeVerify);
     changeEnablity();
     if (response != null) {
       log('checkCode success');
@@ -231,6 +247,7 @@ class ApiAuthProvider extends ChangeNotifier {
         ));
       } else {
         log(response.message.toString());
+        log(mobile.toString());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,
           content: Text(response.message.toString()),

@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'package:provider/provider.dart';
 import 'package:publish_brand/helpers/RouterClass.dart';
 import 'package:publish_brand/providers/AppProvider.dart';
@@ -13,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:publish_brand/repositories/Message.dart';
 import '../../models/get_services_details_response.dart';
 import '../../models/send_message_request.dart';
+import '../../providers/SalehProvider.dart';
 import '../../providers/chatProvider.dart';
 import '../../repositories/Message2.dart';
 import '../../repositories/firestore_helper.dart';
@@ -37,12 +42,19 @@ class AllChatMessagesScreen extends StatefulWidget {
 class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
   void initState() {
     super.initState();
+
     Provider.of<ChatProvider>(context, listen: false)
         .getChatMessages(context, widget.project_id, widget.target);
     Provider.of<AppProvider>(context, listen: false).getChatMessages(
         widget.target == 'admin'
             ? widget.adminChatID.toString()
             : widget.categoryChatID.toString());
+    Provider.of<AppProvider>(context, listen: false).targetProvider =
+        widget.target;
+    Provider.of<AppProvider>(context, listen: false).adminChatIDProvider =
+        widget.adminChatID;
+    Provider.of<AppProvider>(context, listen: false).categoryChatIDProvider =
+        widget.categoryChatID;
   }
 
   @override
@@ -96,67 +108,265 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                           child: Lottie.asset('assets/animations/empty2.json'),
                         )
                       : Container(
-                          child: ListView.builder(
-                              itemCount: providerApp.listMessage2.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment: providerApp
-                                                .listMessage2[index]
-                                                .client_id ==
-                                            providerAuth.currentUser.id
-                                        ? MainAxisAlignment.end
-                                        : MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        // width: MediaQuery.of(context).size.width/2,
+                          child: StreamBuilder<
+                              QuerySnapshot<Map<String, dynamic>>>(
+                          stream: FirestoreHelper.firestoreHelper
+                              .getChatMessages(widget.target == 'admin'
+                                  ? widget.adminChatID.toString()
+                                  : widget.categoryChatID.toString() ?? '1'),
+                          builder: (context, dataSnapShot) {
+                            List<QueryDocumentSnapshot<Map<String, dynamic>>>
+                                snapshots = dataSnapShot.data?.docs ?? [];
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                  itemCount: snapshots.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 10),
+                                      child: Container(
+                                        //width: MediaQuery.of(context).size.width/2,
                                         child: ChatBubble(
-                                          backGroundColor: providerApp
-                                                      .listMessage2[index]
-                                                      .client_id ==
-                                                  providerAuth.currentUser.id
-                                              ? HexColor('#E5E5EA')
-                                              : HexColor('#145366'),
-                                          clipper: ChatBubbleClipper5(
-                                              type: providerApp
-                                                          .listMessage2[index]
-                                                          .client_id ==
-                                                      providerAuth
-                                                          .currentUser.id
-                                                  ? BubbleType.sendBubble
-                                                  : BubbleType.receiverBubble),
-                                          child: providerApp.listMessage2[index]
-                                                      .client_id ==
-                                                  providerAuth.currentUser.id
-                                              ? Text(
-                                                  providerApp
-                                                          .listMessage2[index]
-                                                          .content ??
-                                                      '',
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                  overflow:
-                                                      TextOverflow.visible,
-                                                )
-                                              : Text(
-                                                  providerApp
-                                                          .listMessage2[index]
-                                                          .content ??
-                                                      '',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                  overflow:
-                                                      TextOverflow.visible,
-                                                ),
-                                        ),
+                                            alignment: snapshots[index]['client_id'] ==
+                                                    providerAuth.currentUser.id
+                                                ? Alignment.topRight
+                                                : Alignment.topLeft,
+                                            backGroundColor: snapshots[index]
+                                                        ['client_id'] ==
+                                                    providerAuth.currentUser.id
+                                                ? HexColor('#E5E5EA')
+                                                : HexColor('#145366'),
+                                            clipper: ChatBubbleClipper5(
+                                                type: snapshots[index]['client_id'] == providerAuth.currentUser.id
+                                                    ? BubbleType.sendBubble
+                                                    : BubbleType
+                                                        .receiverBubble),
+                                            child: snapshots[index]['client_id'] ==
+                                                    providerAuth.currentUser.id
+                                                ? snapshots[index]['type'] !=
+                                                        'image'
+                                                    ? Text(
+                                                        snapshots[index]
+                                                                ['content'] ??
+                                                            ' ',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                      )
+                                                    : snapshots[index]['content'].toString().split('.').last == 'jpg' ||
+                                                            snapshots[index]['content']
+                                                                    .toString()
+                                                                    .split('.')
+                                                                    .last ==
+                                                                'jpeg ' ||
+                                                            snapshots[index]['content'].toString().split('.').last == 'gif' ||
+                                                            snapshots[index]['content'].toString().split('.').last == 'png' ||
+                                                            snapshots[index]['content'].toString().split('.').last == 'svg'
+                                                        ? GestureDetector(
+                                                            onLongPress: () {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) =>
+                                                                        AlertDialog(
+                                                                  title:
+                                                                      GestureDetector(
+                                                                          onTap:
+                                                                              () async {
+                                                                            log('download');
+                                                                            try {
+                                                                              // Saved with this method.
+                                                                              var imageId = await ImageDownloader.downloadImage(snapshots[index]['content'], destination: AndroidDestinationType.directoryDownloads..subDirectory('publish_brand.png'));
+                                                                              log('true download');
+                                                                              Navigator.of(context).pop();
+                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                                backgroundColor: Colors.green,
+                                                                                content: Text('The image has been saved'),
+                                                                                duration: Duration(seconds: 3),
+                                                                              ));
+                                                                              if (imageId == null) {
+                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                                  backgroundColor: Colors.red,
+                                                                                  content: Text('error download'),
+                                                                                  duration: Duration(seconds: 3),
+                                                                                ));
+                                                                                return;
+                                                                              }
+
+                                                                              // Below is a method of obtaining saved image information.
+                                                                              var fileName = await ImageDownloader.findName(imageId);
+                                                                              var path = await ImageDownloader.findPath(imageId);
+                                                                              var size = await ImageDownloader.findByteSize(imageId);
+                                                                              var mimeType = await ImageDownloader.findMimeType(imageId);
+                                                                            } on PlatformException catch (error) {
+                                                                              print(error);
+                                                                            }
+
+                                                                            // await ImageDownloader.downloadImage(snapshots[index]['content'],
+                                                                            //   destination: AndroidDestinationType.custom( directory: '')
+                                                                            //     ..inExternalFilesDir()
+                                                                            //     ..subDirectory("custom/sample.gif"),
+                                                                            // );
+                                                                            //  Provider.of<SalehProvider>(context, listen: false).download2(snapshots[index]['content']);
+                                                                          },
+                                                                          child:
+                                                                              Text('Download Image')),
+                                                                  // content: Text('Dowmload'),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child:
+                                                                Image.network(
+                                                              snapshots[index]
+                                                                  ['content'],
+                                                              width: 200,
+                                                              height: 200,
+                                                            ),
+                                                          )
+                                                        : GestureDetector(
+                                                            onTap: () {
+                                                              log('download');
+                                                              Provider.of<SalehProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .download2(snapshots[
+                                                                          index]
+                                                                      [
+                                                                      'content']);
+                                                            },
+                                                            child: Text(
+                                                              snapshots[index][
+                                                                          'content']
+                                                                      .toString()
+                                                                      .split(
+                                                                          '/')
+                                                                      .last ??
+                                                                  'file',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .lightBlue),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 2,
+                                                            ),
+                                                          )
+                                                : snapshots[index]['type'] != 'image'
+                                                    ? Text(
+                                                        snapshots[index]
+                                                                ['content'] ??
+                                                            '',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                      )
+                                                    : snapshots[index]['content'].toString().split('.').last == 'jpg' || snapshots[index]['content'].toString().split('.').last == 'jpeg ' || snapshots[index]['content'].toString().split('.').last == 'gif' || snapshots[index]['content'].toString().split('.').last == 'png' || snapshots[index]['content'].toString().split('.').last == 'svg'
+                                                        ? GestureDetector(
+                                                            onLongPress: () {
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) =>
+                                                                        AlertDialog(
+                                                                  title:
+                                                                      GestureDetector(
+                                                                          onTap:
+                                                                              () async {
+                                                                            log('download');
+                                                                            try {
+                                                                              // Saved with this method.
+                                                                              var imageId = await ImageDownloader.downloadImage(snapshots[index]['content'], destination: AndroidDestinationType.directoryDownloads..subDirectory('publish_brand.png'));
+                                                                              log('true download');
+                                                                              Navigator.of(context).pop();
+                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                                backgroundColor: Colors.green,
+                                                                                content: Text('The image has been saved'),
+                                                                                duration: Duration(seconds: 3),
+                                                                              ));
+                                                                              if (imageId == null) {
+                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                                  backgroundColor: Colors.red,
+                                                                                  content: Text('error download'),
+                                                                                  duration: Duration(seconds: 3),
+                                                                                ));
+                                                                                return;
+                                                                              }
+
+                                                                              // Below is a method of obtaining saved image information.
+                                                                              var fileName = await ImageDownloader.findName(imageId);
+                                                                              var path = await ImageDownloader.findPath(imageId);
+                                                                              var size = await ImageDownloader.findByteSize(imageId);
+                                                                              var mimeType = await ImageDownloader.findMimeType(imageId);
+                                                                            } on PlatformException catch (error) {
+                                                                              print(error);
+                                                                            }
+
+                                                                            // await ImageDownloader.downloadImage(snapshots[index]['content'],
+                                                                            //   destination: AndroidDestinationType.custom( directory: '')
+                                                                            //     ..inExternalFilesDir()
+                                                                            //     ..subDirectory("custom/sample.gif"),
+                                                                            // );
+                                                                            //  Provider.of<SalehProvider>(context, listen: false).download2(snapshots[index]['content']);
+                                                                          },
+                                                                          child:
+                                                                              Text('Download Image')),
+                                                                  // content: Text('Dowmload'),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child:
+                                                                Image.network(
+                                                              snapshots[index]
+                                                                  ['content'],
+                                                              width: 200,
+                                                              height: 200,
+                                                            ),
+                                                          )
+                                                        : GestureDetector(
+                                                            onTap: () {
+                                                              log('download');
+                                                              Provider.of<SalehProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .download2(snapshots[
+                                                                          index]
+                                                                      [
+                                                                      'content']);
+                                                            },
+                                                            child: Text(
+                                                              snapshots[index][
+                                                                          'content']
+                                                                      .toString()
+                                                                      .split(
+                                                                          '/')
+                                                                      .last ??
+                                                                  'file',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .lightBlue),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 2,
+                                                            ),
+                                                          )),
                                       ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
+                                    );
+                                  }),
+                            );
+                          },
+                        )),
             ),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -165,7 +375,15 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                   Expanded(
                     child: TextField(
                       controller: providerChat.textEditingController,
+                      keyboardType: TextInputType.multiline,
                       decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                              onPressed: () => providerApp.getImage(
+                                  context,
+                                  widget.target == 'admin'
+                                      ? widget.adminChatID.toString()
+                                      : widget.categoryChatID.toString()),
+                              icon: Icon(Icons.attach_file)),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50))),
                     ),
@@ -191,13 +409,14 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                           client_id: providerAuth.currentUser.id,
                           client_name: providerAuth.currentUser.name,
                           content: providerChat.textEditingController.text,
+                          date: Timestamp.now(),
                           type: 'text');
                       providerApp.sendMessage(
                           message2,
                           widget.target == 'admin'
                               ? widget.adminChatID.toString()
                               : widget.categoryChatID.toString());
-                      providerChat.textEditingController.text='';
+                      providerChat.textEditingController.text = '';
                     },
                     child: Container(
                       padding: EdgeInsets.all(12),

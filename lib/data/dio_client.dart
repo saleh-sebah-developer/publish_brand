@@ -32,6 +32,7 @@ import 'package:publish_brand/models/sign_up_users_request.dart';
 import 'package:publish_brand/models/sign_up_users_response.dart';
 import '../models/get_chat_message_response.dart';
 import '../models/send_message_request.dart';
+import '../models/upload_chat_img_response.dart';
 import 'api_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -49,6 +50,7 @@ class DioClient {
     dio.options.baseUrl = ApiConstant.baseUrl;
     dio.options.headers['Accept-Language'] = 'ar';
 
+
     // if (context.locale == Locale('en')) {
     //   dio.options.headers['Accept-Language'] = 'en';
     // } else {
@@ -63,7 +65,13 @@ class DioClient {
     try {
       log(signUpUsersRequest.toJson().toString());
       Response response = await dio.post(ApiConstant.signUpUsers,
-          data: signUpUsersRequest.toJson());
+          data: signUpUsersRequest.toJson(),
+      // options: Options(
+      //   followRedirects: false,
+      // //  validateStatus: (status) => true,
+      //   // headers: headers,
+      // )
+      );
       SignUpUsersResponse signUpUsersResponse =
           SignUpUsersResponse.fromJson(response.data);
       return signUpUsersResponse;
@@ -75,10 +83,10 @@ class DioClient {
 
   // ignore: non_constant_identifier_names
   Future<LoginForUsersResponse> LoginForUsers(
-      {String mobile, String password}) async {
+      {String mobile, String password, String fcm_token}) async {
     try {
       Response response = await dio.post(ApiConstant.loginForUsers,
-          data: {'mobile': mobile, 'password': password});
+          data: {'mobile': mobile, 'password': password, 'fcm_token': fcm_token});
       LoginForUsersResponse loginForUsersResponse =
           LoginForUsersResponse.fromJson(response.data);
       return loginForUsersResponse;
@@ -88,7 +96,7 @@ class DioClient {
     }
   }
 
-  Future<LoginForUsersResponse> checkCode({String mobile, String code}) async {
+  Future<LoginForUsersResponse> checkCode({int mobile, String code}) async {
     try {
       Response response = await dio
           .post(ApiConstant.checkCode, data: {'mobile': mobile, 'code': code});
@@ -515,6 +523,7 @@ class DioClient {
               await Provider.of<SpHelper>(context, listen: false).getToken()
         }),
       );
+
       RequestPackagesResponse requestPackagesResponse =
           RequestPackagesResponse.fromJson(response.data);
       return requestPackagesResponse;
@@ -567,4 +576,32 @@ class DioClient {
       return null;
     }
   }
+
+  Future<UploadChatImgResponse> upload_chat_img(
+      BuildContext context, PlatformFile file) async {
+    try {
+      String fileName = file.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(file.path, filename: fileName),
+      });
+
+      Response response = await dio.post(
+        ApiConstant.upload_chat_img,
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "multipart/form-data",
+          'authorization': 'Bearer ' +
+              await Provider.of<SpHelper>(context, listen: false).getToken()
+        }),
+      );
+      UploadChatImgResponse requestServiceResponse =
+      UploadChatImgResponse.fromJson(response.data);
+      return requestServiceResponse;
+    } on Exception catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+
 }

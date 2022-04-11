@@ -1,6 +1,6 @@
 class ApiConstant {
   static const String baseUrl =
-      'https://businessapp.live/appfiles/public/api/';
+      'https://businessapp.live/api/';
      // 'https://publishbrand.homeshopuae.com/public/api/';
 
   // --- Auth
@@ -43,6 +43,7 @@ class ApiConstant {
 // --- chats
   static const String getChatMessage = 'getChatMessage';
   static const String sendMessage = 'sendMessage';
+  static const String upload_chat_img = 'upload-chat-img';
 
 
 

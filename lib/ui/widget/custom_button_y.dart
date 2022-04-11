@@ -18,11 +18,14 @@ class CustomButtonY extends StatelessWidget {
         color: HexColor('#4091AF'),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Text(
-        labelText,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-            color: Colors.white, fontSize: 14, fontFamily: 'TajawalRegular'),
+      child: Container(
+
+        child: Text(
+          labelText,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 14, fontFamily: 'TajawalRegular'),
+        ),
       ),
     );
   }

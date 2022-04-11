@@ -62,11 +62,22 @@ class PaymentConfirmationScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text('price'.tr() + service.title,
-                                  style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontFamily: 'TajawalRegular',
-                                      color: Colors.black)),
+                              Flexible(
+                                child: Text(
+                                    'price'.tr() + service.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontFamily:
+                                        'TajawalRegular',
+                                        color: Colors.black)),
+                              ),
+                              // Text('price'.tr() + service.title,
+                              //     style: TextStyle(
+                              //         fontSize: 14.sp,
+                              //         fontFamily: 'TajawalRegular',
+                              //         color: Colors.black)),
                               SizedBox(
                                 width: 4.w,
                               ),
@@ -97,7 +108,7 @@ class PaymentConfirmationScreen extends StatelessWidget {
                               Text(
                                   Provider.of<HomeProvider>(context)
                                           .selectedServices
-                                          .estimatedTime +
+                                          .estimatedTime ??'estimated'+
                                       'days'.tr(),
                                   style: TextStyle(
                                       fontSize: 14.sp,

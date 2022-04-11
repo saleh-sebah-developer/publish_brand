@@ -31,7 +31,7 @@ class FirestoreHelper {
   }
 
   sendMessage(Message2 message2, String projectID) async {
-    message2.date = FieldValue.serverTimestamp();
+   // message2.date = FieldValue.serverTimestamp();
     await firebaseFirestore
         .collection(chatsCollectionName)
         .doc(projectID)
@@ -64,6 +64,7 @@ class FirestoreHelper {
         .collection(chatsCollectionName)
         .doc(projectID.toString())
         .collection(messagesCollectionName)
+        .orderBy('date',descending: false)
         .get();
     List<QueryDocumentSnapshot<Map<String, dynamic>>> adminMessages =
         querySnapshot.docs;
@@ -76,7 +77,7 @@ class FirestoreHelper {
         .collection(chatsCollectionName)
         .doc(chatId)
         .collection(messagesCollectionName)
-        .orderBy('date',descending: true)
+        .orderBy('date',descending: false)
         .snapshots();
   }
 }

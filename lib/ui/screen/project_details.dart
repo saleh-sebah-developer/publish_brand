@@ -55,7 +55,7 @@ class ProjectDetailsScreen extends StatelessWidget {
                       title: _service.title ?? 'null',
                       price: _service.price.toString() ?? '0',
                       status: _service.status ?? 'new',
-                      imageService: _service.photos[0].file ?? 'null',
+                      imageService: _service.image ?? 'null',
                       type: _service.type ?? ' ',
                       pointsCount: _service.pointsCount ?? ' ',
                     ),

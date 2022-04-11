@@ -60,11 +60,22 @@ class SubmitService extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text('price'.tr()+service.title,
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontFamily: 'TajawalRegular',
-                                  color: Colors.black)),
+                          Flexible(
+                            child: Text(
+                                'price'.tr() + service.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontFamily:
+                                    'TajawalRegular',
+                                    color: Colors.black)),
+                          ),
+                          // Text('price'.tr()+service.title,
+                          //     style: TextStyle(
+                          //         fontSize: 14.sp,
+                          //         fontFamily: 'TajawalRegular',
+                          //         color: Colors.black)),
                           SizedBox(
                             width: 4.w,
                           ),
@@ -93,7 +104,7 @@ class SubmitService extends StatelessWidget {
                           SizedBox(
                             width: 4.w,
                           ),
-                          Text(Provider.of<HomeProvider>(context).selectedServices.estimatedTime+'days'.tr(),
+                          Text(Provider.of<HomeProvider>(context).selectedServices.estimatedTime??'estimated'+'days'.tr(),
                               style: TextStyle(
                                   fontSize: 14.sp,
                                   fontFamily: 'TajawalBold',
@@ -135,7 +146,7 @@ class SubmitService extends StatelessWidget {
                   child: Container(
                     color: Colors.white,
                     padding:
-                        EdgeInsets.symmetric(horizontal: 22.w, vertical: 22.h),
+                        EdgeInsets.symmetric(horizontal: 22.w, vertical: 16.h),
                     margin: EdgeInsets.only(top: 85.h),
                     child: CustomButtonY(
                       labelText: 'continuation'.tr(),

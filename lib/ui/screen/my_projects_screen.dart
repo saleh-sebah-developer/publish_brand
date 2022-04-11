@@ -78,9 +78,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                   ? Center(
                       child: Lottie.asset('assets/animations/empty2.json'),
                     )
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
+                  : Container(
                       child: ListView.builder(
                           padding: EdgeInsets.all(2.h),
                           scrollDirection: Axis.vertical,
@@ -158,11 +156,12 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                                             .myProjectsData[index]
                                             .service !=
                                         null
-                                    ? Provider.of<HomeProvider>(context)
-                                        .myProjectsData[index]
-                                        .service
-                                        .photos[0]
-                                        .file
+
+                                        ? Provider.of<HomeProvider>(context)
+                                                .myProjectsData[index]
+                                                .service
+                                                .image ??
+                                            'null'
                                     : 'null',
                                 type: Provider.of<HomeProvider>(context)
                                             .myProjectsData[index]
