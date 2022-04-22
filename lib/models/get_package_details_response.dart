@@ -33,6 +33,8 @@ class Package {
   int id;
   int price;
   String image;
+  String file;
+  num monthsCount;
   String status;
   String createdAt;
   String title;
@@ -43,6 +45,8 @@ class Package {
       {this.id,
         this.price,
         this.image,
+        this.file,
+        this.monthsCount,
         this.status,
         this.createdAt,
         this.title,
@@ -53,6 +57,8 @@ class Package {
     id = json['id'];
     price = json['price'];
     image = json['image'];
+    file = json['file'];
+    monthsCount = json['months_count'];
     status = json['status'];
     createdAt = json['created_at'];
     title = json['title'];
@@ -70,6 +76,8 @@ class Package {
     data['id'] = id;
     data['price'] = price;
     data['image'] = image;
+    data['file'] = file;
+    data['months_count'] = monthsCount;
     data['status'] = status;
     data['created_at'] = createdAt;
     data['title'] = title;

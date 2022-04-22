@@ -26,12 +26,11 @@ class _MyPackagesAndSubscriptionsScreenState
   @override
   void initState() {
     super.initState();
-    Provider.of<HomeProvider>(context,listen: false).getMyPackages(context);
+    Provider.of<HomeProvider>(context, listen: false).getMyPackages(context);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: CupertinoNavigationBar(
         backgroundColor: CupertinoColors.white.withOpacity(0.5),
@@ -43,7 +42,7 @@ class _MyPackagesAndSubscriptionsScreenState
               fontFamily: 'TajawalBold'),
         ),
       ),
-      body: Provider.of<HomeProvider>(context).listPackage==null
+      body: Provider.of<HomeProvider>(context).listPackage == null
           ? Center(
               child: Container(
                 height: 50,
@@ -86,6 +85,11 @@ class _MyPackagesAndSubscriptionsScreenState
                                 .listPackage[index]
                                 .package
                                 .price
+                                .toString(),
+                            monthsCount: Provider.of<HomeProvider>(context)
+                                .listPackage[index]
+                                .package
+                                .monthsCount
                                 .toString(),
                             package_id: Provider.of<HomeProvider>(context)
                                 .listPackage[index]

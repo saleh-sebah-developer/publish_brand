@@ -185,23 +185,26 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 height: 4.h,
                               ),
-                              Text(
-                                Provider.of<SpHelper>(context, listen: false)
-                                            .token ==
-                                        null
-                                    ? 'loyalty_points'.tr() +
-                                        ' 0' +
-                                        'point'.tr()
-                                    : 'loyalty_points'.tr() +
-                                        ' ' +
-                                        Provider.of<HomeProvider>(context,
-                                                listen: false)
-                                            .numPoints
-                                            .toString() +
-                                        'point'.tr(),
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'TajawalRegular'),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 14.w),
+                                child: Text(
+                                  Provider.of<SpHelper>(context, listen: false)
+                                              .token ==
+                                          null
+                                      ? 'loyalty_points'.tr() +
+                                          ' 0 ' +
+                                          'point'.tr()
+                                      : 'loyalty_points'.tr() +
+                                          ' ' +
+                                          Provider.of<HomeProvider>(context,
+                                                  listen: false)
+                                              .numPoints
+                                              .toString() +' '+
+                                          'point'.tr(),
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'TajawalRegular'),
+                                ),
                               ),
                             ],
                           ),
@@ -304,6 +307,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               onTap: () {
+                Provider.of<SpHelper>(context, listen: false)
+                    .token ==
+                    null
+                    ? Provider.of<ApiAuthProvider>(context,
+                    listen: false)
+                    .checkToken(context)
+                    :
                 RouterClass.routerClass
                     .pushToScreenUsingWidget(SpecialRequestsScreen());
               },

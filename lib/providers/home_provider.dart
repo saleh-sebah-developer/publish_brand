@@ -709,7 +709,7 @@ class HomeProvider extends ChangeNotifier {
  uploadFile(BuildContext context) async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc', 'docx'],
+      allowedExtensions: ['jpg', 'pdf', 'doc', 'docx','*'],
     );
     if (result != null) {
       final file = result.files.first;
