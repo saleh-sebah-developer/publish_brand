@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -33,6 +34,7 @@ import 'package:publish_brand/models/sign_up_users_response.dart';
 import '../models/get_chat_message_response.dart';
 import '../models/send_message_request.dart';
 import '../models/upload_chat_img_response.dart';
+import '../repositories/Message2.dart';
 import 'api_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -50,7 +52,6 @@ class DioClient {
     dio.options.baseUrl = ApiConstant.baseUrl;
     dio.options.headers['Accept-Language'] = 'ar';
 
-
     // if (context.locale == Locale('en')) {
     //   dio.options.headers['Accept-Language'] = 'en';
     // } else {
@@ -64,13 +65,14 @@ class DioClient {
       SignUpUsersRequest signUpUsersRequest) async {
     try {
       log(signUpUsersRequest.toJson().toString());
-      Response response = await dio.post(ApiConstant.signUpUsers,
-          data: signUpUsersRequest.toJson(),
-      // options: Options(
-      //   followRedirects: false,
-      // //  validateStatus: (status) => true,
-      //   // headers: headers,
-      // )
+      Response response = await dio.post(
+        ApiConstant.signUpUsers,
+        data: signUpUsersRequest.toJson(),
+        // options: Options(
+        //   followRedirects: false,
+        // //  validateStatus: (status) => true,
+        //   // headers: headers,
+        // )
       );
       SignUpUsersResponse signUpUsersResponse =
           SignUpUsersResponse.fromJson(response.data);
@@ -85,8 +87,11 @@ class DioClient {
   Future<LoginForUsersResponse> LoginForUsers(
       {String mobile, String password, String fcm_token}) async {
     try {
-      Response response = await dio.post(ApiConstant.loginForUsers,
-          data: {'mobile': mobile, 'password': password, 'fcm_token': fcm_token});
+      Response response = await dio.post(ApiConstant.loginForUsers, data: {
+        'mobile': mobile,
+        'password': password,
+        'fcm_token': fcm_token
+      });
       LoginForUsersResponse loginForUsersResponse =
           LoginForUsersResponse.fromJson(response.data);
       return loginForUsersResponse;
@@ -259,10 +264,14 @@ class DioClient {
   }
 
   Future<ContactMsgResponse> sendContactMsg(
-      {String email,String name, String phone, String message}) async {
+      {String email, String name, String phone, String message}) async {
     try {
-      Response response = await dio.post(ApiConstant.sendContactMsg,
-          data: {'email': email,'name': name, 'phone': phone, 'message': message});
+      Response response = await dio.post(ApiConstant.sendContactMsg, data: {
+        'email': email,
+        'name': name,
+        'phone': phone,
+        'message': message
+      });
       ContactMsgResponse contactMsgResponse =
           ContactMsgResponse.fromJson(response.data);
       return contactMsgResponse;
@@ -595,7 +604,7 @@ class DioClient {
         }),
       );
       UploadChatImgResponse requestServiceResponse =
-      UploadChatImgResponse.fromJson(response.data);
+          UploadChatImgResponse.fromJson(response.data);
       return requestServiceResponse;
     } on Exception catch (e) {
       log(e.toString());
@@ -603,5 +612,29 @@ class DioClient {
     }
   }
 
-
+  Future<DataResponse> send_chat_notification(
+      BuildContext context, int chatID, Message2 message2) async {
+    try {
+      // FormData formData =
+      //     FormData.fromMap({"chat_id": chatID, "message": message2});
+      var params =  {
+        "chat_id": chatID,
+        "message": message2,
+      };
+      Response response = await dio.post(
+        ApiConstant.send_chat_notification,
+        data: jsonEncode(params),
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          'authorization': 'Bearer ' +
+              await Provider.of<SpHelper>(context, listen: false).getToken()
+        }),
+      );
+      DataResponse dataResponse = DataResponse.fromJson(response.data);
+      return dataResponse;
+    } on Exception catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
 }

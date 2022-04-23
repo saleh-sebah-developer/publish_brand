@@ -44,6 +44,7 @@ class ApiConstant {
   static const String getChatMessage = 'getChatMessage';
   static const String sendMessage = 'sendMessage';
   static const String upload_chat_img = 'upload-chat-img';
+  static const String send_chat_notification = 'send-chat-notification';
 
 
 

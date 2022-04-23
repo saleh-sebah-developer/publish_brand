@@ -416,6 +416,12 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                           widget.target == 'admin'
                               ? widget.adminChatID.toString()
                               : widget.categoryChatID.toString());
+                      providerApp.sendMessageNotification(
+                          context,
+                          widget.target == 'admin'
+                              ? widget.adminChatID
+                              : widget.categoryChatID,
+                          message2);
                       providerChat.textEditingController.text = '';
                     },
                     child: Container(

@@ -78,6 +78,20 @@ class AppProvider extends ChangeNotifier {
     */
   }
 
+  sendMessageNotification(
+      BuildContext context, int chatID, Message2 message2) async {
+    DataResponse response = await DioClient.dioClient
+        .send_chat_notification(context, chatID, message2);
+    if (response != null) {
+      log('pageDetails success');
+      if (response.status == true) {
+        log(response.message.toString());
+      } else {
+        log(response.message.toString());
+      }
+    }
+  }
+
   createChat(String chatId, User otherUser) async {
     FirestoreHelper.firestoreHelper.createChat(chatId, this.myUser, otherUser);
   }
@@ -180,25 +194,25 @@ class AppProvider extends ChangeNotifier {
     //     postImage(context, projectID);
     //   }
     // });
-  //  ---- picker file
+    //  ---- picker file
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: [
-        'jpg',
-        'jpeg',
-        'png',
-        'svg',
-        'gif',
-        'pdf',
-        'doc',
-        'docx'
-      ],
+      type: FileType.any,
+      // type: FileType.custom,
+      // allowedExtensions: [
+      //   'jpg',
+      //   'jpeg',
+      //   'png',
+      //   'svg',
+      //   'gif',
+      //   'pdf',
+      //   'doc',
+      //   'docx'
+      // ],
     );
     if (result != null) {
       final file = result.files.first;
       imageFile2 = file;
       postImage(context, projectID);
-
     }
   }
 
