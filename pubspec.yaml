@@ -66,6 +66,7 @@ dependencies:
   jiffy: ^5.0.0
   mime: ^1.0.1
   image_downloader: ^0.31.0
+  audioplayers: ^0.20.1
 #  flowder: ^0.2.0
 
   # The following adds the Cupertino Icons font to your application.

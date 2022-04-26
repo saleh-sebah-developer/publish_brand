@@ -8,7 +8,7 @@ class Message2 {
   String client_image;
   String client_name;
   String content;
-  Timestamp date;
+  String date;
   String file_mime;
   String file_name;
   String type;

@@ -234,7 +234,7 @@ class AppProvider extends ChangeNotifier {
                 .currentUser
                 .name,
             content: imageFilePath,
-            date: Timestamp.now(),
+            date: DateTime.now().millisecondsSinceEpoch.toString(),
             type: 'image');
         sendMessage(
             message2,

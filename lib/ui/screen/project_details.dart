@@ -142,7 +142,7 @@ class ProjectDetailsScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         child: ListTile(
-                          title: Text('competent'.tr() + _service.category.name,
+                          title: Text('competent'.tr() +' '+ _service.category.name,
                               style: TextStyle(
                                   fontSize: 14.sp,
                                   fontFamily: 'TajawalBold',
