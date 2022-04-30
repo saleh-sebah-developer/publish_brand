@@ -69,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
     Provider.of<HomeProvider>(context, listen: false).settingsApiApp(context);
+    Provider.of<HomeProvider>(context, listen: false)
+        .getServicesByPoints(context);
     Provider.of<SpHelper>(context, listen: false).getToken != null
         ? Provider.of<ApiAuthProvider>(context, listen: false).profile(context)
         : () {};
@@ -199,7 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Provider.of<HomeProvider>(context,
                                                   listen: false)
                                               .numPoints
-                                              .toString() +' '+
+                                              .toString() +
+                                          ' ' +
                                           'point'.tr(),
                                   style: const TextStyle(
                                       color: Colors.black,
@@ -307,15 +310,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               onTap: () {
-                Provider.of<SpHelper>(context, listen: false)
-                    .token ==
-                    null
-                    ? Provider.of<ApiAuthProvider>(context,
-                    listen: false)
-                    .checkToken(context)
-                    :
-                RouterClass.routerClass
-                    .pushToScreenUsingWidget(SpecialRequestsScreen());
+                Provider.of<SpHelper>(context, listen: false).token == null
+                    ? Provider.of<ApiAuthProvider>(context, listen: false)
+                        .checkToken(context)
+                    : RouterClass.routerClass
+                        .pushToScreenUsingWidget(SpecialRequestsScreen());
               },
               title: Text(
                 'submit_special_requests'.tr(),
@@ -577,7 +576,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Builder(
                                   builder: (BuildContext context) {
                                     return Container(
-                                        padding: EdgeInsets.symmetric(horizontal:1.w),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 1.w),
                                         decoration: const BoxDecoration(
                                             color: Colors.white10),
                                         child: CachedNetworkImage(
@@ -632,8 +632,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Container(
-                    margin:
-                        EdgeInsets.only(right: 8.w, left: 8.w, top: 210.h),
+                    margin: EdgeInsets.only(right: 8.w, left: 8.w, top: 210.h),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -724,130 +723,155 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               provider.categories == null
                   ? Container(
-                height: 180.h,
-                child: Center(
-                  child: SizedBox(
-                      height: 40.h,
-                      width: 40.w,
+                      height: 180.h,
                       child: Center(
-                        child: Lottie.asset(
-                            'assets/animations/progress1.json'),
-                      )),
-                ),
-              )
+                        child: SizedBox(
+                            height: 40.h,
+                            width: 40.w,
+                            child: Center(
+                              child: Lottie.asset(
+                                  'assets/animations/progress1.json'),
+                            )),
+                      ),
+                    )
                   : provider.categories.isEmpty
-                  ? Center(
-                child:
-                Lottie.asset('assets/animations/empty2.json'),
-              )
-                  :
-              Container(
-                height: 180.h,
-                width: MediaQuery.of(context).size.width,
-                child: GridView.builder(
-                    scrollDirection: Axis.horizontal,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisExtent: 100,
-                            mainAxisSpacing: 4),
-                    itemCount: searchHomeScreenCon.text.isNotEmpty
-                        ? provider.searchCategories.length
-                        : provider.categories.length,
-                    itemBuilder: (BuildContext ctx, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          RouterClass.routerClass.pushToScreenUsingWidget(
-                              ServiceScreen(searchHomeScreenCon.text.isNotEmpty
-                                  ? provider.searchCategories[index].id
-                                  : provider.categories[index].id));
-                        },
-                        child: CustomCategoryService(
-                          label: searchHomeScreenCon.text.isNotEmpty
-                              ? provider.searchCategories[index].name
-                              : provider.categories[index].name,
-                          iconData: searchHomeScreenCon.text.isNotEmpty
-                              ? provider.searchCategories[index].image
-                              : provider.categories[index].image,
+                      ? Center(
+                          child: Lottie.asset('assets/animations/empty2.json'),
+                        )
+                      : Container(
+                          height: 180.h,
+                          width: MediaQuery.of(context).size.width,
+                          child: GridView.builder(
+                              scrollDirection: Axis.horizontal,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisExtent: 100,
+                                      mainAxisSpacing: 4),
+                              itemCount: searchHomeScreenCon.text.isNotEmpty
+                                  ? provider.searchCategories.length
+                                  : provider.categories.length,
+                              itemBuilder: (BuildContext ctx, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    RouterClass.routerClass
+                                        .pushToScreenUsingWidget(ServiceScreen(
+                                            searchHomeScreenCon.text.isNotEmpty
+                                                ? provider
+                                                    .searchCategories[index].id
+                                                : provider
+                                                    .categories[index].id));
+                                  },
+                                  child: CustomCategoryService(
+                                    label: searchHomeScreenCon.text.isNotEmpty
+                                        ? provider.searchCategories[index].name
+                                        : provider.categories[index].name,
+                                    iconData: searchHomeScreenCon
+                                            .text.isNotEmpty
+                                        ? provider.searchCategories[index].image
+                                        : provider.categories[index].image,
+                                  ),
+                                );
+                              }),
                         ),
-                      );
-                    }),
+              Row(
+                children: [
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                    child: Text(
+                      'newly_added_services'.tr(),
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: 'TajawalBold',
+                          color: Colors.black),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                alignment: Alignment.centerRight,
-                margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-                child: Text(
-                  'newly_added_services'.tr(),
-                  style: TextStyle(
-                      fontSize: 16.sp,
-                      fontFamily: 'TajawalBold',
-                      color: Colors.black),
-                  textAlign: TextAlign.end,
-                ),
-              ),
-              provider.services == null
+              provider.servicesByPoint == null
                   ? Container(
-                height: MediaQuery.of(context).size.height / 3.5,
-                width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: SizedBox(
-                      height: 40.h,
-                      width: 40.w,
+                      height: MediaQuery.of(context).size.height / 3.5,
+                      width: MediaQuery.of(context).size.width,
                       child: Center(
-                        child: Lottie.asset(
-                            'assets/animations/progress1.json'),
-                      )),
-                ),
-              )
-                  : provider.services.isEmpty
-                  ? Center(
-                child:
-                Lottie.asset('assets/animations/empty2.json'),
-              )
-                  :
-              SizedBox(
-                  height: MediaQuery.of(context).size.height / 3.5,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                      padding: EdgeInsets.all(2.h),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: searchHomeScreenCon.text.isNotEmpty
-                          ? provider.searchServices.length
-                          : provider.services.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            RouterClass.routerClass.pushToScreenUsingWidget(
-                                ServiceDetailsScreen(
-                                    searchHomeScreenCon.text.isNotEmpty
-                                        ? provider.searchServices[index].id
-                                        : provider.services[index].id));
-                          },
-                          child: CustomService(
-                            ImageService: searchHomeScreenCon.text.isNotEmpty
-                                ?
-
-                            provider.searchServices[index].image?? 'null'
-                                :
-                            provider.services[index].image?? 'null',
-                            title: searchHomeScreenCon.text.isNotEmpty
-                                ? provider.searchServices[index].title
-                                : provider.services[index].title,
-                            titleSub: searchHomeScreenCon.text.isNotEmpty
-                                ? provider.searchServices[index].price
-                                    .toString()
-                                : provider.services[index].price.toString(),
-                            type: searchHomeScreenCon.text.isNotEmpty
-                                ? provider.searchServices[index].type.toString()
-                                : provider.services[index].type.toString(),
-                            pointsCount: searchHomeScreenCon.text.isNotEmpty
-                                ? provider.searchServices[index].pointsCount
-                                    .toString()
-                                : provider.services[index].pointsCount
-                                    .toString(),
+                        child: SizedBox(
+                            height: 40.h,
+                            width: 40.w,
+                            child: Center(
+                              child: Lottie.asset(
+                                  'assets/animations/progress1.json'),
+                            )),
+                      ),
+                    )
+                  : provider.servicesByPoint.isEmpty
+                      ? Container(
+                          height: 230.h,
+                          width: 230.w,
+                          child: Center(
+                            child:
+                                Lottie.asset('assets/animations/empty2.json'),
                           ),
-                        );
-                      })),
+                        )
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.height / 3.5,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                              padding: EdgeInsets.all(2.h),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: searchHomeScreenCon.text.isNotEmpty
+                                  ? provider.searchServices.length
+                                  : provider.servicesByPoint.length,
+                              //: provider.services.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    RouterClass.routerClass
+                                        .pushToScreenUsingWidget(
+                                            ServiceDetailsScreen(
+                                                searchHomeScreenCon
+                                                        .text.isNotEmpty
+                                                    ? provider
+                                                        .searchServices[index]
+                                                        .id
+                                                    : provider
+                                                        .servicesByPoint[index]
+                                                        .id));
+                                  },
+                                  child: CustomService(
+                                    ImageService:
+                                        searchHomeScreenCon.text.isNotEmpty
+                                            ? provider.searchServices[index]
+                                                    .image ??
+                                                'null'
+                                            : provider.servicesByPoint[index]
+                                                    .image ??
+                                                'null',
+                                    title: searchHomeScreenCon.text.isNotEmpty
+                                        ? provider.searchServices[index].title
+                                        : provider.servicesByPoint[index].title,
+                                    titleSub: searchHomeScreenCon
+                                            .text.isNotEmpty
+                                        ? provider.searchServices[index].price
+                                            .toString()
+                                        : provider.servicesByPoint[index].price
+                                            .toString(),
+                                    type: searchHomeScreenCon.text.isNotEmpty
+                                        ? provider.searchServices[index].type
+                                            .toString()
+                                        : provider.servicesByPoint[index].type
+                                            .toString(),
+                                    pointsCount:
+                                        searchHomeScreenCon.text.isNotEmpty
+                                            ? provider.searchServices[index]
+                                                .pointsCount
+                                                .toString()
+                                            : provider.servicesByPoint[index]
+                                                .points_count
+                                                .toString(),
+                                  ),
+                                );
+                              })),
             ],
           ),
         );

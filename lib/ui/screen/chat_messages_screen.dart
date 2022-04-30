@@ -93,10 +93,21 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                     size: 40,
                   ),
                 ),
-                // trailing: Text(
-                //   'create_a_meeting'.tr(),
-                //   style: TextStyle(fontSize: 12.sp, fontFamily: 'TajawalBold'),
-                // ),
+                trailing:
+                    Column(
+                      children: [
+                        Icon(Icons.video_call),
+                        Text(
+                          'create_a_meeting'.tr(),
+                          style: TextStyle(fontSize: 12.sp, fontFamily: 'TajawalBold'),
+                        ),
+                      ],
+                    ),
+                onTap: (){
+                  //TODO click to create meeting
+                },
+
+
               ),
             ),
             Expanded(
@@ -129,270 +140,294 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                                     return Container(
                                       margin: EdgeInsets.symmetric(
                                           vertical: 5, horizontal: 10),
-                                      child: Container(
+                                      child: Column(
                                         //width: MediaQuery.of(context).size.width/2,
-                                        child: ChatBubble(
-                                            alignment: snapshots[index]['client_id'] ==
-                                                    providerAuth.currentUser.id
-                                                ? Alignment.topRight
-                                                : Alignment.topLeft,
-                                            backGroundColor: snapshots[index]
-                                                        ['client_id'] ==
-                                                    providerAuth.currentUser.id
-                                                ? HexColor('#E5E5EA')
-                                                : HexColor('#145366'),
-                                            clipper: ChatBubbleClipper5(
-                                                type: snapshots[index]['client_id'] == providerAuth.currentUser.id
-                                                    ? BubbleType.sendBubble
-                                                    : BubbleType
-                                                        .receiverBubble),
-                                            child:
-                                                snapshots[index]['client_id'] ==
-                                                        providerAuth
-                                                            .currentUser.id
-                                                    ? snapshots[index]['type'] !=
-                                                            'image'
-                                                        ? Text(
-                                                            snapshots[index][
-                                                                    'content'] ??
-                                                                ' ',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            maxLines: 2,
-                                                          )
-                                                        : snapshots[index]['content'].toString().split('.').last == 'jpg' ||
-                                                                snapshots[index]['content']
-                                                                        .toString()
-                                                                        .split('.')
-                                                                        .last ==
-                                                                    'jpeg ' ||
-                                                                snapshots[index]['content'].toString().split('.').last == 'gif' ||
-                                                                snapshots[index]['content'].toString().split('.').last == 'png' ||
-                                                                snapshots[index]['content'].toString().split('.').last == 'svg'
-                                                            ? GestureDetector(
-                                                                onLongPress:
-                                                                    () {
-                                                                  showDialog(
-                                                                    context:
-                                                                        context,
-                                                                    builder:
-                                                                        (context) =>
-                                                                            AlertDialog(
-                                                                      title: GestureDetector(
-                                                                          onTap: () async {
-                                                                            log('download');
-                                                                            try {
-                                                                              // Saved with this method.
-                                                                              var imageId = await ImageDownloader.downloadImage(snapshots[index]['content'], destination: AndroidDestinationType.directoryDownloads..subDirectory('publish_brand.png'));
-                                                                              log('true download');
-                                                                              Navigator.of(context).pop();
-                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                                backgroundColor: Colors.green,
-                                                                                content: Text('The image has been saved'),
-                                                                                duration: Duration(seconds: 3),
-                                                                              ));
-                                                                              if (imageId == null) {
-                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                                  backgroundColor: Colors.red,
-                                                                                  content: Text('error download'),
-                                                                                  duration: Duration(seconds: 3),
-                                                                                ));
-                                                                                return;
-                                                                              }
+                                        children: [
+                                          ChatBubble(
+                                              alignment: snapshots[index]['client_id'] ==
+                                                  providerAuth.currentUser.id
+                                                  ? Alignment.topRight
+                                                  : Alignment.topLeft,
+                                              backGroundColor: snapshots[index]
+                                              ['client_id'] ==
+                                                  providerAuth.currentUser.id
+                                                  ? HexColor('#E5E5EA')
+                                                  : HexColor('#145366'),
+                                              clipper: ChatBubbleClipper5(
+                                                  type: snapshots[index]['client_id'] == providerAuth.currentUser.id
+                                                      ? BubbleType.sendBubble
+                                                      : BubbleType
+                                                      .receiverBubble),
+                                              child: snapshots[index]['client_id'] ==
+                                                  providerAuth.currentUser.id
+                                                  ? snapshots[index]['type'] !=
+                                                  'image'
+                                                  ? Text(
+                                                snapshots[index]
+                                                ['content'] ??
+                                                    ' ',
+                                                style: TextStyle(
+                                                    color:
+                                                    Colors.black),
+                                                overflow: TextOverflow
+                                                    .ellipsis,
+                                                maxLines: 2,
+                                              )
+                                                  : snapshots[index]['content'].toString().split('.').last == 'jpg' ||
+                                                  snapshots[index]['content']
+                                                      .toString()
+                                                      .split('.')
+                                                      .last ==
+                                                      'jpeg ' ||
+                                                  snapshots[index]['content'].toString().split('.').last == 'gif' ||
+                                                  snapshots[index]['content'].toString().split('.').last == 'png' ||
+                                                  snapshots[index]['content'].toString().split('.').last == 'svg'
+                                                  ? GestureDetector(
+                                                onLongPress: () {
+                                                  showDialog(
+                                                    context:
+                                                    context,
+                                                    builder:
+                                                        (context) =>
+                                                        AlertDialog(
+                                                          title:
+                                                          GestureDetector(
+                                                              onTap:
+                                                                  () async {
+                                                                log('download');
+                                                                try {
+                                                                  // Saved with this method.
+                                                                  var imageId = await ImageDownloader.downloadImage(snapshots[index]['content'], destination: AndroidDestinationType.directoryDownloads..subDirectory('publish_brand.png'));
+                                                                  log('true download');
+                                                                  Navigator.of(context).pop();
+                                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                    backgroundColor: Colors.green,
+                                                                    content: Text('The image has been saved'),
+                                                                    duration: Duration(seconds: 3),
+                                                                  ));
+                                                                  if (imageId == null) {
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                      backgroundColor: Colors.red,
+                                                                      content: Text('error download'),
+                                                                      duration: Duration(seconds: 3),
+                                                                    ));
+                                                                    return;
+                                                                  }
 
-                                                                              // Below is a method of obtaining saved image information.
-                                                                              var fileName = await ImageDownloader.findName(imageId);
-                                                                              var path = await ImageDownloader.findPath(imageId);
-                                                                              var size = await ImageDownloader.findByteSize(imageId);
-                                                                              var mimeType = await ImageDownloader.findMimeType(imageId);
-                                                                            } on PlatformException catch (error) {
-                                                                              print(error);
-                                                                            }
+                                                                  // Below is a method of obtaining saved image information.
+                                                                  var fileName = await ImageDownloader.findName(imageId);
+                                                                  var path = await ImageDownloader.findPath(imageId);
+                                                                  var size = await ImageDownloader.findByteSize(imageId);
+                                                                  var mimeType = await ImageDownloader.findMimeType(imageId);
+                                                                } on PlatformException catch (error) {
+                                                                  print(error);
+                                                                }
 
-                                                                            // await ImageDownloader.downloadImage(snapshots[index]['content'],
-                                                                            //   destination: AndroidDestinationType.custom( directory: '')
-                                                                            //     ..inExternalFilesDir()
-                                                                            //     ..subDirectory("custom/sample.gif"),
-                                                                            // );
-                                                                            //  Provider.of<SalehProvider>(context, listen: false).download2(snapshots[index]['content']);
-                                                                          },
-                                                                          child: Text('Download Image')),
-                                                                      // content: Text('Dowmload'),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                child: Image
-                                                                    .network(
-                                                                  snapshots[
-                                                                          index]
-                                                                      [
-                                                                      'content'],
-                                                                  width: 200,
-                                                                  height: 200,
-                                                                ),
-                                                              )
-                                                            // : snapshots[index]['content'].toString().split('.').last == 'mp3' || snapshots[index]['content'].toString().split('.').last == 'm4a'
-                                                            //     ? Container(
-                                                            //         child: GestureDetector(
-                                                            //             onTap: () {
-                                                            //               widget
-                                                            //                   .audioPlayer
-                                                            //                   .playBytes(snapshots[index]['content']);
-                                                            //             },
-                                                            //             child: Icon(Icons.play_arrow)),
-                                                            //       )
-                                                                : GestureDetector(
-                                                                    onTap: () {
-                                                                      log('download');
-                                                                      Provider.of<SalehProvider>(
-                                                                              context,
-                                                                              listen:
-                                                                                  false)
-                                                                          .download2(snapshots[index]
-                                                                              [
-                                                                              'content']);
-                                                                    },
-                                                                    child: Text(
-                                                                      snapshots[index]['content']
-                                                                              .toString()
-                                                                              .split('/')
-                                                                              .last ??
-                                                                          'file',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.lightBlue),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      maxLines:
-                                                                          2,
-                                                                    ),
-                                                                  )
-                                                    : snapshots[index]['type'] != 'image'
-                                                        ? Text(
-                                                            snapshots[index][
-                                                                    'content'] ??
-                                                                '',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            maxLines: 2,
-                                                          )
-                                                        : snapshots[index]['content'].toString().split('.').last == 'jpg' || snapshots[index]['content'].toString().split('.').last == 'jpeg ' || snapshots[index]['content'].toString().split('.').last == 'gif' || snapshots[index]['content'].toString().split('.').last == 'png' || snapshots[index]['content'].toString().split('.').last == 'svg'
-                                                            ? GestureDetector(
-                                                                onLongPress:
-                                                                    () {
-                                                                  showDialog(
-                                                                    context:
-                                                                        context,
-                                                                    builder:
-                                                                        (context) =>
-                                                                            AlertDialog(
-                                                                      title: GestureDetector(
-                                                                          onTap: () async {
-                                                                            log('download');
-                                                                            try {
-                                                                              // Saved with this method.
-                                                                              var imageId = await ImageDownloader.downloadImage(snapshots[index]['content'], destination: AndroidDestinationType.directoryDownloads..subDirectory('publish_brand.png'));
-                                                                              log('true download');
-                                                                              Navigator.of(context).pop();
-                                                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                                backgroundColor: Colors.green,
-                                                                                content: Text('The image has been saved'),
-                                                                                duration: Duration(seconds: 3),
-                                                                              ));
-                                                                              if (imageId == null) {
-                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                                  backgroundColor: Colors.red,
-                                                                                  content: Text('error download'),
-                                                                                  duration: Duration(seconds: 3),
-                                                                                ));
-                                                                                return;
-                                                                              }
+                                                                // await ImageDownloader.downloadImage(snapshots[index]['content'],
+                                                                //   destination: AndroidDestinationType.custom( directory: '')
+                                                                //     ..inExternalFilesDir()
+                                                                //     ..subDirectory("custom/sample.gif"),
+                                                                // );
+                                                                //  Provider.of<SalehProvider>(context, listen: false).download2(snapshots[index]['content']);
+                                                              },
+                                                              child:
+                                                              Text('Download Image')),
+                                                          // content: Text('Dowmload'),
+                                                        ),
+                                                  );
+                                                },
+                                                child:
+                                                Image.network(
+                                                  snapshots[index]
+                                                  ['content'],
+                                                  width: 200,
+                                                  height: 200,
+                                                ),
+                                              )
+                                              // : snapshots[index]['content'].toString().split('.').last == 'mp3' || snapshots[index]['content'].toString().split('.').last == 'm4a'
+                                              //     ? Container(
+                                              //         child: GestureDetector(
+                                              //             onTap: () {
+                                              //               widget
+                                              //                   .audioPlayer
+                                              //                   .playBytes(snapshots[index]['content']);
+                                              //             },
+                                              //             child: Icon(Icons.play_arrow)),
+                                              //       )
+                                                  : GestureDetector(
+                                                onTap: () {
+                                                  log('download');
+                                                  Provider.of<SalehProvider>(
+                                                      context,
+                                                      listen:
+                                                      false)
+                                                      .download2(snapshots[
+                                                  index]
+                                                  [
+                                                  'content']);
+                                                },
+                                                child: Text(
+                                                  snapshots[index][
+                                                  'content']
+                                                      .toString()
+                                                      .split(
+                                                      '/')
+                                                      .last ??
+                                                      'file',
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .lightBlue),
+                                                  overflow:
+                                                  TextOverflow
+                                                      .ellipsis,
+                                                  maxLines: 2,
+                                                ),
+                                              )
+                                                  : snapshots[index]['type'] != 'image'
+                                                  ? Text(
+                                                snapshots[index]
+                                                ['content'] ??
+                                                    '',
+                                                style: TextStyle(
+                                                    color:
+                                                    Colors.white),
+                                                overflow: TextOverflow
+                                                    .ellipsis,
+                                                maxLines: 2,
+                                              )
+                                                  : snapshots[index]['content'].toString().split('.').last == 'jpg' || snapshots[index]['content'].toString().split('.').last == 'jpeg ' || snapshots[index]['content'].toString().split('.').last == 'gif' || snapshots[index]['content'].toString().split('.').last == 'png' || snapshots[index]['content'].toString().split('.').last == 'svg'
+                                                  ? GestureDetector(
+                                                onLongPress: () {
+                                                  showDialog(
+                                                    context:
+                                                    context,
+                                                    builder:
+                                                        (context) =>
+                                                        AlertDialog(
+                                                          title:
+                                                          GestureDetector(
+                                                              onTap:
+                                                                  () async {
+                                                                log('download');
+                                                                try {
+                                                                  // Saved with this method.
+                                                                  var imageId = await ImageDownloader.downloadImage(snapshots[index]['content'], destination: AndroidDestinationType.directoryDownloads..subDirectory('publish_brand.png'));
+                                                                  log('true download');
+                                                                  Navigator.of(context).pop();
+                                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                    backgroundColor: Colors.green,
+                                                                    content: Text('The image has been saved'),
+                                                                    duration: Duration(seconds: 3),
+                                                                  ));
+                                                                  if (imageId == null) {
+                                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                      backgroundColor: Colors.red,
+                                                                      content: Text('error download'),
+                                                                      duration: Duration(seconds: 3),
+                                                                    ));
+                                                                    return;
+                                                                  }
 
-                                                                              // Below is a method of obtaining saved image information.
-                                                                              var fileName = await ImageDownloader.findName(imageId);
-                                                                              var path = await ImageDownloader.findPath(imageId);
-                                                                              var size = await ImageDownloader.findByteSize(imageId);
-                                                                              var mimeType = await ImageDownloader.findMimeType(imageId);
-                                                                            } on PlatformException catch (error) {
-                                                                              print(error);
-                                                                            }
+                                                                  // Below is a method of obtaining saved image information.
+                                                                  var fileName = await ImageDownloader.findName(imageId);
+                                                                  var path = await ImageDownloader.findPath(imageId);
+                                                                  var size = await ImageDownloader.findByteSize(imageId);
+                                                                  var mimeType = await ImageDownloader.findMimeType(imageId);
+                                                                } on PlatformException catch (error) {
+                                                                  print(error);
+                                                                }
 
-                                                                            // await ImageDownloader.downloadImage(snapshots[index]['content'],
-                                                                            //   destination: AndroidDestinationType.custom( directory: '')
-                                                                            //     ..inExternalFilesDir()
-                                                                            //     ..subDirectory("custom/sample.gif"),
-                                                                            // );
-                                                                            //  Provider.of<SalehProvider>(context, listen: false).download2(snapshots[index]['content']);
-                                                                          },
-                                                                          child: Text('Download Image')),
-                                                                      // content: Text('Dowmload'),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                child: Image
-                                                                    .network(
-                                                                  snapshots[
-                                                                          index]
-                                                                      [
-                                                                      'content'],
-                                                                  width: 200,
-                                                                  height: 200,
-                                                                ),
-                                                              )
-                                                            // : snapshots[index]['content'].toString().split('.').last == 'mp3' || snapshots[index]['content'].toString().split('.').last == 'm4a'
-                                                            //     ? Container(
-                                                            //         child: GestureDetector(
-                                                            //             onTap: () async {
-                                                            //               widget
-                                                            //                   .audioPlayer
-                                                            //                   .play(snapshots[index]['content']);
-                                                            //               int result = await widget
-                                                            //                   .audioPlayer
-                                                            //                   .play(snapshots[index]['content']);
-                                                            //               if (result ==
-                                                            //                   1) {
-                                                            //                 log('1');
-                                                            //                 // success
-                                                            //               }
-                                                            //             },
-                                                            //             child: Icon(Icons.play_arrow)),
-                                                            //       )
-                                                                : GestureDetector(
-                                                                    onTap: () {
-                                                                      log('download');
-                                                                      Provider.of<SalehProvider>(
-                                                                              context,
-                                                                              listen:
-                                                                                  false)
-                                                                          .download2(snapshots[index]
-                                                                              [
-                                                                              'content']);
-                                                                    },
-                                                                    child: Text(
-                                                                      snapshots[index]['content']
-                                                                              .toString()
-                                                                              .split('/')
-                                                                              .last ??
-                                                                          'file',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.lightBlue),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      maxLines:
-                                                                          2,
-                                                                    ),
-                                                                  )),
+                                                                // await ImageDownloader.downloadImage(snapshots[index]['content'],
+                                                                //   destination: AndroidDestinationType.custom( directory: '')
+                                                                //     ..inExternalFilesDir()
+                                                                //     ..subDirectory("custom/sample.gif"),
+                                                                // );
+                                                                //  Provider.of<SalehProvider>(context, listen: false).download2(snapshots[index]['content']);
+                                                              },
+                                                              child:
+                                                              Text('Download Image')),
+                                                          // content: Text('Dowmload'),
+                                                        ),
+                                                  );
+                                                },
+                                                child:
+                                                Image.network(
+                                                  snapshots[index]
+                                                  ['content'],
+                                                  width: 200,
+                                                  height: 200,
+                                                ),
+                                              )
+                                              // : snapshots[index]['content'].toString().split('.').last == 'mp3' || snapshots[index]['content'].toString().split('.').last == 'm4a'
+                                              //     ? Container(
+                                              //         child: GestureDetector(
+                                              //             onTap: () async {
+                                              //               widget
+                                              //                   .audioPlayer
+                                              //                   .play(snapshots[index]['content']);
+                                              //               int result = await widget
+                                              //                   .audioPlayer
+                                              //                   .play(snapshots[index]['content']);
+                                              //               if (result ==
+                                              //                   1) {
+                                              //                 log('1');
+                                              //                 // success
+                                              //               }
+                                              //             },
+                                              //             child: Icon(Icons.play_arrow)),
+                                              //       )
+                                                  : GestureDetector(
+                                                onTap: () {
+                                                  log('download');
+                                                  Provider.of<SalehProvider>(
+                                                      context,
+                                                      listen:
+                                                      false)
+                                                      .download2(snapshots[
+                                                  index]
+                                                  [
+                                                  'content']);
+                                                },
+                                                child: Text(
+                                                  snapshots[index][
+                                                  'content']
+                                                      .toString()
+                                                      .split(
+                                                      '/')
+                                                      .last ??
+                                                      'file',
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .lightBlue),
+                                                  overflow:
+                                                  TextOverflow
+                                                      .ellipsis,
+                                                  maxLines: 2,
+                                                ),
+                                              )),
+                                          SizedBox(height: 2,),
+                                          Container(
+                                            alignment:
+                                            snapshots[index]['client_id'] ==
+                                              providerAuth.currentUser.id
+                                              ? Alignment.topRight
+                                                  : Alignment.topLeft
+                                            ,
+                                            child: Text(
+                                                DateTime.fromMillisecondsSinceEpoch(int.parse(snapshots[index]['date']) ).toString().substring(0,16)??'',
+                                              // DateTime.parse(snapshots[index]
+                                              // ['date'].toDate().toString()).toString().substring(0,16)
+                                              //     ??
+                                              //     ' ',
+                                              style: TextStyle(
+                                                  fontSize: 8,
+                                                  color:
+                                                  Colors.black),
+                                              overflow: TextOverflow
+                                                  .ellipsis,
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     );
                                   }),
@@ -451,6 +486,7 @@ class _AllChatMessagesScreenState extends State<AllChatMessagesScreen> {
                           widget.target == 'admin'
                               ? widget.adminChatID.toString()
                               : widget.categoryChatID.toString());
+                      //TODO send audio and video on chat and download it
                       providerApp.sendMessageNotification(
                           context,
                           widget.target == 'admin'

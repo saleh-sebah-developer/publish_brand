@@ -41,35 +41,19 @@ class _SplashScreenState extends State<SplashScreen> {
             alignment: Alignment.center,
             height: 812.h,
             width: 375.w,
+            //TODO image splash screen in center
             decoration: BoxDecoration(
               color: HexColor('#F5F5F5'),
               image: const DecorationImage(
                   image: AssetImage('assets/images/comp.gif'),
                   fit: BoxFit.fill),
             ),
-            child: Column(
+            child:
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Spacer(),
-                /*
-                Container(
-                  margin: EdgeInsets.only(top: 70),
-                  child: DelayedDisplay(
-                    delay: Duration(milliseconds: 600),
-                    slidingBeginOffset: Offset(0.0, -10.0),
-                    fadingDuration: Duration(milliseconds: 600),
-                    child: Center(
-                      child: Image(
-                        height: 329.h,
-                        width: 337.w,
-                        //image: const AssetImage('assets/images/comp.gif'),
-                        image: const AssetImage('assets/images/logo_app1.png'),
-                      ),
-                    ),
-                  ),
-                ),
-                */
                 Spacer(),
                 Container(
                   margin: EdgeInsets.only(bottom: 30),
@@ -99,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
                               height: 60.h,
                               width: 60.w,
                               image:
-                                  const AssetImage('assets/images/logo1.png'),
+                              const AssetImage('assets/images/logo1.png'),
                             ),
                           ],
                         ),
@@ -109,6 +93,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ],
             ),
+            // Container(
+            //   height: 300,
+            //   width: 300,
+            //   color: Colors.green,
+            // ),
           ),
         ),
       ),

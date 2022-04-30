@@ -149,6 +149,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                                         .price
                                         .toString()
                                     : ' ',
+                                // TODO status my project
                                 status: Provider.of<HomeProvider>(context)
                                     .myProjectsData[index]
                                     .status,
